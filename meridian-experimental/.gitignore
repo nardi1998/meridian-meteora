@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+.envrypt
+
+# User config (contains RPC URL, wallet key, API keys)
+user-config.json
+gmgn-config.json
+
+# Runtime state (position tracking, lessons — user-specific)
+state.json
+lessons.json
+smart-wallets.json
+pool-memory.json
+token-blacklist.json
+strategy-library.json
+decision-log.json
+hivemind-cache.json
+signal-weights.json
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+
+# Dev context
+context.md
+docs/
+
+# Test files
+test-*.js

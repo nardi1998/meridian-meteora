@@ -18,6 +18,13 @@ const USER_CONFIG_PATH = path.join(__dirname, "user-config.json");
 const LESSONS_FILE = "./lessons.json";
 const MIN_EVOLVE_POSITIONS = 5;   // don't evolve until we have real data
 const MAX_CHANGE_PER_STEP  = 0.20; // never shift a threshold more than 20% at once
+
+// ─── Notification callback (set by index.js to send Telegram alerts) ───
+let _notifyCallback = null;
+export function setLearnNotifyCallback(fn) { _notifyCallback = fn; }
+function notifyLearn(msg) {
+  if (_notifyCallback) _notifyCallback(msg).catch?.(() => {});
+}
 const PERFORMANCE_SIGNAL_FIELDS = [
   "organic_score",
   "fee_tvl_ratio",
@@ -149,6 +156,7 @@ export async function recordPerformance(perf) {
   if (lesson) {
     data.lessons.push(lesson);
     log("lessons", `New lesson: ${lesson.rule}`);
+    notifyLearn(`📚 Lesson learned: ${lesson.rule}`);
   }
 
   save(data);
@@ -184,6 +192,8 @@ export async function recordPerformance(perf) {
     if (result?.changes && Object.keys(result.changes).length > 0) {
       reloadScreeningThresholds();
       log("evolve", `Auto-evolved thresholds: ${JSON.stringify(result.changes)}`);
+      const changeList = Object.entries(result.changes).map(([k, v]) => `${k}: ${v}`).join(", ");
+      notifyLearn(`🧬 Thresholds evolved: ${changeList}`);
     }
 
     // Darwinian signal weight recalculation
@@ -192,6 +202,7 @@ export async function recordPerformance(perf) {
       const wResult = recalculateWeights(data.performance, config);
       if (wResult.changes.length > 0) {
         log("evolve", `Darwin: adjusted ${wResult.changes.length} signal weight(s)`);
+        notifyLearn(`🧬 Darwin weights adjusted: ${wResult.changes.length} signal(s)`);
       }
     }
   }

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { log } from "./logger.js";
+import { config } from "./config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const USER_CONFIG_PATH = path.join(__dirname, "user-config.json");
@@ -458,10 +459,11 @@ export async function notifyDeploy({ pair, amountSol, position, tx, priceRange, 
 
 export async function notifyClose({ pair, pnlUsd, pnlPct }) {
   if (hasActiveLiveMessage()) return;
+  const cur = config.management.solMode ? "◎" : "$";
   const sign = pnlUsd >= 0 ? "+" : "";
   await sendHTML(
     `🔒 <b>Closed</b> ${pair}\n` +
-    `PnL: ${sign}$${(pnlUsd ?? 0).toFixed(2)} (${sign}${(pnlPct ?? 0).toFixed(2)}%)`
+    `PnL: ${sign}${cur}${(pnlUsd ?? 0).toFixed(2)} (${sign}${(pnlPct ?? 0).toFixed(2)}%)`
   );
 }
 

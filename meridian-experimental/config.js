@@ -107,6 +107,7 @@ export const config = {
     blockedLaunchpads:  u.blockedLaunchpads  ?? [],  // e.g. ["letsbonk.fun", "pump.fun"]
     minTokenAgeHours:   u.minTokenAgeHours   ?? null, // null = no minimum
     maxTokenAgeHours:   u.maxTokenAgeHours   ?? null, // null = no maximum
+    maxPoolTokenAgeDiffDays: u.maxPoolTokenAgeDiffDays ?? 30, // max difference between pool age and token age (days)
     athFilterPct:       u.athFilterPct       ?? null, // e.g. -20 = only deploy if price is >= 20% below ATH
   },
 
@@ -194,6 +195,16 @@ export const config = {
     pnlSanityMaxDiffPct:   u.pnlSanityMaxDiffPct   ?? 5,    // max allowed diff between reported and derived pnl % before ignoring a tick
     // SOL mode — positions, PnL, and balances reported in SOL instead of USD
     solMode:               u.solMode               ?? false,
+    // Whale escape — close before whale dumps
+    whaleEscape: {
+      enabled:       u.whaleEscapeEnabled       ?? true,
+      tvlPctWarn:    u.whaleEscapeTvlPctWarn    ?? 8,     // warn at TVL drop %
+      tvlPctClose:   u.whaleEscapeTvlPctClose   ?? 15,    // close at TVL drop %
+      absFloor:      u.whaleEscapeAbsFloor      ?? 10000, // absolute USD minimum for close
+      legacyAb:      u.whaleEscapeLegacyAb      ?? 5000,  // legacy absolute threshold
+      netDepCache:   u.whaleEscapeNetDepCache   ?? 30,    // minutes to cache net deposits
+      priceDistBins: u.whaleEscapePriceDistBins ?? 5,     // close if price within N bins of bottom
+    },
   },
 
   // ─── Strategy Mapping ───────────────────

@@ -3,6 +3,7 @@ import { isBlacklisted } from "../token-blacklist.js";
 import { isDevBlocked, getBlockedDevs } from "../dev-blocklist.js";
 import { log } from "../logger.js";
 import { isBaseMintOnCooldown, isPoolOnCooldown } from "../pool-memory.js";
+import { recordPoolFirstSeen, checkPoolTokenAgeDiff } from "../pool-age-cache.js";
 import { confirmIndicatorPreset } from "./chart-indicators.js";
 import { discoverGmgnPools } from "./gmgn.js";
 
@@ -143,6 +144,11 @@ function getRawPoolScreeningRejectReason(pool, s) {
   if (s.maxTokenAgeHours != null) {
     const minCreatedAt = Date.now() - s.maxTokenAgeHours * 3_600_000;
     if (createdAt == null || createdAt < minCreatedAt) return `token age above maxTokenAgeHours ${s.maxTokenAgeHours}`;
+  }
+  // Pool-token age difference check
+  if (s.maxPoolTokenAgeDiffDays != null && pool?.pool_address && createdAt != null) {
+    const ageCheck = checkPoolTokenAgeDiff(pool.pool_address, createdAt, s.maxPoolTokenAgeDiffDays);
+    if (ageCheck.skip) return ageCheck.reason;
   }
   return null;
 }
@@ -475,7 +481,14 @@ export async function discoverPools({
   const filteredExamples = [];
   const thresholdedRawPools = rawPools.filter((pool) => {
     const reason = getRawPoolScreeningRejectReason(pool, s);
-    if (!reason) return true;
+    if (!reason) {
+      // Record pool first seen for age tracking
+      recordPoolFirstSeen(pool.pool_address, {
+        tokenCreatedAt: pool.token_x?.created_at || null,
+        name: pool.name || null,
+      });
+      return true;
+    }
     filteredExamples.push({ name: pool.name || pool.pool_address || "unknown pool", reason });
     if (pool.discord_signal) log("screening", `Discord signal filtered: ${pool.name || pool.pool_address} — ${reason}`);
     return false;

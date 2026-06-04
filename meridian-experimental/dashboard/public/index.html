@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">M</div>
+      <div class="header-info">
+        <h1>Meridian</h1>
+        <span class="subtitle">Autonomous DLMM LP Agent · <span id="ws-status" class="ws-offline">WS offline</span></span>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="last-update">Terakhir update <span id="last-update">—</span></span>
+      <button class="btn btn-theme" id="btn-theme" title="Gelap/Terang">
+        <span class="icon-moon">🌙</span>
+      </button>
+      <button class="btn btn-refresh" id="btn-refresh">Refresh</button>
+      <div class="status-badge running" id="agent-status">
+        <span class="dot"></span> Running
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Banner -->
+  <div class="alert-banner" id="alert-banner" style="display:none">
+    <span id="alert-text"></span>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Summary Cards -->
+    <section class="summary">
+      <div class="summary-header">
+        <h2>Ringkasan</h2>
+        <span class="denomination">Denominasi SOL · 1 SOL = $<span id="sol-price">—</span></span>
+      </div>
+      <div class="summary-cards">
+        <div class="card card-balance">
+          <div class="card-label">TOTAL BALANCE</div>
+          <div class="card-value" id="total-balance">— <small>SOL</small></div>
+          <div class="card-change positive" id="balance-change">—</div>
+        </div>
+        <div class="card card-pnl">
+          <div class="card-label">PNL</div>
+          <div class="card-value" id="total-pnl">— <small>SOL</small></div>
+          <div class="card-change" id="pnl-change">—</div>
+        </div>
+        <div class="card card-positions">
+          <div class="card-label">POSISI AKTIF</div>
+          <div class="card-value" id="active-count">—</div>
+          <div class="card-sub">Meteora DLMM</div>
+        </div>
+        <div class="card card-fees">
+          <div class="card-label">FEES EARNED</div>
+          <div class="card-value" id="fees-earned">— <small>SOL</small></div>
+          <div class="card-change positive" id="fees-change">—</div>
+        </div>
+        <div class="card card-status">
+          <div class="card-label">STATUS AGENT</div>
+          <div class="card-value status-running" id="status-text">Running</div>
+          <div class="card-sub" id="status-sub">Semua agent aktif</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent Bars -->
+    <section class="agent-bars">
+      <div class="agent-bar">
+        <span class="agent-dot green"></span>
+        <strong>Hunter Alpha</strong> · Screening · <span id="hunter-interval">30m</span>
+      </div>
+      <div class="agent-bar">
+        <span class="agent-dot green"></span>
+        <strong>Healer Alpha</strong> · Position mgmt · <span id="healer-interval">10m</span>
+      </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      <!-- Left Column -->
+      <div class="col-left">
+        <!-- Active Positions -->
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Posisi aktif</h3>
+            <span class="panel-sub" id="open-pos-count">0 posisi LP terbuka</span>
+          </div>
+          <table class="table" id="table-open">
+            <thead>
+              <tr>
+                <th>PAIR</th>
+                <th class="right">NILAI</th>
+                <th class="right">PNL</th>
+                <th class="right">FEES</th>
+                <th class="center">STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-open"></tbody>
+          </table>
+          <div class="empty-state" id="empty-open">Belum ada posisi aktif</div>
+        </section>
+
+        <!-- Closed Positions -->
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Posisi tertutup</h3>
+            <span class="panel-sub" id="closed-pos-count">0 posisi LP sudah ditutup</span>
+          </div>
+          <table class="table" id="table-closed">
+            <thead>
+              <tr>
+                <th>PAIR</th>
+                <th class="right">NILAI AKHIR</th>
+                <th class="right">PNL</th>
+                <th class="right">FEES</th>
+                <th class="center">STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-closed"></tbody>
+          </table>
+          <div class="empty-state" id="empty-closed">Belum ada posisi tertutup</div>
+        </section>
+
+        <!-- Charts -->
+        <div class="charts-row">
+          <section class="panel chart-panel">
+            <h3>Nilai portofolio</h3>
+            <span class="panel-sub">Tren saldo 30 hari (SOL)</span>
+            <canvas id="chart-portfolio"></canvas>
+            <div class="chart-footer">Saat ini <strong id="chart-current-val">— SOL</strong></div>
+          </section>
+          <section class="panel chart-panel">
+            <h3>Profit</h3>
+            <span class="panel-sub">PnL kumulatif & fee harian (SOL)</span>
+            <canvas id="chart-profit"></canvas>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot green"></span> Fee harian</span>
+              <span class="legend-item"><span class="legend-dot purple"></span> PnL kumulatif</span>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-right">
+        <!-- Opportunities -->
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Opportunities</h3>
+            <span class="panel-sub">Screened Meteora DLMM pools</span>
+          </div>
+          <div id="opportunities-list" class="opportunities"></div>
+          <div class="empty-state" id="empty-opp">Menunggu data screening...</div>
+        </section>
+
+        <!-- Decision Log -->
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Decision Log</h3>
+            <span class="panel-sub">Recent agent actions</span>
+          </div>
+          <div id="decision-log" class="decision-log"></div>
+          <div class="empty-state" id="empty-decisions">Belum ada keputusan tercatat</div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

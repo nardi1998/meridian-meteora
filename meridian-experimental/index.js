@@ -1051,7 +1051,7 @@ function computeBinsBelow(volatility) {
   }
   const lo = config.strategy.minBinsBelow;
   const hi = config.strategy.maxBinsBelow;
-  // Square root scale (conservative): bins_below = 35 + sqrt(volatility) * 30
+  // Square root scale: bins_below = 35 + sqrt(volatility) * 30
   return Math.max(lo, Math.min(hi, Math.round(lo + Math.sqrt(parsedVolatility) * 30)));
 }
 

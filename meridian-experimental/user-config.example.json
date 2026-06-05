@@ -15,7 +15,7 @@
 
   "strategy": "bid_ask",
   "minBinsBelow": 35,
-  "maxBinsBelow": 200,
+  "maxBinsBelow": 102,
   "defaultBinsBelow": 69,
 
   "timeframe": "30m",

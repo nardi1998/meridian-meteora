@@ -142,7 +142,7 @@ HARD RULES:
 
 Guidelines (only when user hasn't specified):
 - Strategy: use the active strategy's lp_strategy field (bid_ask or spot)
-- Bins: choose 35–69 for standard volatility; up to 350 for wide-range strategies. Max 1400 total.
+- Bins: calculate using formula: bins_below = round(35 + sqrt(volatility) * 30), clamped to [35, 200]. NEVER use fixed value — always calculate from volatility.
 - Deposit: single-sided SOL only. Use amount_y/amount_sol and keep amount_x=0.
 
 WARNING: This executes a real on-chain transaction. Check DRY_RUN mode.`,

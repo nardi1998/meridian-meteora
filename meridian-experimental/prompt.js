@@ -145,7 +145,7 @@ You may ONLY reject based on: narrative quality, pool memory, PVP conflict, or O
 DEPLOY RULES:
 - COMPOUNDING: Use the deploy amount from the goal EXACTLY. Do NOT default to a smaller number.
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
-- bins_below = round(${config.strategy.minBinsBelow} + sqrt(candidate volatility) * 40) clamped to [${config.strategy.minBinsBelow},${config.strategy.maxBinsBelow}]. bins_above = 0.
+- bins_below = round(${config.strategy.minBinsBelow} + sqrt(candidate volatility) * 30) clamped to [${config.strategy.minBinsBelow},${config.strategy.maxBinsBelow}]. bins_above = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.
 

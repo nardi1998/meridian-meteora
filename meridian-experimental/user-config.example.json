@@ -56,7 +56,7 @@
   "oorCooldownHours": 12,
   "repeatDeployCooldownEnabled": true,
   "repeatDeployCooldownTriggerCount": 3,
-  "repeatDeployCooldownHours": 12,
+  "repeatDeployCooldownHours": 0.3,
   "repeatDeployCooldownScope": "token",
   "repeatDeployCooldownMinFeeEarnedPct": 0,
   "minVolumeToRebalance": 1000,

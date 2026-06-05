@@ -305,20 +305,21 @@ export async function runManagementCycle({ silent = false } = {}) {
 
     const reportLines = positionData.map((p) => {
       const act = actionMap.get(p.position);
-      const pnlEmoji = (p.pnl_pct ?? 0) >= 0 ? "📈" : "📉";
-      const val = config.management.solMode ? `◎${p.total_value_usd ?? "?"}` : `$${p.total_value_usd ?? "?"}`;
-      const unclaimed = config.management.solMode ? `◎${p.unclaimed_fees_usd ?? "?"}` : `$${p.unclaimed_fees_usd ?? "?"}`;
+      const cur = config.management.solMode ? "◎" : "$";
+      const val = `${cur}${(p.total_value_usd ?? 0).toFixed(4)}`;
+      const unclaimed = `${cur}${(p.unclaimed_fees_usd ?? 0).toFixed(4)}`;
       const pnlPct = p.pnl_pct ?? 0;
+      const yieldPct = p.fee_per_tvl_24h ?? 0;
       const statusLabel = act.action === "INSTRUCTION" ? "HOLD (instruction)" : act.action;
-      let line = `**${p.pair}** • Age: ${p.age_minutes ?? "?"}m • Unclaimed: ${unclaimed}`;
-      line += `\nPnL: ${pnlEmoji} ${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(2)}% • ${statusLabel}`;
+      const rangeEmoji = p.in_range ? "🟢" : "🔴";
+      const oorText = !p.in_range ? ` OOR ${p.minutes_out_of_range ?? 0}m` : "";
+      let line = `**${p.pair}** | Age: ${p.age_minutes ?? "?"}m | Val: ${val} | Unclaimed: ${unclaimed} | PnL: ${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(2)}% | Yield: ${yieldPct.toFixed(2)}% | ${rangeEmoji}${oorText} | ${statusLabel}`;
       const rangeBar = buildRangeBar(p.lower_bin, p.upper_bin, p.active_bin);
       if (rangeBar) {
-        const inRangeLabel = p.in_range ? "in range" : `OOR ${p.minutes_out_of_range ?? 0}m`;
-        line += `\nRange: [${rangeBar}] ${inRangeLabel}`;
+        line += `\nRange: [${rangeBar}]`;
       }
       if (p.instruction) line += `\nNote: "${p.instruction}"`;
-      if (act.action === "CLOSE" && act.rule === "exit") line += `\n⚡ Trailing TP: ${act.reason}`;
+      if (act.action === "CLOSE" && act.rule === "exit") line += `\n⚡ ${act.reason}`;
       if (act.action === "CLOSE" && act.rule && act.rule !== "exit") line += `\nRule ${act.rule}: ${act.reason}`;
       if (act.action === "CLAIM") line += `\n→ Claiming fees`;
       return line;
@@ -475,6 +476,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
       return screenReport;
     }
     const candidates = (topCandidates?.candidates || topCandidates?.pools || []).slice(0, 10);
+    setLatestCandidates(candidates); // Update candidates cache for /candidates command
     const earlyFilteredExamples = topCandidates?.filtered_examples || [];
     const gmgnStageCounts = topCandidates?.stage_counts ?? null;
     const gmgnAllFiltered = topCandidates?.all_filtered ?? [];
@@ -1742,7 +1744,7 @@ async function telegramHandler(msg) {
           try {
             const balances = await getWalletBalances({});
             const token = balances.tokens?.find(t => t.mint === result.base_mint);
-            if (token && token.usd >= 0.10) {
+            if (token && token.usd >= 0.01) {
               await sendMessage(`🔄 Auto-swapping ${token.symbol || token.mint.slice(0, 8)} ($${token.usd.toFixed(2)}) → SOL...`);
               const swapResult = await swapToken({ input_mint: result.base_mint, output_mint: "SOL", amount: token.balance });
               if (swapResult?.success) {
@@ -1753,7 +1755,7 @@ async function telegramHandler(msg) {
             }
           } catch (e) { log("telegram_warn", `Auto-swap after /close failed: ${e.message}`); }
         }
-        await sendMessage(`✅ Closed ${pos.pair}\nPnL: ${config.management.solMode ? "◎" : "$"}${result.pnl_usd ?? "?"} | close txs: ${closeTxs?.join(", ") || "n/a"}${claimNote}${swapNote}`);
+        await sendMessage(`✅ Closed ${pos.pair}\nPnL: ${config.management.solMode ? "◎" : "$"}${(result.pnl_usd ?? 0).toFixed(4)} (${(result.pnl_pct ?? 0).toFixed(2)}%) | close txs: ${closeTxs?.join(", ") || "n/a"}${claimNote}${swapNote}`);
       } else {
         await sendMessage(`❌ Close failed: ${JSON.stringify(result)}`);
       }
@@ -1772,12 +1774,14 @@ async function telegramHandler(msg) {
         try {
           const result = await closePosition({ position_address: pos.position });
           if (result.success) {
+            const pnl = (result.pnl_usd ?? 0).toFixed(4);
+            const pnlPct = (result.pnl_pct ?? 0).toFixed(2);
             // Auto-swap base token back to SOL
             if (result.base_mint) {
               try {
                 const balances = await getWalletBalances({});
                 const token = balances.tokens?.find(t => t.mint === result.base_mint);
-                if (token && token.usd >= 0.10) {
+                if (token && token.usd >= 0.01) {
                   const swapResult = await swapToken({ input_mint: result.base_mint, output_mint: "SOL", amount: token.balance });
                   if (swapResult?.success) {
                     swapResults.push(`${token.symbol || "token"} → ${swapResult.amount_out ?? "?"} SOL`);
@@ -1787,7 +1791,7 @@ async function telegramHandler(msg) {
                 }
               } catch (e) { log("telegram_warn", `Auto-swap after /closeall failed for ${pos.pair}: ${e.message}`); }
             }
-            results.push(`${pos.pair}: closed`);
+            results.push(`${pos.pair}: closed (PnL: ${pnl} SOL, ${pnlPct}%)`);
           } else {
             results.push(`${pos.pair}: failed (${result.error || "unknown"})`);
           }

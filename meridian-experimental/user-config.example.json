@@ -73,7 +73,7 @@
 
   "whaleEscapeEnabled": true,
   "whaleEscapeTvlPctWarn": 8,
-  "whaleEscapeTvlPctClose": 20,
+  "whaleEscapeTvlPctClose": 15,
   "whaleEscapeAbsFloor": 10000,
   "whaleEscapeLegacyAb": 5000,
   "whaleEscapeNetDepCache": 30,

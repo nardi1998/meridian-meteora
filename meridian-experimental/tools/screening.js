@@ -116,6 +116,7 @@ function getRawPoolScreeningRejectReason(pool, s) {
   if (binStep == null || binStep < s.minBinStep) return `bin_step ${binStep ?? "unknown"} below minBinStep ${s.minBinStep}`;
   if (binStep > s.maxBinStep) return `bin_step ${binStep} above maxBinStep ${s.maxBinStep}`;
   if (!isUsableVolatility(volatility)) return `volatility ${volatility ?? "unknown"} unusable`;
+  if (s.maxVolatility != null && volatility > s.maxVolatility) return `volatility ${volatility} above maxVolatility ${s.maxVolatility}`;
   if (feeActiveTvlRatio == null || feeActiveTvlRatio < s.minFeeActiveTvlRatio) {
     return `fee/active-TVL ${feeActiveTvlRatio ?? "unknown"} below minFeeActiveTvlRatio ${s.minFeeActiveTvlRatio}`;
   }

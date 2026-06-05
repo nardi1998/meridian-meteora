@@ -129,10 +129,23 @@ NARRATIVE QUALITY (your main judgment call):
 
 POOL MEMORY: Past losses or problems → strong skip signal.
 
+⚠️ STRICT CONFIG RULES — DO NOT OVERRIDE:
+All candidates shown to you have ALREADY passed hard filters. You MUST NOT reject a candidate based on metrics that are already covered by config thresholds. The following metrics are ALREADY filtered:
+- bot_holders_pct: max ${config.screening.maxBotHoldersPct}% → if shown, it's ≤ ${config.screening.maxBotHoldersPct}%
+- top_holders_pct: max ${config.screening.maxTop10Pct}% → if shown, it's ≤ ${config.screening.maxTop10Pct}%
+- token_age_hours: min ${config.screening.minTokenAgeHours ?? "none"}h → if shown, it's ≥ threshold
+- fee_active_tvl_ratio: min ${config.screening.minFeeActiveTvlRatio}% → if shown, it's ≥ threshold
+- TVL: ${config.screening.minTvl}-${config.screening.maxTvl} → if shown, it's in range
+- volume: min $${config.screening.minVolume} → if shown, it's ≥ threshold
+- organic_score: min ${config.screening.minOrganic} → if shown, it's ≥ threshold
+- bin_step: ${config.screening.minBinStep}-${config.screening.maxBinStep} → if shown, it's in range
+- volatility: ${config.screening.maxVolatility ? `max ${config.screening.maxVolatility}` : "no max"} → if shown, it's within threshold
+You may ONLY reject based on: narrative quality, pool memory, PVP conflict, or OKX risk flags (rugpull, wash trading). NEVER reject based on the metrics above — they are already filtered.
+
 DEPLOY RULES:
 - COMPOUNDING: Use the deploy amount from the goal EXACTLY. Do NOT default to a smaller number.
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
-- bins_below = round(${config.strategy.minBinsBelow} + (candidate volatility/5)*${config.strategy.maxBinsBelow - config.strategy.minBinsBelow}) clamped to [${config.strategy.minBinsBelow},${config.strategy.maxBinsBelow}]. bins_above = 0.
+- bins_below = round(${config.strategy.minBinsBelow} + sqrt(candidate volatility) * 40) clamped to [${config.strategy.minBinsBelow},${config.strategy.maxBinsBelow}]. bins_above = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.
 

@@ -62,10 +62,30 @@ app.get("/api/summary", async (req, res) => {
 
 app.get("/api/positions", async (req, res) => {
   try {
+    // Get live positions from on-chain
+    const live = await getMyPositions({ force: true, silent: true }).catch(() => null);
+    const livePositions = live?.positions || [];
+
+    // Get tracked positions for metadata (deployed_at, strategy, etc.)
     const tracked = getTrackedPositions(false);
-    const open = tracked.filter((p) => !p.closed);
-    const closed = tracked.filter((p) => p.closed);
-    res.json({ open, closed });
+    const trackedMap = new Map(tracked.map((p) => [p.position, p]));
+    const trackedOpen = tracked.filter((p) => !p.closed);
+    const trackedClosed = tracked.filter((p) => p.closed);
+
+    // Merge live data with tracked metadata
+    const open = livePositions.map((p) => {
+      const t = trackedMap.get(p.position);
+      return {
+        ...p,
+        pool_name: t?.pool_name || p.pair,
+        strategy: t?.strategy || null,
+        deployed_at: t?.deployed_at || null,
+        bin_step: t?.bin_step || null,
+        amount_sol: t?.amount_sol || null,
+      };
+    });
+
+    res.json({ open, closed: trackedClosed });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -146,13 +166,30 @@ async function sendFullUpdate(ws) {
     const state = getStateSummary();
     const perf = getPerformanceSummary();
     const decisions = getRecentDecisions(10);
+
+    // Get live positions from on-chain
+    const live = await getMyPositions({ force: true, silent: true }).catch(() => null);
+    const livePositions = live?.positions || [];
     const tracked = getTrackedPositions(false);
-    const open = tracked.filter((p) => !p.closed);
-    const closed = tracked.filter((p) => !p.closed === false);
+    const trackedMap = new Map(tracked.map((p) => [p.position, p]));
+    const closed = tracked.filter((p) => p.closed);
+
+    // Merge live with tracked metadata
+    const open = livePositions.map((p) => {
+      const t = trackedMap.get(p.position);
+      return {
+        ...p,
+        pool_name: t?.pool_name || p.pair,
+        strategy: t?.strategy || null,
+        deployed_at: t?.deployed_at || null,
+        bin_step: t?.bin_step || null,
+        amount_sol: t?.amount_sol || null,
+      };
+    });
 
     ws.send(JSON.stringify({
       type: "full_update",
-      state,
+      state: { ...state, open_positions: open.length },
       performance: perf,
       decisions,
       positions: { open, closed },
@@ -171,20 +208,37 @@ setInterval(async () => {
   if (clients.size === 0) return;
 
   try {
+    // Get live positions from on-chain
+    const live = await getMyPositions({ force: true, silent: true }).catch(() => null);
+    const livePositions = live?.positions || [];
     const tracked = getTrackedPositions(false);
-    const open = tracked.filter((p) => !p.closed);
+    const trackedMap = new Map(tracked.map((p) => [p.position, p]));
     const closed = tracked.filter((p) => p.closed);
+
+    // Merge live with tracked metadata
+    const open = livePositions.map((p) => {
+      const t = trackedMap.get(p.position);
+      return {
+        ...p,
+        pool_name: t?.pool_name || p.pair,
+        strategy: t?.strategy || null,
+        deployed_at: t?.deployed_at || null,
+        bin_step: t?.bin_step || null,
+        amount_sol: t?.amount_sol || null,
+      };
+    });
+
     const state = getStateSummary();
     const perf = getPerformanceSummary();
     const decisions = getRecentDecisions(10);
 
-    const hash = JSON.stringify({ open: open.length, closed: closed.length, state: state.open_positions });
+    const hash = JSON.stringify({ open: open.length, closed: closed.length });
 
     if (hash !== lastPositionsHash) {
       lastPositionsHash = hash;
       broadcast({
         type: "full_update",
-        state,
+        state: { ...state, open_positions: open.length },
         performance: perf,
         decisions,
         positions: { open, closed },

@@ -3,6 +3,7 @@
  * Express + WebSocket for real-time position monitoring
  */
 
+import "../envcrypt.js";
 import express from "express";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";

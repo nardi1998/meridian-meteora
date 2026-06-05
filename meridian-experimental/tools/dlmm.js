@@ -1996,6 +1996,7 @@ export async function closePosition({ position_address, reason }) {
       let finalValueUsd = 0;
       let initialUsd = 0;
       let feesUsd = tracked.total_fees_claimed_usd || 0;
+      const solMode = config.management.solMode;
       try {
         const closedUrl = `https://dlmm.datapi.meteora.ag/positions/${poolAddress}/pnl?user=${wallet.publicKey.toString()}&status=closed&pageSize=50&page=1`;
         for (let attempt = 0; attempt < 6; attempt++) {
@@ -2005,11 +2006,18 @@ export async function closePosition({ position_address, reason }) {
             const posEntry = (data.positions || []).find(p => p.positionAddress === position_address);
             if (posEntry) {
               const nextPnlUsd = safeNum(posEntry.pnlUsd);
-              const nextPnlValue = config.management.solMode ? getClosedPnlValue(posEntry, true) : nextPnlUsd;
-              const nextPnlPct = getClosedPnlPct(posEntry, config.management.solMode);
-              const nextFinalValueUsd = parseFloat(posEntry.allTimeWithdrawals?.total?.usd || 0);
-              const nextInitialUsd = parseFloat(posEntry.allTimeDeposits?.total?.usd || 0);
-              const nextFeesUsd = parseFloat(posEntry.allTimeFees?.total?.usd || 0) || feesUsd;
+              const nextPnlValue = solMode ? getClosedPnlValue(posEntry, true) : nextPnlUsd;
+              const nextPnlPct = getClosedPnlPct(posEntry, solMode);
+              // Use SOL values when solMode is enabled
+              const nextFinalValue = solMode
+                ? parseFloat(posEntry.allTimeWithdrawals?.total?.sol || 0)
+                : parseFloat(posEntry.allTimeWithdrawals?.total?.usd || 0);
+              const nextInitial = solMode
+                ? parseFloat(posEntry.allTimeDeposits?.total?.sol || 0)
+                : parseFloat(posEntry.allTimeDeposits?.total?.usd || 0);
+              const nextFees = solMode
+                ? parseFloat(posEntry.allTimeFees?.total?.sol || 0) || feesUsd
+                : parseFloat(posEntry.allTimeFees?.total?.usd || 0) || feesUsd;
 
               if (shouldRejectClosedPnl(nextPnlPct, reason || tracked?.close_reason)) {
                 log("close_warn", `Rejected unsettled closed PnL for ${position_address.slice(0, 8)} on attempt ${attempt + 1}/6: ${nextPnlPct.toFixed(2)}%`);
@@ -2017,10 +2025,10 @@ export async function closePosition({ position_address, reason }) {
                 pnlTrueUsd    = nextPnlUsd;
                 pnlUsd        = nextPnlValue;
                 pnlPct        = nextPnlPct;
-                finalValueUsd = nextFinalValueUsd;
-                initialUsd    = nextInitialUsd;
-                feesUsd       = nextFeesUsd;
-                log("close", `Closed PnL from API: pnl=${pnlUsd.toFixed(2)} ${config.management.solMode ? "SOL" : "USD"} (${pnlPct.toFixed(2)}%), withdrawn=${finalValueUsd.toFixed(2)} USD, deposited=${initialUsd.toFixed(2)} USD`);
+                finalValueUsd = nextFinalValue;
+                initialUsd    = nextInitial;
+                feesUsd       = nextFees;
+                log("close", `Closed PnL from API: pnl=${pnlUsd.toFixed(4)} ${solMode ? "SOL" : "USD"} (${pnlPct.toFixed(2)}%), withdrawn=${finalValueUsd.toFixed(4)} ${solMode ? "SOL" : "USD"}, deposited=${initialUsd.toFixed(4)} ${solMode ? "SOL" : "USD"}`);
                 break;
               }
             } else {
@@ -2036,15 +2044,15 @@ export async function closePosition({ position_address, reason }) {
       if (finalValueUsd === 0) {
         const cachedPos = _positionsCache?.positions?.find(p => p.position === position_address);
         if (cachedPos) {
-          pnlTrueUsd    = cachedPos.pnl_true_usd ?? (config.management.solMode ? 0 : cachedPos.pnl_usd) ?? 0;
-          pnlUsd        = config.management.solMode ? (cachedPos.pnl_usd ?? 0) : pnlTrueUsd;
+          pnlTrueUsd    = cachedPos.pnl_true_usd ?? (solMode ? 0 : cachedPos.pnl_usd) ?? 0;
+          pnlUsd        = solMode ? (cachedPos.pnl_usd ?? 0) : pnlTrueUsd;
           pnlPct        = cachedPos.pnl_pct   ?? 0;
           feesUsd       = (cachedPos.collected_fees_true_usd || 0) + (cachedPos.unclaimed_fees_true_usd || 0);
           initialUsd    = tracked.initial_value_usd || 0;
           if (initialUsd > 0) {
             // Keep fallback internally consistent using USD-only cached metrics.
             finalValueUsd = Math.max(0, initialUsd + pnlTrueUsd - feesUsd);
-            if (!config.management.solMode) pnlPct = (pnlTrueUsd / initialUsd) * 100;
+            if (!solMode) pnlPct = (pnlTrueUsd / initialUsd) * 100;
           } else {
             finalValueUsd = cachedPos.total_value_true_usd ?? cachedPos.total_value_usd ?? 0;
             initialUsd = Math.max(0, finalValueUsd + feesUsd - pnlTrueUsd);

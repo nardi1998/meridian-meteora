@@ -15,7 +15,7 @@
 
   "strategy": "bid_ask",
   "minBinsBelow": 35,
-  "maxBinsBelow": 69,
+  "maxBinsBelow": 200,
   "defaultBinsBelow": 69,
 
   "timeframe": "30m",
@@ -102,7 +102,7 @@
   "agentId": "",
   "publicApiKey": "bWVyaWRpYW4taXMtdGhlLWJlc3QtYWdlbnRz",
   "agentMeridianApiUrl": "https://api.agentmeridian.xyz/api",
-  "lpAgentRelayEnabled": true,
+  "lpAgentRelayEnabled": false,
   "chartIndicators": {
     "enabled": false,
     "entryPreset": "supertrend_break",

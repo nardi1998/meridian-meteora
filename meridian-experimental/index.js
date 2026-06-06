@@ -999,6 +999,15 @@ function getDeterministicCloseRule(position, managementConfig) {
   ) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }
+  // Time-based exit: if trailing TP not triggered after 4 hours, close at +2%
+  if (
+    managementConfig.trailingTakeProfit &&
+    (position.age_minutes ?? 0) >= 240 &&
+    (tracked?.peak_pnl_pct ?? 0) < managementConfig.trailingTriggerPct &&
+    (position.pnl_pct ?? 0) >= 2
+  ) {
+    return { action: "CLOSE", rule: 7, reason: `time exit: no trailing TP after ${position.age_minutes}m, taking +${position.pnl_pct?.toFixed(2)}% profit` };
+  }
   return null;
 }
 

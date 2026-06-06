@@ -140,9 +140,16 @@ HARD RULES:
 - For single-side SOL deploys (amount_y only, amount_x=0), do not request upside exposure:
   use bins_below only, keep bins_above=0, and the upper bin will be pinned to the current active bin.
 
+⚠️ MANDATORY bins_below CALCULATION:
+You MUST calculate bins_below using this EXACT formula. NEVER use a fixed value.
+bins_below = round(35 + sqrt(volatility) * 30)
+where volatility is the candidate's volatility value.
+Example: volatility=3.0 → bins_below = round(35 + 1.732 * 30) = round(35 + 52) = 87
+Example: volatility=7.0 → bins_below = round(35 + 2.646 * 30) = round(35 + 79) = 114
+NEVER use 35 or any other fixed value. ALWAYS calculate from volatility.
+
 Guidelines (only when user hasn't specified):
 - Strategy: use the active strategy's lp_strategy field (bid_ask or spot)
-- Bins: calculate using formula: bins_below = round(35 + sqrt(volatility) * 30), clamped to [35, 102]. Always calculate from volatility.
 - Deposit: single-sided SOL only. Use amount_y/amount_sol and keep amount_x=0.
 
 WARNING: This executes a real on-chain transaction. Check DRY_RUN mode.`,

@@ -120,6 +120,11 @@ function getRawPoolScreeningRejectReason(pool, s) {
   if (feeActiveTvlRatio == null || feeActiveTvlRatio < s.minFeeActiveTvlRatio) {
     return `fee/active-TVL ${feeActiveTvlRatio ?? "unknown"} below minFeeActiveTvlRatio ${s.minFeeActiveTvlRatio}`;
   }
+  // Check fee_per_tvl_24h if available from Meteora API
+  const feePerTvl24h = numeric(pool?.fee_per_tvl_24h);
+  if (s.minFeePerTvl24h != null && feePerTvl24h != null && feePerTvl24h < s.minFeePerTvl24h) {
+    return `fee_per_tvl_24h ${feePerTvl24h}% below minFeePerTvl24h ${s.minFeePerTvl24h}%`;
+  }
   if (baseOrganic == null || baseOrganic < s.minOrganic) {
     return `base organic ${baseOrganic ?? "unknown"} below minOrganic ${s.minOrganic}`;
   }
@@ -846,6 +851,7 @@ function condensePool(p) {
     fee_window: round(p.fee),
     volume_window: round(p.volume),
     fee_active_tvl_ratio: p.fee_active_tvl_ratio != null ? fix(p.fee_active_tvl_ratio, 4) : null,
+    fee_per_tvl_24h: p.fee_per_tvl_24h ?? null, // From Meteora API if available
     volatility: fix(p.volatility, 4),
     volatility_timeframe: p.volatility_timeframe || getVolatilityTimeframe(config.screening.timeframe),
 

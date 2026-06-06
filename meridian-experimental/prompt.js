@@ -135,6 +135,7 @@ All candidates shown to you have ALREADY passed hard filters. You MUST NOT rejec
 - top_holders_pct: max ${config.screening.maxTop10Pct}% → if shown, it's ≤ ${config.screening.maxTop10Pct}%
 - token_age_hours: min ${config.screening.minTokenAgeHours ?? "none"}h → if shown, it's ≥ threshold
 - fee_active_tvl_ratio: min ${config.screening.minFeeActiveTvlRatio}% → if shown, it's ≥ threshold
+- fee_per_tvl_24h: min ${config.screening.minFeePerTvl24h ?? "none"}% → if shown, it's ≥ threshold
 - TVL: ${config.screening.minTvl}-${config.screening.maxTvl} → if shown, it's in range
 - volume: min $${config.screening.minVolume} → if shown, it's ≥ threshold
 - organic_score: min ${config.screening.minOrganic} → if shown, it's ≥ threshold
@@ -145,7 +146,9 @@ You may ONLY reject based on: narrative quality, pool memory, PVP conflict, or O
 DEPLOY RULES:
 - COMPOUNDING: Use the deploy amount from the goal EXACTLY. Do NOT default to a smaller number.
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
-- bins_below = round(${config.strategy.minBinsBelow} + sqrt(candidate volatility) * 30) clamped to [${config.strategy.minBinsBelow},${config.strategy.maxBinsBelow}]. bins_above = 0.
+- ⚠️ bins_below MUST be calculated: round(35 + sqrt(volatility) * 30), clamped to [35, 102]. Example: volatility=3.0 → 87 bins. volatility=7.0 → 114 bins. NEVER use 35 or any fixed value.
+- pass deploy_position.volatility = the candidate volatility value.
+- bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.
 

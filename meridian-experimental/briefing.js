@@ -1,5 +1,6 @@
 import fs from "fs";
 import { log } from "./logger.js";
+import { config } from "./config.js";
 import { getPerformanceSummary } from "./lessons.js";
 
 const STATE_FILE = "./state.json";
@@ -11,6 +12,8 @@ export async function generateBriefing() {
 
   const now = new Date();
   const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const solMode = config.management?.solMode;
+  const cur = solMode ? "◎" : "$";
 
   // 1. Positions Activity
   const allPositions = Object.values(state.positions || {});
@@ -19,8 +22,8 @@ export async function generateBriefing() {
 
   // 2. Performance Activity (from performance log)
   const perfLast24h = (lessonsData.performance || []).filter(p => new Date(p.recorded_at) > last24h);
-  const totalPnLUsd = perfLast24h.reduce((sum, p) => sum + (p.pnl_usd || 0), 0);
-  const totalFeesUsd = perfLast24h.reduce((sum, p) => sum + (p.fees_earned_usd || 0), 0);
+  const totalPnL = perfLast24h.reduce((sum, p) => sum + (p.pnl_usd || 0), 0);
+  const totalFees = perfLast24h.reduce((sum, p) => sum + (p.fees_earned_usd || 0), 0);
 
   // 3. Lessons Learned
   const lessonsLast24h = (lessonsData.lessons || []).filter(l => new Date(l.created_at) > last24h);
@@ -38,8 +41,8 @@ export async function generateBriefing() {
     `📤 Positions Closed: ${closedLast24h.length}`,
     "",
     `<b>Performance:</b>`,
-    `💰 Net PnL: ${totalPnLUsd >= 0 ? "+" : ""}$${totalPnLUsd.toFixed(2)}`,
-    `💎 Fees Earned: $${totalFeesUsd.toFixed(2)}`,
+    `💰 Net PnL: ${totalPnL >= 0 ? "+" : ""}${cur}${totalPnL.toFixed(4)}`,
+    `💎 Fees Earned: ${cur}${totalFees.toFixed(4)}`,
     perfLast24h.length > 0
       ? `📈 Win Rate (24h): ${Math.round((perfLast24h.filter(p => p.pnl_usd > 0).length / perfLast24h.length) * 100)}%`
       : "📈 Win Rate (24h): N/A",
@@ -52,7 +55,7 @@ export async function generateBriefing() {
     `<b>Current Portfolio:</b>`,
     `📂 Open Positions: ${openPositions.length}`,
     perfSummary
-      ? `📊 All-time PnL: $${perfSummary.total_pnl_usd.toFixed(2)} (${perfSummary.win_rate_pct}% win)`
+      ? `📊 All-time PnL: ${cur}${perfSummary.total_pnl_usd.toFixed(4)} (${perfSummary.win_rate_pct}% win)`
       : "",
     "────────────────"
   ];

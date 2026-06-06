@@ -599,6 +599,10 @@ export async function executeTool(name, args) {
   if (PROTECTED_TOOLS.has(name)) {
     const safetyCheck = await runSafetyChecks(name, args);
     if (!safetyCheck.pass) {
+      // Release deploy lock if safety check fails
+      if (name === "deploy_position") {
+        _deployLock = false;
+      }
       log("safety_block", `${name} blocked: ${safetyCheck.reason}`);
       return {
         blocked: true,
@@ -625,6 +629,8 @@ export async function executeTool(name, args) {
       if (name === "swap_token" && result.tx) {
         notifySwap({ inputSymbol: args.input_mint?.slice(0, 8), outputSymbol: args.output_mint === "So11111111111111111111111111111111111111112" || args.output_mint === "SOL" ? "SOL" : args.output_mint?.slice(0, 8), amountIn: result.amount_in, amountOut: result.amount_out, tx: result.tx }).catch(() => {});
       } else if (name === "deploy_position") {
+        _deployLock = false;
+        _lastDeployAt = Date.now();
         notifyDeploy({ pair: result.pool_name || args.pool_name || args.pool_address?.slice(0, 8), amountSol: args.amount_y ?? args.amount_sol ?? 0, position: result.position, tx: result.txs?.[0] ?? result.tx, priceRange: result.price_range, rangeCoverage: result.range_coverage, binStep: result.bin_step, baseFee: result.base_fee }).catch(() => {});
       } else if (name === "close_position") {
         notifyClose({ pair: result.pool_name || args.position_address?.slice(0, 8), pnlUsd: result.pnl_usd ?? 0, pnlPct: result.pnl_pct ?? 0, reason: args.reason || null }).catch(() => {});
@@ -668,6 +674,11 @@ export async function executeTool(name, args) {
   } catch (error) {
     const duration = Date.now() - startTime;
 
+    // Release deploy lock on error
+    if (name === "deploy_position") {
+      _deployLock = false;
+    }
+
     logAction({
       tool: name,
       args,
@@ -687,11 +698,26 @@ export async function executeTool(name, args) {
 /**
  * Run safety checks before executing write operations.
  */
+let _deployLock = false; // Prevent concurrent deploys
+let _lastDeployAt = 0; // Track last deploy timestamp
+const DEPLOY_COOLDOWN_MS = 10000; // 10 seconds cooldown between deploys
+
 async function runSafetyChecks(name, args) {
   switch (name) {
     case "deploy_position": {
+      // Prevent concurrent deploys
+      if (_deployLock) {
+        return { pass: false, reason: "Deploy already in progress. Wait for current deploy to finish." };
+      }
+      // Cooldown between deploys
+      if (Date.now() - _lastDeployAt < DEPLOY_COOLDOWN_MS) {
+        const waitSec = Math.ceil((DEPLOY_COOLDOWN_MS - (Date.now() - _lastDeployAt)) / 1000);
+        return { pass: false, reason: `Deploy cooldown. Wait ${waitSec}s before next deploy.` };
+      }
+      _deployLock = true;
+
       const poolThresholds = await validateDeployPoolThresholds(args);
-      if (!poolThresholds.pass) return poolThresholds;
+      if (!poolThresholds.pass) { _deployLock = false; return poolThresholds; }
 
       // Reject pools with bin_step out of configured range
       const minStep = config.screening.minBinStep;
@@ -711,11 +737,8 @@ async function runSafetyChecks(name, args) {
           reason: "This agent only supports single-side SOL deploys. Use amount_y/amount_sol and keep amount_x=0.",
         };
       }
-      const requestedBinsBelow = Number(args.bins_below ?? config.strategy.defaultBinsBelow ?? config.strategy.minBinsBelow);
-      const requestedBinsAbove = Number(args.bins_above ?? 0);
-      const minBinsBelow = Math.max(MIN_SAFE_BINS_BELOW, Number(config.strategy.minBinsBelow ?? MIN_SAFE_BINS_BELOW));
-      const isSingleSidedSol = deployAmountY > 0 && deployAmountX <= 0;
-      const requestedTotalBins = requestedBinsBelow + requestedBinsAbove;
+
+      // Calculate bins_below from volatility — override LLM value if volatility provided
       const requestedVolatility = args.volatility == null ? null : Number(args.volatility);
       if (args.volatility != null && (!Number.isFinite(requestedVolatility) || requestedVolatility <= 0)) {
         return {
@@ -723,6 +746,21 @@ async function runSafetyChecks(name, args) {
           reason: `volatility ${args.volatility} is invalid. Refusing deploy because the volatility feed is unusable.`,
         };
       }
+
+      let requestedBinsBelow;
+      if (requestedVolatility != null && requestedVolatility > 0) {
+        // Hardcode formula: bins_below = 35 + sqrt(volatility) * 30
+        const calculatedBins = Math.round(config.strategy.minBinsBelow + Math.sqrt(requestedVolatility) * 30);
+        requestedBinsBelow = Math.max(config.strategy.minBinsBelow, Math.min(config.strategy.maxBinsBelow, calculatedBins));
+        log("deploy", ` bins_below calculated: round(35 + sqrt(${requestedVolatility}) * 30) = ${requestedBinsBelow}`);
+      } else {
+        requestedBinsBelow = Number(args.bins_below ?? config.strategy.defaultBinsBelow ?? config.strategy.minBinsBelow);
+      }
+
+      const requestedBinsAbove = Number(args.bins_above ?? 0);
+      const minBinsBelow = Math.max(MIN_SAFE_BINS_BELOW, Number(config.strategy.minBinsBelow ?? MIN_SAFE_BINS_BELOW));
+      const isSingleSidedSol = deployAmountY > 0 && deployAmountX <= 0;
+      const requestedTotalBins = requestedBinsBelow + requestedBinsAbove;
       if (
         args.downside_pct == null &&
         args.upside_pct == null &&
@@ -827,6 +865,12 @@ async function runSafetyChecks(name, args) {
             reason: `Insufficient SOL: have ${balance.sol} SOL, need ${minRequired} SOL (${amountY} deploy + ${gasReserve} gas reserve).`,
           };
         }
+      }
+
+      // Override bins_below with calculated value from volatility
+      if (requestedVolatility != null && requestedVolatility > 0) {
+        args.bins_below = requestedBinsBelow;
+        log("deploy", ` bins_below overridden to ${requestedBinsBelow} (from volatility ${requestedVolatility})`);
       }
 
       return { pass: true };

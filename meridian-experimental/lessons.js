@@ -335,7 +335,8 @@ export function evolveThresholds(perfData, config) {
   // ── 1. maxVolatility ─────────────────────────────────────────
   // If losers tend to cluster at higher volatility → tighten the ceiling.
   // If winners span higher volatility safely → we can loosen a bit.
-  {
+  // SKIP if maxVolatility is null (user wants no volatility limit)
+  if (config.screening.maxVolatility != null) {
     const winnerVols = winners.map((p) => p.volatility).filter(isFiniteNum);
     const loserVols  = losers.map((p) => p.volatility).filter(isFiniteNum);
     const current    = config.screening.maxVolatility;

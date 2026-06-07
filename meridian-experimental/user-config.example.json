@@ -4,7 +4,7 @@
   "llmBaseUrl": "https://openrouter.ai/api/v1",
   "llmApiKey": "",
   "llmModel": "deepseek/deepseek-v4-flash",
-  "dryRun": true,
+  "dryRun": false,
 
   "deployAmountSol": 0.1,
   "maxPositions": 3,
@@ -31,6 +31,7 @@
   "maxMcap": 10000000,
   "minBinStep": 80,
   "maxBinStep": 125,
+  "maxVolatility": null,
   "minFeeActiveTvlRatio": 0.1,
   "minTokenFeesSol": 25,
   "useDiscordSignals": false,
@@ -102,7 +103,7 @@
   "agentId": "",
   "publicApiKey": "bWVyaWRpYW4taXMtdGhlLWJlc3QtYWdlbnRz",
   "agentMeridianApiUrl": "https://api.agentmeridian.xyz/api",
-  "lpAgentRelayEnabled": false,
+  "lpAgentRelayEnabled": true,
   "chartIndicators": {
     "enabled": false,
     "entryPreset": "supertrend_break",

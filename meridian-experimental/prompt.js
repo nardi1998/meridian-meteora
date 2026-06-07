@@ -148,6 +148,7 @@ DEPLOY RULES:
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
 - ⚠️ bins_below MUST be calculated: round(35 + sqrt(volatility) * 30), clamped to [35, 102]. Example: volatility=3.0 → 87 bins. volatility=7.0 → 114 bins. NEVER use 35 or any fixed value.
 - pass deploy_position.volatility = the candidate volatility value.
+- pass deploy_position.fee_per_tvl_24h = the candidate fee_per_tvl_24h value (if available).
 - bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.

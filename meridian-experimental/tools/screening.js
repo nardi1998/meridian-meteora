@@ -120,11 +120,6 @@ function getRawPoolScreeningRejectReason(pool, s) {
   if (feeActiveTvlRatio == null || feeActiveTvlRatio < s.minFeeActiveTvlRatio) {
     return `fee/active-TVL ${feeActiveTvlRatio ?? "unknown"} below minFeeActiveTvlRatio ${s.minFeeActiveTvlRatio}`;
   }
-  // Check fee_per_tvl_24h if available from Meteora API
-  const feePerTvl24h = numeric(pool?.fee_per_tvl_24h);
-  if (s.minFeePerTvl24h != null && feePerTvl24h != null && feePerTvl24h < s.minFeePerTvl24h) {
-    return `fee_per_tvl_24h ${feePerTvl24h}% below minFeePerTvl24h ${s.minFeePerTvl24h}%`;
-  }
   if (baseOrganic == null || baseOrganic < s.minOrganic) {
     return `base organic ${baseOrganic ?? "unknown"} below minOrganic ${s.minOrganic}`;
   }

@@ -65,7 +65,7 @@
   "emergencyPriceDropPct": -30,
   "takeProfitPct": 5,
   "minFeePerTvl24h": 2,
-  "minAgeBeforeYieldCheck": 300,
+  "minAgeBeforeYieldCheck": 60,
   "trailingTakeProfit": true,
   "trailingTriggerPct": 3,
   "trailingDropPct": 1,

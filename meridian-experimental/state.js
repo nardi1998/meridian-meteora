@@ -462,18 +462,19 @@ export function updatePnlAndCheckExits(position_address, positionData, mgmtConfi
     }
   }
 
-  // ── Low yield (only after position has had time to accumulate fees) ───
-  const { age_minutes } = positionData;
+  // ── Low yield (only after position has had time to accumulate fees AND is in profit) ───
+  const { age_minutes, pnl_pct } = positionData;
   const minAgeForYieldCheck = mgmtConfig.minAgeBeforeYieldCheck ?? 60;
   if (
     fee_per_tvl_24h != null &&
     mgmtConfig.minFeePerTvl24h != null &&
     fee_per_tvl_24h < mgmtConfig.minFeePerTvl24h &&
-    (age_minutes == null || age_minutes >= minAgeForYieldCheck)
+    (age_minutes == null || age_minutes >= minAgeForYieldCheck) &&
+    (pnl_pct ?? 0) > 0
   ) {
     return {
       action: "LOW_YIELD",
-      reason: `Low yield: fee/TVL ${fee_per_tvl_24h.toFixed(2)}% < min ${mgmtConfig.minFeePerTvl24h}% (age: ${age_minutes ?? "?"}m)`,
+      reason: `Low yield: fee/TVL ${fee_per_tvl_24h.toFixed(2)}% < min ${mgmtConfig.minFeePerTvl24h}% (age: ${age_minutes ?? "?"}m, pnl: ${pnl_pct ?? "?"}%)`,
     };
   }
 

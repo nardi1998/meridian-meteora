@@ -709,14 +709,15 @@ STEPS:
      range_coverage.upside_pct
      range_coverage.width_pct
 
-   MARKET
-   Fee/TVL: <x>%
-   Volume: $<x>
-   TVL: $<x>
-   Volatility: <x>
-   Organic: <x>
-   Mcap: $<x>
-   Age: <x>h
+    MARKET
+    Fee/TVL: <x>%
+    24h Fees/TVL: <x>%
+    Volume: $<x>
+    TVL: $<x>
+    Volatility: <x>
+    Organic: <x>
+    Mcap: $<x>
+    Age: <x>h
 
    AUDIT
    Top10: <x>%
@@ -992,10 +993,12 @@ function getDeterministicCloseRule(position, managementConfig) {
   ) {
     return { action: "CLOSE", rule: 4, reason: "OOR" };
   }
+  // Low yield: only close if position is in profit AND yield is low AND age >= minAge
   if (
     position.fee_per_tvl_24h != null &&
-    position.fee_per_tvl_24h < managementConfig.minFeePerTvl24h &&
-    (position.age_minutes ?? 0) >= 60
+    position.fee_per_tvl24h < managementConfig.minFeePerTvl24h &&
+    (position.age_minutes ?? 0) >= managementConfig.minAgeBeforeYieldCheck &&
+    (position.pnl_pct ?? 0) > 0
   ) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }

@@ -711,7 +711,6 @@ STEPS:
 
     MARKET
     Fee/TVL: <x>%
-    24h Fees/TVL: <x>%
     Volume: $<x>
     TVL: $<x>
     Volatility: <x>
@@ -992,6 +991,14 @@ function getDeterministicCloseRule(position, managementConfig) {
     (position.minutes_out_of_range ?? 0) >= managementConfig.outOfRangeWaitMinutes
   ) {
     return { action: "CLOSE", rule: 4, reason: "OOR" };
+  }
+  // Hold until profit: if position open 3h+ and hasn't touched +1%, wait for +1% first
+  if (
+    (position.age_minutes ?? 0) >= 180 &&
+    (tracked?.peak_pnl_pct ?? 0) < 1 &&
+    (position.pnl_pct ?? 0) < 1
+  ) {
+    return null; // Don't close yet - wait for +1%
   }
   // Low yield: only close if position is in profit AND yield is low AND age >= minAge
   if (

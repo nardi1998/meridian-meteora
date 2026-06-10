@@ -22,6 +22,7 @@ import {
   editMessageWithButtons,
   answerCallbackQuery,
   notifyOutOfRange,
+  notifyClose,
   isEnabled as telegramEnabled,
   createLiveMessage,
 } from "./telegram.js";
@@ -361,10 +362,10 @@ MANAGEMENT ACTION REQUIRED — ${actionPositions.length} position(s)
 ${actionBlocks}
 
 RULES:
-- CLOSE: call close_position only — it handles fee claiming internally, do NOT call claim_fees first
+- CLOSE: call close_position with reason from the rule above — it handles fee claiming internally, do NOT call claim_fees first
 - CLAIM: call claim_fees with position address
-- INSTRUCTION: evaluate the instruction condition. If met → close_position. If not → HOLD, do nothing.
-- ⚡ exit alerts: close immediately, no exceptions
+- INSTRUCTION: evaluate the instruction condition. If met → close_position with reason "instruction met". If not → HOLD, do nothing.
+- ⚡ exit alerts: close immediately with the exit reason, no exceptions
 
 Execute the required actions. Do NOT re-evaluate CLOSE/CLAIM — rules already applied. Just execute.
 After executing, write a brief one-line result per position.
@@ -991,7 +992,7 @@ function getDeterministicCloseRule(position, managementConfig) {
     position.fee_per_tvl_24h != null &&
     position.fee_per_tvl24h < managementConfig.minFeePerTvl24h &&
     (position.age_minutes ?? 0) >= managementConfig.minAgeBeforeYieldCheck &&
-    (position.pnl_pct ?? 0) > 0
+    (position.pnl_pct ?? 0) >= 0
   ) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }
@@ -1794,7 +1795,7 @@ async function telegramHandler(msg) {
             }
           } catch (e) { log("telegram_warn", `Auto-swap after /close failed: ${e.message}`); }
         }
-        await sendMessage(`✅ Closed ${pos.pair}\nPnL: ${config.management.solMode ? "◎" : "$"}${(result.pnl_usd ?? 0).toFixed(4)} (${(result.pnl_pct ?? 0).toFixed(2)}%) | close txs: ${closeTxs?.join(", ") || "n/a"}${claimNote}${swapNote}`);
+        await notifyClose({ pair: pos.pair, pnlUsd: result.pnl_usd ?? 0, pnlPct: result.pnl_pct ?? 0, reason: "manual close" });
       } else {
         await sendMessage(`❌ Close failed: ${JSON.stringify(result)}`);
       }
@@ -1813,8 +1814,6 @@ async function telegramHandler(msg) {
         try {
           const result = await closePosition({ position_address: pos.position });
           if (result.success) {
-            const pnl = (result.pnl_usd ?? 0).toFixed(4);
-            const pnlPct = (result.pnl_pct ?? 0).toFixed(2);
             // Auto-swap base token back to SOL
             if (result.base_mint) {
               try {
@@ -1830,7 +1829,8 @@ async function telegramHandler(msg) {
                 }
               } catch (e) { log("telegram_warn", `Auto-swap after /closeall failed for ${pos.pair}: ${e.message}`); }
             }
-            results.push(`${pos.pair}: closed (PnL: ${pnl} SOL, ${pnlPct}%)`);
+            await notifyClose({ pair: pos.pair, pnlUsd: result.pnl_usd ?? 0, pnlPct: result.pnl_pct ?? 0, reason: "close all" });
+            results.push(`${pos.pair}: closed`);
           } else {
             results.push(`${pos.pair}: failed (${result.error || "unknown"})`);
           }

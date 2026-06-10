@@ -443,8 +443,10 @@ export async function notifyDeploy({ pair, amountSol, position, tx, priceRange, 
   const coverageStr = rangeCoverage
     ? `Range cover: ${fmtPct(rangeCoverage.downside_pct)} downside | ${fmtPct(rangeCoverage.upside_pct)} upside | ${fmtPct(rangeCoverage.width_pct)} total\n`
     : "";
-  const poolStr = (binStep || baseFee)
-    ? `Bin step: ${binStep ?? "?"}  |  Base fee: ${baseFee != null ? baseFee + "%" : "?"}\n`
+  const binStepStr = binStep != null ? `Bin step: ${binStep}` : "";
+  const baseFeeStr = baseFee != null ? `Base fee: ${baseFee}%` : "";
+  const poolStr = (binStepStr || baseFeeStr)
+    ? [binStepStr, baseFeeStr].filter(Boolean).join("  |  ") + "\n"
     : "";
   await sendHTML(
     `✅ <b>Deployed</b> ${pair}\n` +

@@ -741,6 +741,22 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       if (eligible.length < before) log("screening", `ATH filter removed ${before - eligible.length} pool(s)`);
     }
 
+    // Small cap ATH filter — for tokens with mcap < $1M, skip if price is below -75% from ATH
+    const smallCapAthThreshold = 25; // price must be >= 25% of ATH (not below -75%)
+    const beforeSmallCap = eligible.length;
+    eligible.splice(0, eligible.length, ...eligible.filter((p) => {
+      const mcap = p.mcap ?? p.token_x?.market_cap ?? 0;
+      if (mcap >= 1000000) return true; // only apply to tokens with mcap < $1M
+      if (p.price_vs_ath_pct == null) return true; // no data → don't filter
+      if (p.price_vs_ath_pct < smallCapAthThreshold) {
+        log("screening", `Small cap ATH filter: dropped ${p.name} — mcap $${mcap}, price ${p.price_vs_ath_pct.toFixed(1)}% of ATH (min: ${smallCapAthThreshold}%)`);
+        pushFilteredReason(filteredOut, p, `small cap: mcap $${mcap}, price ${p.price_vs_ath_pct.toFixed(1)}% of ATH < ${smallCapAthThreshold}%`);
+        return false;
+      }
+      return true;
+    }));
+    if (eligible.length < beforeSmallCap) log("screening", `Small cap ATH filter removed ${beforeSmallCap - eligible.length} pool(s)`);
+
     // Drop any pools whose creator is on the dev blocklist (caught via advanced-info)
     const before = eligible.length;
     const filtered = eligible.filter((p) => {

@@ -68,7 +68,8 @@ ${decisionSummary}` : ""}
 
 1. PATIENCE IS PROFIT: DLMM LPing is about capturing fees over time. Avoid "paper-handing" or closing positions for tiny gains/losses.
 2. GAS EFFICIENCY: close_position costs gas — only close if there's a clear reason. However, swap_token after a close is MANDATORY for any token worth >= $0.01. Skip tokens below $0.01 (dust — not worth the gas). Always check token USD value before swapping.
-3. DATA-DRIVEN AUTONOMY: You have full autonomy. Guidelines are heuristics. Use all tools to justify your actions.
+3. CLOSE REASON REQUIRED: When calling close_position, ALWAYS include the "reason" parameter with the exact reason provided in the management instructions. This ensures Telegram notifications display the correct close reason.
+4. DATA-DRIVEN AUTONOMY: You have full autonomy. Guidelines are heuristics. Use all tools to justify your actions.
 4. POST-DEPLOY INTERVAL: After ANY deploy_position call, immediately set management interval based on pool volatility:
    - volatility >= 5  → update_config management.managementIntervalMin = 3
    - volatility 2–5   → update_config management.managementIntervalMin = 5

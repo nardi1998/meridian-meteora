@@ -104,6 +104,10 @@ export function trackPosition({
     confirmed_trailing_exit_reason: null,
     confirmed_trailing_exit_until: null,
     trailing_active: false,
+    failed_target_trailing_active: false,
+    failed_target_trailing_trigger: null,
+    failed_target_trailing_drop: null,
+    failed_target_observation_started_at: null,
   };
   pushEvent(state, { action: "deploy", position, pool_name: pool_name || pool });
   save(state);
@@ -409,10 +413,12 @@ export function updatePnlAndCheckExits(position_address, positionData, mgmtConfi
   let changed = false;
 
   // Activate trailing TP once trigger threshold is reached
-  if (mgmtConfig.trailingTakeProfit && !pos.trailing_active && (pos.peak_pnl_pct ?? 0) >= mgmtConfig.trailingTriggerPct) {
+  // Use custom trigger if failed_target_trailing_active is set
+  const effectiveTrigger = pos.failed_target_trailing_trigger ?? mgmtConfig.trailingTriggerPct;
+  if (mgmtConfig.trailingTakeProfit && !pos.trailing_active && (pos.peak_pnl_pct ?? 0) >= effectiveTrigger) {
     pos.trailing_active = true;
     changed = true;
-    log("state", `Position ${position_address} trailing TP activated (confirmed peak: ${pos.peak_pnl_pct}%)`);
+    log("state", `Position ${position_address} trailing TP activated (confirmed peak: ${pos.peak_pnl_pct}%, trigger: ${effectiveTrigger}%)`);
   }
 
   // Update OOR state
@@ -438,11 +444,14 @@ export function updatePnlAndCheckExits(position_address, positionData, mgmtConfi
 
   // ── Trailing TP ────────────────────────────────────────────────
   if (!pnl_pct_suspicious && pos.trailing_active) {
+    // Use custom trailing thresholds for failed target rule if active
+    const customTrigger = pos.failed_target_trailing_trigger ?? mgmtConfig.trailingTriggerPct;
+    const customDrop = pos.failed_target_trailing_drop ?? mgmtConfig.trailingDropPct;
     const dropFromPeak = pos.peak_pnl_pct - currentPnlPct;
-    if (dropFromPeak >= mgmtConfig.trailingDropPct) {
+    if (dropFromPeak >= customDrop) {
       return {
         action: "TRAILING_TP",
-        reason: `Trailing TP: peak ${pos.peak_pnl_pct.toFixed(2)}% → current ${currentPnlPct.toFixed(2)}% (dropped ${dropFromPeak.toFixed(2)}% >= ${mgmtConfig.trailingDropPct}%)`,
+        reason: `Trailing TP: peak ${pos.peak_pnl_pct.toFixed(2)}% → current ${currentPnlPct.toFixed(2)}% (dropped ${dropFromPeak.toFixed(2)}% >= ${customDrop}%)`,
         needs_confirmation: true,
         peak_pnl_pct: pos.peak_pnl_pct,
         current_pnl_pct: currentPnlPct,

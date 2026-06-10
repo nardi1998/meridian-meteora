@@ -213,6 +213,12 @@ function analyzeTokenInfo(info = {}) {
     const threshold = 100 + Number(athFilter);
     if (priceVsAthPct > threshold) reasons.push(`price ${priceVsAthPct.toFixed(1)}% of ATH > ${threshold}%`);
   }
+  // Small cap ATH filter — for tokens with mcap < $1M, skip if price is below -75% from ATH
+  const mcap = num(token.market_cap);
+  const smallCapAthThreshold = 25; // price must be >= 25% of ATH
+  if (mcap < 1000000 && priceVsAthPct != null && priceVsAthPct < smallCapAthThreshold) {
+    reasons.push(`small cap: mcap $${mcap}, price ${priceVsAthPct.toFixed(1)}% of ATH < ${smallCapAthThreshold}%`);
+  }
   const totalFeeSol = num(info.total_fee);
   if (num(info.holder_count) < g.minHolders) reasons.push(`holders ${num(info.holder_count)} < ${g.minHolders}`);
   if (totalFeeSol < g.minTotalFeeSol) reasons.push(`total fee ${totalFeeSol} SOL < ${g.minTotalFeeSol} SOL`);

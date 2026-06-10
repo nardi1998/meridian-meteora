@@ -1014,18 +1014,44 @@ function getDeterministicCloseRule(position, managementConfig) {
   }
 
   // ── Failed to reach target: close on the way down if peak was too low ──
-  // Only apply if peak has been tracked (peak > 0 means PnL went above 0 at some point)
+  // Apply if position is at least 2 hours old and peak hasn't reached target
   if (
     !pnlSuspect &&
     (position.age_minutes ?? 0) >= 120 &&
-    position.pnl_pct != null &&
-    (tracked?.peak_pnl_pct ?? 0) > 0
+    position.pnl_pct != null
   ) {
-    const peak = tracked.peak_pnl_pct;
-    // Never touched +0.5% in 2h → close at +0.5%
-    if (peak < 0.5 && position.pnl_pct >= 0.5) {
-      return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.5%, taking +${position.pnl_pct.toFixed(2)}%` };
+    const peak = tracked?.peak_pnl_pct ?? 0;
+
+    // Peak < 0.6% after 2 hours → 1-hour observation period
+    if (peak < 0.6) {
+      // Start observation period if not started
+      if (!tracked.failed_target_observation_started_at) {
+        tracked.failed_target_observation_started_at = new Date().toISOString();
+        save(state);
+      }
+
+      const observationStarted = new Date(tracked.failed_target_observation_started_at);
+      const observationMinutes = Math.floor((Date.now() - observationStarted.getTime()) / 60000);
+
+      // During observation: if PnL reaches +0.5% → close immediately
+      if (observationMinutes < 60 && position.pnl_pct >= 0.5) {
+        return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.6%, taking +${position.pnl_pct.toFixed(2)}% during observation` };
+      }
+
+      // During observation: if PnL goes above +0.5% → activate trailing
+      if (position.pnl_pct > 0.5 && !tracked.failed_target_trailing_active) {
+        tracked.failed_target_trailing_active = true;
+        tracked.failed_target_trailing_trigger = 1.0;
+        tracked.failed_target_trailing_drop = 0.5;
+        save(state);
+      }
+
+      // After observation (60 min): if PnL reaches +0.5% → close
+      if (observationMinutes >= 60 && position.pnl_pct >= 0.5) {
+        return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.6%, observation complete, taking +${position.pnl_pct.toFixed(2)}%` };
+      }
     }
+
     // Never touched +1% in 2h → close near +0.1%
     if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1%, taking +${position.pnl_pct.toFixed(2)}%` };

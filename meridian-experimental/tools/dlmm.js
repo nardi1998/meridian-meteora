@@ -1851,7 +1851,7 @@ export async function closePosition({ position_address, reason }) {
           claim_txs: claimTxHashes,
           close_txs: closeTxHashes,
           txs: txHashes,
-          base_mint: livePosition?.base_mint || null,
+          base_mint: closeBaseMint,
         };
       } catch (relayError) {
         if (relaySubmitted) throw relayError;

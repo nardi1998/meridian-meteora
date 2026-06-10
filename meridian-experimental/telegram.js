@@ -460,7 +460,6 @@ export async function notifyDeploy({ pair, amountSol, position, tx, priceRange, 
 }
 
 export async function notifyClose({ pair, pnlUsd, pnlPct, reason }) {
-  if (hasActiveLiveMessage()) return;
   const cur = config.management.solMode ? "◎" : "$";
   const sign = pnlUsd >= 0 ? "+" : "";
   const reasonLine = reason ? `\nReason: ${reason}` : "";

@@ -375,6 +375,14 @@ After executing, write a brief one-line result per position.
       });
 
       mgmtReport += `\n\n${content}`;
+
+      // Fallback: send notifications for any CLOSE actions that might have been missed
+      for (const p of actionPositions) {
+        const act = actionMap.get(p.position);
+        if (act.action === "CLOSE" && act.rule) {
+          log("cron", `Management close executed for ${p.pair}: Rule ${act.rule} - ${act.reason}`);
+        }
+      }
     } else {
       log("cron", "Management: all positions STAY — skipping LLM");
       await liveMessage?.note("No tool actions needed.");
@@ -1006,12 +1014,18 @@ function getDeterministicCloseRule(position, managementConfig) {
   }
 
   // ── Failed to reach target: close on the way down if peak was too low ──
+  // Only apply if peak has been tracked (peak > 0 means PnL went above 0 at some point)
   if (
     !pnlSuspect &&
     (position.age_minutes ?? 0) >= 120 &&
-    position.pnl_pct != null
+    position.pnl_pct != null &&
+    (tracked?.peak_pnl_pct ?? 0) > 0
   ) {
-    const peak = tracked?.peak_pnl_pct ?? 0;
+    const peak = tracked.peak_pnl_pct;
+    // Never touched +0.5% in 2h → close at +0.5%
+    if (peak < 0.5 && position.pnl_pct >= 0.5) {
+      return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.5%, taking +${position.pnl_pct.toFixed(2)}%` };
+    }
     // Never touched +1% in 2h → close near +0.1%
     if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1%, taking +${position.pnl_pct.toFixed(2)}%` };
@@ -1780,10 +1794,12 @@ async function telegramHandler(msg) {
         const claimNote = result.claim_txs?.length ? `\nClaim txs: ${result.claim_txs.join(", ")}` : "";
         // Auto-swap base token back to SOL
         let swapNote = "";
+        log("close", `Auto-swap check: base_mint=${result.base_mint}, position=${pos.position}`);
         if (result.base_mint) {
           try {
             const balances = await getWalletBalances({});
             const token = balances.tokens?.find(t => t.mint === result.base_mint);
+            log("close", `Token found: ${token ? `${token.symbol} balance=${token.balance} usd=$${token.usd}` : "NOT FOUND"}`);
             if (token && token.usd >= 0.01) {
               await sendMessage(`🔄 Auto-swapping ${token.symbol || token.mint.slice(0, 8)} ($${token.usd.toFixed(2)}) → SOL...`);
               const swapResult = await swapToken({ input_mint: result.base_mint, output_mint: "SOL", amount: token.balance });
@@ -1792,8 +1808,12 @@ async function telegramHandler(msg) {
               } else {
                 swapNote = `\n⚠️ Swap failed: ${swapResult?.error || "unknown"}`;
               }
+            } else if (token) {
+              log("close", `Token value too low: $${token.usd} < $0.01, skipping swap`);
             }
           } catch (e) { log("telegram_warn", `Auto-swap after /close failed: ${e.message}`); }
+        } else {
+          log("close", `No base_mint in result, skipping auto-swap`);
         }
         await notifyClose({ pair: pos.pair, pnlUsd: result.pnl_usd ?? 0, pnlPct: result.pnl_pct ?? 0, reason: "manual close" });
       } else {

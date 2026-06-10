@@ -486,6 +486,17 @@ export async function notifyOutOfRange({ pair, minutesOOR }) {
   );
 }
 
+export async function notifyWhaleEscapeWarn({ pair, tvlDropPct, currentTvl, netDepUsd, warnThreshold, closeThreshold }) {
+  if (hasActiveLiveMessage()) return;
+  const sign = netDepUsd >= 0 ? "+" : "";
+  await sendHTML(
+    `🐋 <b>Whale Escape Warning</b> ${pair}\n` +
+    `TVL Drop: ${tvlDropPct.toFixed(1)}% (warn ${warnThreshold}% / close ${closeThreshold}%)\n` +
+    `Net Flow: ${sign}$${Math.abs(Math.round(netDepUsd))}\n` +
+    `Current TVL: $${Math.round(currentTvl)}`
+  );
+}
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }

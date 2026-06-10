@@ -971,12 +971,7 @@ function getDeterministicCloseRule(position, managementConfig) {
     return false;
   })();
 
-  if (!pnlSuspect && position.pnl_pct != null && position.pnl_pct <= managementConfig.stopLossPct) {
-    return { action: "CLOSE", rule: 1, reason: "stop loss" };
-  }
-  if (!pnlSuspect && position.pnl_pct != null && position.pnl_pct >= managementConfig.takeProfitPct) {
-    return { action: "CLOSE", rule: 2, reason: "take profit" };
-  }
+  // ── Hard rules: OOR & Low Yield — always close, ignore Hold Until Profit ──
   if (
     position.active_bin != null &&
     position.upper_bin != null &&
@@ -992,15 +987,6 @@ function getDeterministicCloseRule(position, managementConfig) {
   ) {
     return { action: "CLOSE", rule: 4, reason: "OOR" };
   }
-  // Hold until profit: if position open 3h+ and hasn't touched +1%, wait for +1% first
-  if (
-    (position.age_minutes ?? 0) >= 180 &&
-    (tracked?.peak_pnl_pct ?? 0) < 1 &&
-    (position.pnl_pct ?? 0) < 1
-  ) {
-    return null; // Don't close yet - wait for +1%
-  }
-  // Low yield: only close if position is in profit AND yield is low AND age >= minAge
   if (
     position.fee_per_tvl_24h != null &&
     position.fee_per_tvl24h < managementConfig.minFeePerTvl24h &&
@@ -1009,6 +995,36 @@ function getDeterministicCloseRule(position, managementConfig) {
   ) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }
+
+  // ── Soft rules: Stop Loss, Take Profit, Time Exit ──
+  if (!pnlSuspect && position.pnl_pct != null && position.pnl_pct <= managementConfig.stopLossPct) {
+    return { action: "CLOSE", rule: 1, reason: "stop loss" };
+  }
+  if (!pnlSuspect && position.pnl_pct != null && position.pnl_pct >= managementConfig.takeProfitPct) {
+    return { action: "CLOSE", rule: 2, reason: "take profit" };
+  }
+
+  // ── Failed to reach target: close on the way down if peak was too low ──
+  if (
+    !pnlSuspect &&
+    (position.age_minutes ?? 0) >= 120 &&
+    position.pnl_pct != null
+  ) {
+    const peak = tracked?.peak_pnl_pct ?? 0;
+    // Never touched +1% in 2h → close near +0.1%
+    if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
+      return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1%, taking +${position.pnl_pct.toFixed(2)}%` };
+    }
+    // Never touched +1.5% in 2h → close near +0.2%
+    if (peak < 1.5 && position.pnl_pct >= 0.19 && position.pnl_pct <= 0.25) {
+      return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1.5%, taking +${position.pnl_pct.toFixed(2)}%` };
+    }
+    // Never touched +2% in 2h → close near +0.3%
+    if (peak < 2 && position.pnl_pct >= 0.29 && position.pnl_pct <= 0.35) {
+      return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 2%, taking +${position.pnl_pct.toFixed(2)}%` };
+    }
+  }
+
   // Time-based exit: if trailing TP not triggered after 4 hours, close at +2%
   if (
     managementConfig.trailingTakeProfit &&
@@ -1710,6 +1726,7 @@ async function telegramHandler(msg) {
   if (text === "/positions") {
     try {
       const { positions, total_positions } = await getMyPositions({ force: true });
+      positions.sort((a, b) => (a.age_minutes ?? 0) - (b.age_minutes ?? 0));
       if (total_positions === 0) { await sendMessage("No open positions."); return; }
       const cur = config.management.solMode ? "◎" : "$";
       const lines = positions.map((p, i) => {
@@ -1728,6 +1745,7 @@ async function telegramHandler(msg) {
     try {
       const idx = parseInt(poolMatch[1]) - 1;
       const { positions } = await getMyPositions({ force: true });
+      positions.sort((a, b) => (a.age_minutes ?? 0) - (b.age_minutes ?? 0));
       if (idx < 0 || idx >= positions.length) { await sendMessage("Invalid number. Use /positions first."); return; }
       const pos = positions[idx];
       await sendMessage([
@@ -1751,6 +1769,7 @@ async function telegramHandler(msg) {
     try {
       const idx = parseInt(closeMatch[1]) - 1;
       const { positions } = await getMyPositions({ force: true });
+      positions.sort((a, b) => (a.age_minutes ?? 0) - (b.age_minutes ?? 0));
       if (idx < 0 || idx >= positions.length) { await sendMessage("Invalid number. Use /positions first."); return; }
       const pos = positions[idx];
       await sendMessage(`Closing ${pos.pair}...`);
@@ -1833,6 +1852,7 @@ async function telegramHandler(msg) {
       const idx = parseInt(setMatch[1]) - 1;
       const note = setMatch[2].trim();
       const { positions } = await getMyPositions({ force: true });
+      positions.sort((a, b) => (a.age_minutes ?? 0) - (b.age_minutes ?? 0));
       if (idx < 0 || idx >= positions.length) { await sendMessage("Invalid number. Use /positions first."); return; }
       const pos = positions[idx];
       setPositionInstruction(pos.position, note);

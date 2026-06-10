@@ -13,6 +13,7 @@
 import { log } from "./logger.js";
 import { config } from "./config.js";
 import { getTrackedPosition } from "./state.js";
+import { notifyWhaleEscapeWarn } from "./telegram.js";
 
 const DEFAULT_CONFIG = {
   enabled: true,
@@ -130,6 +131,14 @@ export function checkWhaleEscape(position) {
   // ── Warn if approaching threshold ──
   if (tvlDropPct >= cfg.tvlPctWarn && tvlDropPct < cfg.tvlPctClose) {
     log("whale_escape_warn", `TVL drop ${tvlDropPct.toFixed(1)}% for ${position.pair} (warn ${cfg.tvlPctWarn}%, close ${cfg.tvlPctClose}%)`);
+    notifyWhaleEscapeWarn({
+      pair: position.pair,
+      tvlDropPct,
+      currentTvl,
+      netDepUsd,
+      warnThreshold: cfg.tvlPctWarn,
+      closeThreshold: cfg.tvlPctClose,
+    }).catch(() => null);
   }
 
   return null;

@@ -788,6 +788,11 @@ export async function deployPosition({
         }),
       });
 
+      // Check if submit was successful before proceeding
+      if (!submit || submit.error) {
+        throw new Error(`Deploy submit failed: ${submit?.error || "unknown error"}`);
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 5000));
       _positionsCacheAt = 0;
       const refreshed = await getMyPositions({ force: true, silent: true }).catch(() => null);

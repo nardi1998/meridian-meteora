@@ -48,6 +48,29 @@ export function save(state) {
   }
 }
 
+/**
+ * Save changes to a tracked position (load state, update position, save).
+ */
+export function saveTrackedPosition(position_address) {
+  const state = load();
+  const tracked = state.positions[position_address];
+  if (tracked) save(state);
+}
+
+/**
+ * Load tracked position with save callback — use in functions that
+ * need to read AND mutate tracked state (e.g. getDeterministicCloseRule).
+ * Returns { tracked, save } where save() persists changes.
+ */
+export function loadTrackedWithSave(position_address) {
+  const state = load();
+  const tracked = state.positions[position_address] || null;
+  return {
+    tracked,
+    save: () => { if (tracked) save(state); },
+  };
+}
+
 // ─── Position Registry ─────────────────────────────────────────
 
 /**

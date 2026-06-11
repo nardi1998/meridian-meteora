@@ -27,7 +27,7 @@ import {
   createLiveMessage,
 } from "./telegram.js";
 import { generateBriefing } from "./briefing.js";
-import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, getTrackedPositions, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop, save } from "./state.js";
+import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, getTrackedPositions, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop, save, loadTrackedWithSave } from "./state.js";
 import { getActiveStrategy } from "./strategy-library.js";
 import { recordPositionSnapshot, recallForPool, addPoolNote } from "./pool-memory.js";
 import { checkWhaleEscape, recordTvlSnapshot } from "./whale-escape.js";
@@ -969,7 +969,7 @@ function formatCandidates(candidates) {
 }
 
 function getDeterministicCloseRule(position, managementConfig) {
-  const tracked = getTrackedPosition(position.position);
+  const { tracked, save: saveState } = loadTrackedWithSave(position.position);
   const pnlSuspect = (() => {
     if (position.pnl_pct == null) return false;
     if (position.pnl_pct > -90) return false;
@@ -1029,7 +1029,7 @@ function getDeterministicCloseRule(position, managementConfig) {
       // Start observation period if not started
       if (!tracked.failed_target_observation_started_at) {
         tracked.failed_target_observation_started_at = new Date().toISOString();
-        save(state);
+        saveState();
       }
 
       const observationStarted = new Date(tracked.failed_target_observation_started_at);
@@ -1045,7 +1045,7 @@ function getDeterministicCloseRule(position, managementConfig) {
         tracked.failed_target_trailing_active = true;
         tracked.failed_target_trailing_trigger = 1.0;
         tracked.failed_target_trailing_drop = 0.5;
-        save(state);
+        saveState();
       }
 
       // After observation (60 min): if PnL reaches +0.5% → close

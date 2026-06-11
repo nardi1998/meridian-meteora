@@ -39,7 +39,7 @@ function load() {
   }
 }
 
-function save(state) {
+export function save(state) {
   try {
     state.lastUpdated = new Date().toISOString();
     fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
@@ -478,7 +478,7 @@ export function updatePnlAndCheckExits(position_address, positionData, mgmtConfi
     fee_per_tvl_24h != null &&
     mgmtConfig.minFeePerTvl24h != null &&
     fee_per_tvl_24h < mgmtConfig.minFeePerTvl24h &&
-    (age_minutes == null || age_minutes >= minAgeForYieldCheck) &&
+    (age_minutes != null && age_minutes >= minAgeForYieldCheck) &&
     (pnl_pct ?? 0) > 0
   ) {
     return {

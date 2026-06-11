@@ -477,6 +477,15 @@ const toolMap = {
         log("config", `update_config: config.${section}.${field} ${redactConfigValue(key, before)} → ${redactConfigValue(key, val)} (verify: ${redactConfigValue(key, config[section][field])})`);
       }
     }
+    // Guard: takeProfitPct must be at least 0.1% (prevents auto-close at 0% PnL)
+    if (applied.takeProfitPct != null || applied.takeProfitFeePct != null) {
+      const clampedTp = Math.max(0.1, config.management.takeProfitPct);
+      if (clampedTp !== config.management.takeProfitPct) {
+        log("config", `update_config: clamped takeProfitPct ${config.management.takeProfitPct} → ${clampedTp} (minimum 0.1%)`);
+        config.management.takeProfitPct = clampedTp;
+      }
+    }
+
     if (
       applied.binsBelow != null ||
       applied.minBinsBelow != null ||

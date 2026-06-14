@@ -12,12 +12,10 @@
 import "./envcrypt.js";
 import readline from "readline";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { repoPath } from "./repo-root.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CONFIG_PATH = path.join(__dirname, "user-config.json");
-const GMGN_CONFIG_PATH = path.join(__dirname, "gmgn-config.json");
+const CONFIG_PATH = repoPath("user-config.json");
+const GMGN_CONFIG_PATH = repoPath("gmgn-config.json");
 const DEFAULT_HIVEMIND_URL = "https://api.agentmeridian.xyz";
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -202,8 +200,8 @@ const PRESETS = {
   },
 };
 
-const EXAMPLE_DEFAULTS = JSON.parse(fs.readFileSync(path.join(__dirname, "user-config.example.json"), "utf8"));
-const GMGN_EXAMPLE_DEFAULTS = JSON.parse(fs.readFileSync(path.join(__dirname, "gmgn-config.example.json"), "utf8"));
+const EXAMPLE_DEFAULTS = JSON.parse(fs.readFileSync(repoPath("user-config.example.json"), "utf8"));
+const GMGN_EXAMPLE_DEFAULTS = JSON.parse(fs.readFileSync(repoPath("gmgn-config.example.json"), "utf8"));
 const existing = fs.existsSync(CONFIG_PATH)
   ? JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"))
   : {};

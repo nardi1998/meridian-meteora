@@ -34,3 +34,6 @@ docs/
 
 # Test files
 test-*.js
+
+# Stray Claude Code worktrees
+.claude/worktrees/

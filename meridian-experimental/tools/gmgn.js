@@ -228,6 +228,16 @@ function analyzeTokenInfo(info = {}) {
   if (g.maxFreshWalletRate != null && num(stat.fresh_wallet_rate) > g.maxFreshWalletRate) reasons.push(`fresh wallets ${ratioPct(stat.fresh_wallet_rate)}%`);
   if (num(stat.top_bundler_trader_percentage) > g.maxBundlerRate) reasons.push(`bundler ${ratioPct(stat.top_bundler_trader_percentage)}%`);
   if (num(stat.top_rat_trader_percentage) > g.maxRatTraderRate) reasons.push(`insider ${ratioPct(stat.top_rat_trader_percentage)}%`);
+  // Holder count vs bundler count — if more bundlers than real holders, it's bot-driven
+  const holderCount = num(info.holder_count);
+  const bundlerCount = num(tags.bundler_wallets);
+  if (holderCount > 0 && bundlerCount > 0 && holderCount < bundlerCount) {
+    reasons.push(`holders ${holderCount} < bundlers ${bundlerCount}`);
+  }
+  // Phishing wallet percentage
+  const phishingWallets = num(tags.phishing_wallets) || num(stat.phishing_wallet_rate) || 0;
+  const phishingPct = num(stat.phishing_wallet_rate) != null ? phishingWallets : (holderCount > 0 ? phishingWallets / holderCount : 0);
+  if (phishingPct > g.maxPhishingWalletPct) reasons.push(`phishing wallets ${ratioPct(phishingPct)}% > ${ratioPct(g.maxPhishingWalletPct)}%`);
   return {
     passed: reasons.length === 0,
     reasons,

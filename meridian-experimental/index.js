@@ -23,6 +23,7 @@ import {
   answerCallbackQuery,
   notifyOutOfRange,
   notifyClose,
+  notifyTvlChange,
   isEnabled as telegramEnabled,
   createLiveMessage,
 } from "./telegram.js";
@@ -30,7 +31,7 @@ import { generateBriefing } from "./briefing.js";
 import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, getTrackedPositions, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop, save, loadTrackedWithSave } from "./state.js";
 import { getActiveStrategy } from "./strategy-library.js";
 import { recordPositionSnapshot, recallForPool, addPoolNote } from "./pool-memory.js";
-import { checkWhaleEscape, recordTvlSnapshot } from "./whale-escape.js";
+import { checkWhaleEscape, recordTvlSnapshot, getNetDepositData } from "./whale-escape.js";
 import { checkSmartWalletsOnPool } from "./smart-wallets.js";
 import { getTokenNarrative, getTokenInfo } from "./tools/token.js";
 import { stageSignals } from "./signal-tracker.js";
@@ -232,6 +233,21 @@ export async function runManagementCycle({ silent = false } = {}) {
       }
       return { ...p, recall: recallForPool(p.pool) };
     });
+
+    // Send TVL change notifications
+    for (const p of positionData) {
+      if (p.total_value_usd != null) {
+        const netData = getNetDepositData(p.pool);
+        if (netData) {
+          notifyTvlChange({
+            pair: p.pair,
+            tvlUsd: netData.currentTvl,
+            tvlChangePct: netData.tvlPctChange,
+            netDepUsd: netData.netDepUsd,
+          }).catch(() => {});
+        }
+      }
+    }
 
     // JS trailing TP check
     const exitMap = new Map();

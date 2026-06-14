@@ -19,7 +19,7 @@ const DEFAULT_CONFIG = {
   enabled: true,
   tvlPctWarn: 8,        // warn threshold % TVL drop
   tvlPctClose: 15,      // close threshold % TVL drop
-  absFloor: 10000,      // absolute USD floor for close
+  minWithdrawPct: 10,   // minimum withdrawal % of TVL for condition 2
   legacyAb: 5000,       // legacy absolute threshold
   netDepCache: 30,      // minutes to cache net deposit data
   priceDistBins: 5,     // close if price within N bins of bottom
@@ -56,7 +56,7 @@ export function recordTvlSnapshot(poolAddress, { tvlUsd, activeBin }) {
  * Calculate net deposit/withdrawal over the cache window.
  * Returns { netDepUsd, tvlPctChange, currentTvl, oldestTvl, oldestAge }
  */
-function getNetDepositData(poolAddress) {
+export function getNetDepositData(poolAddress) {
   const snaps = tvlSnapshots.get(poolAddress);
   if (!snaps || snaps.length < 2) return null;
 
@@ -108,7 +108,7 @@ export function checkWhaleEscape(position) {
 
   // ── Check 1: TVL percentage drop exceeds close threshold ──
   const tvlDropPct = Math.abs(Math.min(0, tvlPctChange));
-  if (tvlDropPct >= cfg.tvlPctClose && Math.abs(netDepUsd) >= cfg.absFloor) {
+  if (tvlDropPct >= cfg.tvlPctClose) {
     const binDist = currentBin != null && lower_bin != null ? currentBin - lower_bin : null;
     const nearBottom = binDist != null && binDist <= cfg.priceDistBins;
 
@@ -119,10 +119,12 @@ export function checkWhaleEscape(position) {
   }
 
   // ── Check 2: Large absolute withdrawal + price near bottom ──
-  if (netDepUsd < -cfg.absFloor && currentBin != null && lower_bin != null) {
+  const minWithdrawPct = cfg.minWithdrawPct ?? 10; // minimum withdrawal % of TVL
+  const minWithdrawUsd = currentTvl * (minWithdrawPct / 100);
+  if (netDepUsd < -minWithdrawUsd && currentBin != null && lower_bin != null) {
     const binDist = currentBin - lower_bin;
     if (binDist <= cfg.priceDistBins) {
-      const reason = `Whale Escape; Large withdraw ${Math.round(netDepUsd)} USD & Price near bottom bin (dist: ${binDist})`;
+      const reason = `Whale Escape; Large withdraw ${Math.round(netDepUsd)} USD (>${minWithdrawPct}% of TVL) & Price near bottom bin (dist: ${binDist})`;
       log("whale_escape", `CLOSE triggered for ${position.pair}: ${reason}`);
       return { action: "CLOSE", rule: 6, reason };
     }
@@ -161,6 +163,5 @@ export function getWhaleEscapeStatus(poolAddress) {
     windowMinutes: oldestAge,
     warnThreshold: cfg.tvlPctWarn,
     closeThreshold: cfg.tvlPctClose,
-    absFloor: cfg.absFloor,
   };
 }

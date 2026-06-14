@@ -228,7 +228,7 @@ export async function runManagementCycle({ silent = false } = {}) {
     const positionData = positions.map((p) => {
       recordPositionSnapshot(p.pool, p);
       // Record TVL snapshot for whale escape detection
-      if (p.total_value_usd != null) {
+      if (p.total_value_usd != null && p.total_value_usd > 0) {
         recordTvlSnapshot(p.pool, { tvlUsd: p.total_value_usd, activeBin: p.active_bin });
       }
       return { ...p, recall: recallForPool(p.pool) };
@@ -236,7 +236,7 @@ export async function runManagementCycle({ silent = false } = {}) {
 
     // Send TVL change notifications
     for (const p of positionData) {
-      if (p.total_value_usd != null) {
+      if (p.total_value_usd != null && p.total_value_usd > 0) {
         const netData = getNetDepositData(p.pool);
         if (netData) {
           notifyTvlChange({

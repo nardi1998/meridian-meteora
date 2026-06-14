@@ -1,4 +1,5 @@
 import fs from "fs";
+import { config } from "./config.js";
 import { log } from "./logger.js";
 import { getPerformanceSummary } from "./lessons.js";
 import { repoPath } from "./repo-root.js";

@@ -547,6 +547,12 @@ export async function runScreeningCycle({ silent = false } = {}) {
         filteredOut.push({ name: pool.name, reason: `bot holders ${botPct}% > ${maxBotHoldersPct}%` });
         return false;
       }
+      const globalFeesSol = Number(ti?.global_fes_sol ?? pool.gmgn_total_fee_sol);
+      if (Number.isFinite(globalFeesSol) && globalFeesSol < config.screening.minTokenFesSol) {
+        log("screening", `Token fees filter: dropped ${pool.name} — fees ${globalFeesSol} SOL < ${config.screening.minTokenFesSol} SOL`);
+        filteredOut.push({ name: pool.name, reason: `token fees ${globalFeesSol} SOL below minimum ${config.screening.minTokenFesSol} SOL` });
+        return false;
+      }
       return true;
     });
 

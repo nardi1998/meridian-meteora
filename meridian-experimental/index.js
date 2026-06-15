@@ -578,7 +578,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
       }
       // GMGN fees first, then Jupiter fees
       const globalFeesSol = Number(gmgnFees ?? pool.gmgn_total_fee_sol ?? ti?.global_fes_sol);
-      if (Number.isFinite(globalFeesSol) && globalFesSol < config.screening.minTokenFesSol) {
+      if (Number.isFinite(globalFeesSol) && globalFeesSol < config.screening.minTokenFesSol) {
         log("screening", `Token fees filter: dropped ${pool.name} — fees ${globalFeesSol} SOL < ${config.screening.minTokenFesSol} SOL`);
         filteredOut.push({ name: pool.name, reason: `token fees ${globalFeesSol} SOL below minimum ${config.screening.minTokenFesSol} SOL` });
         return false;

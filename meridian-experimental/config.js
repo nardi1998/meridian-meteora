@@ -111,6 +111,7 @@ export const config = {
     maxTokenAgeHours:   u.maxTokenAgeHours   ?? null, // null = no maximum
     maxPoolTokenAgeDiffDays: u.maxPoolTokenAgeDiffDays ?? 30, // max difference between pool age and token age (days)
     athFilterPct:       u.athFilterPct       ?? null, // e.g. -20 = only deploy if price is >= 20% below ATH
+    athFilterPctSmallCap: u.athFilterPctSmallCap ?? -80, // e.g. -80 = small cap (mcap < $1M) must be >= 20% of ATH
     maxVolatility:      u.maxVolatility      ?? 10,   // reject pools above this volatility threshold
   },
 
@@ -154,6 +155,7 @@ export const config = {
     maxSniperHoldRate: gmgnValue("maxSniperHoldRate", "gmgnMaxSniperHoldRate", 0.3),
     minTotalFeeSol: gmgnValue("minTotalFeeSol", "gmgnMinTotalFeeSol", 30),
     athFilterPct: gmgnValue("athFilterPct", "gmgnAthFilterPct", null),
+    athFilterPctSmallCap: gmgnValue("athFilterPctSmallCap", "gmgnAthFilterPctSmallCap", -80),
     maxPhishingWalletPct: gmgnValue("maxPhishingWalletPct", "gmgnMaxPhishingWalletPct", 0.3),
     preferredKolNames: gmgnArray("preferredKolNames", "gmgnPreferredKolNames", []),
     dumpKolNames: gmgnArray("dumpKolNames", "gmgnDumpKolNames", []),
@@ -364,6 +366,8 @@ export function reloadScreeningThresholds() {
     if (fresh.allowedLaunchpads !== undefined) s.allowedLaunchpads = fresh.allowedLaunchpads;
     if (fresh.blockedLaunchpads !== undefined) s.blockedLaunchpads = fresh.blockedLaunchpads;
     if (fresh.maxVolatility   != null) s.maxVolatility   = fresh.maxVolatility;
+    if (fresh.athFilterPct    !== undefined) s.athFilterPct    = fresh.athFilterPct;
+    if (fresh.athFilterPctSmallCap !== undefined) s.athFilterPctSmallCap = fresh.athFilterPctSmallCap;
     const minBinsBelow = numericConfig(fresh.minBinsBelow) ?? config.strategy.minBinsBelow;
     const maxBinsBelow = numericConfig(fresh.maxBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.maxBinsBelow;
     const defaultBinsBelow = numericConfig(fresh.defaultBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.defaultBinsBelow ?? maxBinsBelow;

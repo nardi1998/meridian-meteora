@@ -747,3 +747,14 @@ export function formatGmgnCandidateForPrompt(p) {
 function round(n) {
   return n != null ? Math.round(n) : null;
 }
+
+export async function fetchGmgnTokenFees({ mint }) {
+  if (!config.gmgn?.apiKey) return null;
+  try {
+    const infoPayload = await gmgnFetch("/v1/token/info", { params: { chain: "sol", address: mint } });
+    const info = infoPayload?.data?.data || infoPayload?.data || infoPayload;
+    return num(info?.total_fee) ?? null;
+  } catch {
+    return null;
+  }
+}

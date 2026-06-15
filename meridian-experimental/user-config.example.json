@@ -47,7 +47,8 @@
   "minTokenAgeHours": 7,
   "maxTokenAgeHours": 720,
   "maxPoolTokenAgeDiffDays": 30,
-  "athFilterPct": 20,
+  "athFilterPct": -20,
+  "athFilterPctSmallCap": -80,
   "screeningSource": "meteora",
 
   "minClaimAmount": 5,

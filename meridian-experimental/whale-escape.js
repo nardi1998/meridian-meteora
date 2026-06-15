@@ -37,6 +37,15 @@ const tvlSnapshots = new Map();
 const MAX_SNAPSHOTS = 12; // ~2h at 10min intervals
 
 /**
+ * Clear TVL snapshots for a specific pool.
+ */
+export function clearTvlSnapshots(poolAddress) {
+  if (!poolAddress) return;
+  tvlSnapshots.delete(poolAddress);
+  log("whale_escape", `Cleared TVL snapshots for ${poolAddress}`);
+}
+
+/**
  * Record a TVL snapshot for a pool.
  */
 export function recordTvlSnapshot(poolAddress, { tvlUsd, activeBin }) {

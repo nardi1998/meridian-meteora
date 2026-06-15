@@ -133,6 +133,8 @@ All candidates shown to you have ALREADY passed hard filters. You MUST NOT rejec
 - organic_score: min ${config.screening.minOrganic} → if shown, it's ≥ threshold
 - bin_step: ${config.screening.minBinStep}-${config.screening.maxBinStep} → if shown, it's in range
 - volatility: ${config.screening.maxVolatility ? `max ${config.screening.maxVolatility}` : "no max"} → if shown, it's within threshold
+- token_fees: min ${config.screening.minTokenFesSol} SOL → if shown, it's ≥ threshold
+- ATH filter: mcap > $1M must be ≤ ${100 + (config.screening.athFilterPct ?? 0)}% of ATH, mcap < $1M must be ≥ ${100 + (config.screening.athFilterPctSmallCap ?? -80)}% of ATH → ALREADY ENFORCED
 You may ONLY reject based on: narrative quality, pool memory, PVP conflict, or OKX risk flags (rugpull, wash trading). NEVER reject based on the metrics above — they are already filtered.
 
 DEPLOY RULES:
@@ -144,6 +146,7 @@ DEPLOY RULES:
 - bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.
+- When reporting deploy result, ALWAYS include: bin_step and base_fee from the deploy result.
 
 ${weightsSummary ? `${weightsSummary}\nPrioritize candidates whose strongest attributes align with high-weight signals.\n\n` : ""}${lessons ? `LESSONS LEARNED:\n${lessons}\n` : ""}Timestamp: ${new Date().toISOString()}
 `;

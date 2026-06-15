@@ -227,16 +227,42 @@ export async function runManagementCycle({ silent = false } = {}) {
     // Snapshot + load pool memory
     const positionData = positions.map((p) => {
       recordPositionSnapshot(p.pool, p);
-      // Record TVL snapshot for whale escape detection
-      if (p.total_value_usd != null && p.total_value_usd > 0) {
-        recordTvlSnapshot(p.pool, { tvlUsd: p.total_value_usd, activeBin: p.active_bin });
-      }
       return { ...p, recall: recallForPool(p.pool) };
     });
 
+    // Fetch pool TVL for each position
+    const poolTvlMap = new Map();
+    const METEORA_API = "https://dlmm.datapi.meteora.ag";
+    await Promise.allSettled(
+      positionData.map(async (p) => {
+        try {
+          const res = await fetch(`${METEORA_API}/pools?query=${p.pool}`);
+          if (res.ok) {
+            const data = await res.json();
+            const poolData = Array.isArray(data) ? data[0] : data?.data?.[0];
+            if (poolData) {
+              const tvl = Number(poolData.liquidity ?? poolData.tvl ?? poolData.active_tvl ?? 0);
+              poolTvlMap.set(p.pool, tvl);
+            }
+          }
+        } catch (e) {
+          // ignore fetch errors
+        }
+      })
+    );
+
+    // Record TVL snapshots and send notifications
+    for (const p of positionData) {
+      const poolTvl = poolTvlMap.get(p.pool);
+      if (poolTvl != null && poolTvl > 0) {
+        recordTvlSnapshot(p.pool, { tvlUsd: poolTvl, activeBin: p.active_bin });
+      }
+    }
+
     // Send TVL change notifications
     for (const p of positionData) {
-      if (p.total_value_usd != null && p.total_value_usd > 0) {
+      const poolTvl = poolTvlMap.get(p.pool);
+      if (poolTvl != null && poolTvl > 0) {
         const netData = getNetDepositData(p.pool);
         if (netData) {
           notifyTvlChange({
@@ -1047,7 +1073,7 @@ function getDeterministicCloseRule(position, managementConfig) {
     const peak = tracked?.peak_pnl_pct ?? 0;
 
     // Peak < 0.6% after 2 hours → 1-hour observation period
-    if (peak < 0.6) {
+    if (peak < 0.6 && tracked) {
       // Start observation period if not started
       if (!tracked.failed_target_observation_started_at) {
         tracked.failed_target_observation_started_at = new Date().toISOString();

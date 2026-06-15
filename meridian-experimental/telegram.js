@@ -1,6 +1,7 @@
 import fs from "fs";
 import { log } from "./logger.js";
 import { repoPath } from "./repo-root.js";
+import { config } from "./config.js";
 
 const USER_CONFIG_PATH = repoPath("user-config.json");
 
@@ -478,6 +479,7 @@ export async function notifyDeploy({ pair, amountSol, position, tx, priceRange, 
 }
 
 export async function notifyClose({ pair, pnlUsd, pnlPct, reason }) {
+  log("telegram", `notifyClose: pair=${pair}, pnlUsd=${pnlUsd}, pnlPct=${pnlPct}, reason=${reason}`);
   const cur = config.management.solMode ? "◎" : "$";
   const sign = pnlUsd >= 0 ? "+" : "";
   const reasonLine = reason ? `\nReason: ${reason}` : "";

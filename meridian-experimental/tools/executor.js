@@ -640,10 +640,12 @@ export async function executeTool(name, args) {
       } else if (name === "deploy_position") {
         _deployLock = false;
         _lastDeployAt = Date.now();
+        log("executor", `deploy result: bin_step=${result.bin_step}, base_fee=${result.base_fee}, pool=${result.pool_name}`);
         notifyDeploy({ pair: result.pool_name || args.pool_name || args.pool_address?.slice(0, 8), amountSol: args.amount_y ?? args.amount_sol ?? 0, position: result.position, tx: result.txs?.[0] ?? result.tx, priceRange: result.price_range, rangeCoverage: result.range_coverage, binStep: result.bin_step, baseFee: result.base_fee }).catch(() => {});
       } else if (name === "close_position") {
         const closeReason = args.reason || null;
         log("executor", `close_position completed: pool=${result.pool_name}, pnl=${result.pnl_pct}%, reason=${closeReason}`);
+        log("executor", `close_position args: ${JSON.stringify({ position_address: args.position_address, reason: args.reason, skip_swap: args.skip_swap })}`);
         notifyClose({ pair: result.pool_name || args.position_address?.slice(0, 8), pnlUsd: result.pnl_usd ?? 0, pnlPct: result.pnl_pct ?? 0, reason: closeReason }).catch((e) => {
           log("telegram_error", `notifyClose failed: ${e.message}`);
         });
@@ -713,7 +715,7 @@ export async function executeTool(name, args) {
  */
 let _deployLock = false; // Prevent concurrent deploys
 let _lastDeployAt = 0; // Track last deploy timestamp
-const DEPLOY_COOLDOWN_MS = 10000; // 10 seconds cooldown between deploys
+const DEPLOY_COOLDOWN_MS = 60000; // 60 seconds cooldown between deploys (relay needs time to confirm)
 
 async function runSafetyChecks(name, args) {
   switch (name) {

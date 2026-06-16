@@ -536,7 +536,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
     const allCandidates = [];
     for (const pool of candidates) {
       const mint = pool.base?.mint;
-      const [smartWallets, narrative, tokenInfo, gmgnFees] = await Promise.allSettled([
+      const [smartWallets, narrative, tokenInfo, gmgnData] = await Promise.allSettled([
         checkSmartWalletsOnPool({ pool_address: pool.pool }),
         mint ? getTokenNarrative({ mint }) : Promise.resolve(null),
         mint ? getTokenInfo({ query: mint }) : Promise.resolve(null),
@@ -547,7 +547,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
         sw: smartWallets.status === "fulfilled" ? smartWallets.value : null,
         n: narrative.status === "fulfilled" ? narrative.value : null,
         ti: tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null,
-        gmgnFees: gmgnFees.status === "fulfilled" ? gmgnFees.value : null,
+        gmgnData: gmgnData.status === "fulfilled" ? gmgnData.value : null,
         mem: recallForPool(pool.pool),
       });
       await new Promise(r => setTimeout(r, 150)); // avoid 429s
@@ -556,7 +556,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
     // Hard filters after token recon — block launchpads and excessive Jupiter bot holders
     // Skipped for GMGN: platforms already filtered upstream; bundler/bot data from GMGN pipeline
     const filteredOut = [];
-    const passing = allCandidates.filter(({ pool, ti, gmgnFees }) => {
+    const passing = allCandidates.filter(({ pool, ti, gmgnData }) => {
       if (pool.gmgn) return true;
       const launchpad = ti?.launchpad ?? null;
       if (launchpad && config.screening.allowedLaunchpads?.length > 0 && !config.screening.allowedLaunchpads.includes(launchpad)) {
@@ -577,7 +577,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
         return false;
       }
       // GMGN fees first, then Jupiter fees
-      const globalFeesSol = Number(gmgnFees ?? pool.gmgn_total_fee_sol ?? ti?.global_fes_sol);
+      const globalFeesSol = Number(gmgnData?.fees ?? pool.gmgn_total_fee_sol ?? ti?.global_fes_sol);
       if (Number.isFinite(globalFeesSol) && globalFeesSol < config.screening.minTokenFesSol) {
         log("screening", `Token fees filter: dropped ${pool.name} — fees ${globalFeesSol} SOL < ${config.screening.minTokenFesSol} SOL`);
         filteredOut.push({ name: pool.name, reason: `token fees ${globalFeesSol} SOL below minimum ${config.screening.minTokenFesSol} SOL` });
@@ -585,8 +585,9 @@ export async function runScreeningCycle({ silent = false } = {}) {
       }
       // ATH filter — reject tokens too close to ATH
       const athFilterPct = config.screening.athFilterPct;
-      if (athFilterPct != null && ti?.ath != null && ti?.price != null) {
-        const priceVsAthPct = (ti.price / ti.ath) * 100;
+      const athPrice = gmgnData?.ath ?? ti?.ath;
+      if (athFilterPct != null && athPrice != null && ti?.price != null) {
+        const priceVsAthPct = (ti.price / athPrice) * 100;
         const threshold = 100 + Number(athFilterPct);
         if (priceVsAthPct > threshold) {
           log("screening", `ATH filter: dropped ${pool.name} — price ${priceVsAthPct.toFixed(1)}% of ATH > ${threshold}%`);
@@ -597,9 +598,9 @@ export async function runScreeningCycle({ silent = false } = {}) {
       // Small cap ATH filter — for tokens with mcap < $1M, skip if price is below threshold from ATH
       const mcap = ti?.market_cap ?? pool.mcap ?? 0;
       const athFilterPctSmallCap = config.screening.athFilterPctSmallCap;
-      log("screening", `ATH check: ${pool.name} mcap=$${mcap}, ath=${ti?.ath}, price=${ti?.price}, threshold=${athFilterPctSmallCap}`);
-      if (mcap < 1000000 && athFilterPctSmallCap != null && ti?.ath != null && ti?.price != null) {
-        const priceVsAthPct = (ti.price / ti.ath) * 100;
+      log("screening", `ATH check: ${pool.name} mcap=$${mcap}, ath=${athPrice}, price=${ti?.price}, threshold=${athFilterPctSmallCap}`);
+      if (mcap < 1000000 && athFilterPctSmallCap != null && athPrice != null && ti?.price != null) {
+        const priceVsAthPct = (ti.price / athPrice) * 100;
         const smallCapThreshold = 100 + Number(athFilterPctSmallCap);
         if (priceVsAthPct < smallCapThreshold) {
           log("screening", `Small cap ATH filter: dropped ${pool.name} — mcap $${mcap}, price ${priceVsAthPct.toFixed(1)}% of ATH < ${smallCapThreshold}%`);

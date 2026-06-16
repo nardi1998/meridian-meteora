@@ -753,7 +753,10 @@ export async function fetchGmgnTokenFees({ mint }) {
   try {
     const infoPayload = await gmgnFetch("/v1/token/info", { params: { chain: "sol", address: mint } });
     const info = infoPayload?.data?.data || infoPayload?.data || infoPayload;
-    return num(info?.total_fee) ?? null;
+    return {
+      fees: num(info?.total_fee) ?? null,
+      ath: num(info?.ath_price) ?? null,
+    };
   } catch {
     return null;
   }

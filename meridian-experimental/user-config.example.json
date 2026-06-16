@@ -6,10 +6,10 @@
   "llmModel": "xiaomi/mimo-v2.5",
   "dryRun": false,
 
-  "deployAmountSol": 0.5,
-  "maxPositions": 3,
-  "minSolToOpen": 0.5,
-  "maxDeployAmount": 0.5,
+  "deployAmountSol": 0.8,
+  "maxPositions": 2,
+  "minSolToOpen": 0.8,
+  "maxDeployAmount": 0.8,
   "gasReserve": 0.2,
   "positionSizePct": 0.35,
 
@@ -82,7 +82,7 @@
   "whaleEscapeNetDepCache": 30,
   "whaleEscapePriceDistBins": 5,
 
-  "managementIntervalMin": 5,
+  "managementIntervalMin": 10,
   "screeningIntervalMin": 30,
   "healthCheckIntervalMin": 60,
 

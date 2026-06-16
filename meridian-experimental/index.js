@@ -1124,6 +1124,7 @@ function getDeterministicCloseRule(position, managementConfig) {
       }
     }
     // Rules 8b, 8c, 8d — only if peak >= 0.6% (Rule 8a didn't handle it)
+    // Each rule requires PnL to be within specific range
     else if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
       // Never touched +1% in 2h → close near +0.1%
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1%, taking +${position.pnl_pct.toFixed(2)}%` };
@@ -1134,6 +1135,7 @@ function getDeterministicCloseRule(position, managementConfig) {
       // Never touched +2% in 2h → close near +0.3%
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 2%, taking +${position.pnl_pct.toFixed(2)}%` };
     }
+    // If peak < 2% but PnL not in any range, don't close (wait for other rules)
   }
 
   // Time-based exit: if trailing TP not triggered after 4 hours, close at +2%

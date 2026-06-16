@@ -586,7 +586,13 @@ export async function runScreeningCycle({ silent = false } = {}) {
       // ATH filter — reject tokens too close to ATH
       const athFilterPct = config.screening.athFilterPct;
       const athPrice = gmgnData?.ath ?? ti?.ath;
-      if (athFilterPct != null && athPrice != null && ti?.price != null) {
+      if (athFilterPct != null && ti?.price != null) {
+        if (athPrice == null) {
+          // No ATH data available — reject to be safe
+          log("screening", `ATH filter: dropped ${pool.name} — no ATH data available`);
+          filteredOut.push({ name: pool.name, reason: `no ATH data available` });
+          return false;
+        }
         const priceVsAthPct = (ti.price / athPrice) * 100;
         const threshold = 100 + Number(athFilterPct);
         if (priceVsAthPct > threshold) {
@@ -599,7 +605,13 @@ export async function runScreeningCycle({ silent = false } = {}) {
       const mcap = ti?.market_cap ?? pool.mcap ?? 0;
       const athFilterPctSmallCap = config.screening.athFilterPctSmallCap;
       log("screening", `ATH check: ${pool.name} mcap=$${mcap}, ath=${athPrice}, price=${ti?.price}, threshold=${athFilterPctSmallCap}`);
-      if (mcap < 1000000 && athFilterPctSmallCap != null && athPrice != null && ti?.price != null) {
+      if (mcap < 1000000 && athFilterPctSmallCap != null && ti?.price != null) {
+        if (athPrice == null) {
+          // No ATH data available — reject to be safe
+          log("screening", `Small cap ATH filter: dropped ${pool.name} — no ATH data available`);
+          filteredOut.push({ name: pool.name, reason: `small cap: no ATH data available` });
+          return false;
+        }
         const priceVsAthPct = (ti.price / athPrice) * 100;
         const smallCapThreshold = 100 + Number(athFilterPctSmallCap);
         if (priceVsAthPct < smallCapThreshold) {
@@ -1792,7 +1804,9 @@ async function telegramHandler(msg) {
     await showSettingsMenu().catch((e) => sendMessage(`Settings error: ${e.message}`).catch(() => {}));
     return;
   }
-  if (_managementBusy || _screeningBusy || busy) {
+  // Priority commands — bypass queue, execute immediately
+  const isPriority = /^\/close\s+\d+$/i.test(text) || text === "/closeall";
+  if (!isPriority && (_managementBusy || _screeningBusy || busy)) {
     if (_telegramQueue.length < 5) {
       _telegramQueue.push(msg);
       sendMessage(`⏳ Queued (${_telegramQueue.length} in queue): "${text.slice(0, 60)}"`).catch(() => {});

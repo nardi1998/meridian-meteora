@@ -753,10 +753,29 @@ export async function fetchGmgnTokenFees({ mint }) {
   try {
     const infoPayload = await gmgnFetch("/v1/token/info", { params: { chain: "sol", address: mint } });
     const info = infoPayload?.data?.data || infoPayload?.data || infoPayload;
-    return {
-      fees: num(info?.total_fee) ?? null,
-      ath: num(info?.ath_price) ?? null,
-    };
+    const fees = num(info?.total_fee) ?? null;
+    let ath = num(info?.ath_price) ?? null;
+    
+    // Fallback: fetch ATH from DexScreener if not available
+    if (ath == null) {
+      try {
+        const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
+        if (dexRes.ok) {
+          const dexData = await dexRes.json();
+          const pair = dexData?.pairs?.[0];
+          if (pair) {
+            const priceChange24h = num(pair.priceChange?.h24);
+            const currentPrice = num(pair.priceUsd);
+            if (priceChange24h != null && currentPrice != null && priceChange24h < 0) {
+              // Calculate ATH from 24h price change
+              ath = currentPrice / (1 + priceChange24h / 100);
+            }
+          }
+        }
+      } catch {}
+    }
+    
+    return { fees, ath };
   } catch {
     return null;
   }

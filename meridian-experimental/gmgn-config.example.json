@@ -22,7 +22,7 @@
   "minKolCount": 1,
   "minTotalFeeSol": 25,
   "athFilterPct": -20,
-  "athFilterPctSmallCap": -80,
+  "athFilterPctSmallCap": -75,
   "maxRugRatio": 0.3,
   "maxTop10HolderRate": 0.4,
   "maxBundlerRate": 0.3,

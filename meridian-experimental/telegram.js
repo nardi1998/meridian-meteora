@@ -478,13 +478,18 @@ export async function notifyDeploy({ pair, amountSol, position, tx, priceRange, 
   );
 }
 
+function escapeHtml(text) {
+  if (!text) return "";
+  return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export async function notifyClose({ pair, pnlUsd, pnlPct, reason }) {
   log("telegram", `notifyClose: pair=${pair}, pnlUsd=${pnlUsd}, pnlPct=${pnlPct}, reason=${reason}`);
   const cur = config.management.solMode ? "◎" : "$";
   const sign = pnlUsd >= 0 ? "+" : "";
-  const reasonLine = reason ? `\nReason: ${reason}` : "";
+  const reasonLine = reason ? `\nReason: ${escapeHtml(reason)}` : "";
   await sendHTML(
-    `🔒 <b>Closed</b> ${pair}\n` +
+    `🔒 <b>Closed</b> ${escapeHtml(pair)}\n` +
     `PnL: ${sign}${cur}${(pnlUsd ?? 0).toFixed(4)} (${sign}${(pnlPct ?? 0).toFixed(2)}%)` +
     reasonLine
   );

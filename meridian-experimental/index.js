@@ -597,6 +597,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
       // Small cap ATH filter — for tokens with mcap < $1M, skip if price is below threshold from ATH
       const mcap = ti?.market_cap ?? pool.mcap ?? 0;
       const athFilterPctSmallCap = config.screening.athFilterPctSmallCap;
+      log("screening", `ATH check: ${pool.name} mcap=$${mcap}, ath=${ti?.ath}, price=${ti?.price}, threshold=${athFilterPctSmallCap}`);
       if (mcap < 1000000 && athFilterPctSmallCap != null && ti?.ath != null && ti?.price != null) {
         const priceVsAthPct = (ti.price / ti.ath) * 100;
         const smallCapThreshold = 100 + Number(athFilterPctSmallCap);
@@ -1100,8 +1101,9 @@ function getDeterministicCloseRule(position, managementConfig) {
     const peak = tracked?.peak_pnl_pct ?? 0;
 
     // Peak < 0.6% after 2 hours → 1-hour observation period
-    if (peak < 0.6 && tracked) {
+    if (peak < 0.6) {
       // Start observation period if not started
+      if (!tracked) tracked = {};
       if (!tracked.failed_target_observation_started_at) {
         tracked.failed_target_observation_started_at = new Date().toISOString();
         saveState();
@@ -1115,30 +1117,20 @@ function getDeterministicCloseRule(position, managementConfig) {
         return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.6%, taking +${position.pnl_pct.toFixed(2)}% during observation` };
       }
 
-      // During observation: if PnL goes above +0.5% → activate trailing
-      if (position.pnl_pct > 0.5 && !tracked.failed_target_trailing_active) {
-        tracked.failed_target_trailing_active = true;
-        tracked.failed_target_trailing_trigger = 1.0;
-        tracked.failed_target_trailing_drop = 0.5;
-        saveState();
-      }
-
-      // After observation (60 min): if PnL reaches +0.5% → close
+      // After observation (60 min): if PnL >= 0.5% → close
       if (observationMinutes >= 60 && position.pnl_pct >= 0.5) {
         return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 0.6%, observation complete, taking +${position.pnl_pct.toFixed(2)}%` };
       }
     }
-
-    // Never touched +1% in 2h → close near +0.1%
-    if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
+    // Rules 8b, 8c, 8d — only if peak >= 0.6% (Rule 8a didn't handle it)
+    else if (peak < 1 && position.pnl_pct >= 0.09 && position.pnl_pct <= 0.15) {
+      // Never touched +1% in 2h → close near +0.1%
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1%, taking +${position.pnl_pct.toFixed(2)}%` };
-    }
-    // Never touched +1.5% in 2h → close near +0.2%
-    if (peak < 1.5 && position.pnl_pct >= 0.19 && position.pnl_pct <= 0.25) {
+    } else if (peak < 1.5 && position.pnl_pct >= 0.19 && position.pnl_pct <= 0.25) {
+      // Never touched +1.5% in 2h → close near +0.2%
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 1.5%, taking +${position.pnl_pct.toFixed(2)}%` };
-    }
-    // Never touched +2% in 2h → close near +0.3%
-    if (peak < 2 && position.pnl_pct >= 0.29 && position.pnl_pct <= 0.35) {
+    } else if (peak < 2 && position.pnl_pct >= 0.29 && position.pnl_pct <= 0.35) {
+      // Never touched +2% in 2h → close near +0.3%
       return { action: "CLOSE", rule: 8, reason: `failed target: peak ${peak.toFixed(2)}% < 2%, taking +${position.pnl_pct.toFixed(2)}%` };
     }
   }

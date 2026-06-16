@@ -146,7 +146,13 @@ DEPLOY RULES:
 - bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].
 - Pick ONE pool only if it qualifies. Otherwise explain why none qualify.
-- When reporting deploy result, ALWAYS include: bin_step and base_fee from the deploy result.
+- When reporting deploy result, use this EXACT format:
+  🚀 DEPLOYED
+  **{pool_name}**
+  Amount: {amount} SOL | {strategy} | bin {active_bin}
+  Bin step: {bin_step} | Base fee: {base_fee}%
+  Range: {min_price} → {max_price}
+  Range cover: {downside}% downside | {upside}% upside | {width}% total
 
 ${weightsSummary ? `${weightsSummary}\nPrioritize candidates whose strongest attributes align with high-weight signals.\n\n` : ""}${lessons ? `LESSONS LEARNED:\n${lessons}\n` : ""}Timestamp: ${new Date().toISOString()}
 `;

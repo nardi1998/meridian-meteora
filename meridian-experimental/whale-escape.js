@@ -82,6 +82,19 @@ export function getNetDepositData(poolAddress) {
   }
 
   const current = snaps[snaps.length - 1];
+  
+  // Validation: check if TVL change between consecutive snapshots is suspicious
+  const SUSPICIOUS_CHANGE_PCT = 50; // 50% change in single cycle is suspicious
+  if (snaps.length >= 2) {
+    const prev = snaps[snaps.length - 2];
+    const cycleChangePct = prev.tvlUsd > 0
+      ? Math.abs(((current.tvlUsd - prev.tvlUsd) / prev.tvlUsd) * 100)
+      : 0;
+    if (cycleChangePct > SUSPICIOUS_CHANGE_PCT) {
+      log("whale_escape_warn", `Suspicious TVL change for ${poolAddress}: ${cycleChangePct.toFixed(1)}% in single cycle (prev=$${Math.round(prev.tvlUsd)}, current=$${Math.round(current.tvlUsd)}) — possible data error`);
+    }
+  }
+
   const netDepUsd = current.tvlUsd - oldest.tvlUsd;
   const tvlPctChange = oldest.tvlUsd > 0
     ? ((current.tvlUsd - oldest.tvlUsd) / oldest.tvlUsd) * 100

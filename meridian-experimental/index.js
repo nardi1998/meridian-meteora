@@ -39,6 +39,7 @@ import { stageSignals } from "./signal-tracker.js";
 import { getWeightsSummary } from "./signal-weights.js";
 import { bootstrapHiveMind, ensureAgentId, getHiveMindPullMode, isHiveMindEnabled, pullHiveMindLessons, pullHiveMindPresets, registerHiveMindAgent, startHiveMindBackgroundSync } from "./hivemind.js";
 import { appendDecision } from "./decision-log.js";
+import { addToBlacklist, removeFromBlacklist, listBlacklist } from "./token-blacklist.js";
 
 const entrypointPath = process.env.pm_exec_path || process.argv[1];
 const isMain = entrypointPath
@@ -1094,6 +1095,25 @@ function getDeterministicCloseRule(position, managementConfig) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }
 
+  // ── Rule 9: Recovery exit — if PnL dipped < -5% within 2 hours, wait for +0.5% then close ──
+  if (
+    !pnlSuspect &&
+    position.pnl_pct != null &&
+    (position.age_minutes ?? 0) < 120 &&
+    (position.age_minutes ?? 0) >= 3
+  ) {
+    if (position.pnl_pct < -5) {
+      if (!tracked) tracked = {};
+      if (!tracked.recovery_exit_dipped) {
+        tracked.recovery_exit_dipped = true;
+        saveState();
+      }
+    }
+    if (tracked?.recovery_exit_dipped && position.pnl_pct >= 0.5) {
+      return { action: "CLOSE", rule: 9, reason: `recovery exit: dipped below -5% then recovered to +${position.pnl_pct.toFixed(2)}%` };
+    }
+  }
+
   // ── Soft rules: Stop Loss, Take Profit, Time Exit ──
   // Guard: don't apply soft rules to positions younger than 10 minutes (prevents premature close right after deploy)
   const softRuleAgeGuard = (position.age_minutes ?? 0) >= 10;
@@ -1661,6 +1681,9 @@ function formatHelpText() {
     "/screen — refresh deterministic candidate list",
     "/candidates — show latest cached candidates",
     "/deploy <n> — deploy candidate by cached index",
+    "/block <mint> [reason] — block a token from being deployed",
+    "/unblock <mint> — unblock a previously blocked token",
+    "/blocklist — list all blocked tokens",
     "/briefing — morning briefing",
     "/hive — HiveMind sync status",
     "/hive pull — manual HiveMind pull now",
@@ -2023,6 +2046,58 @@ async function telegramHandler(msg) {
 
   if (text === "/candidates") {
     await sendMessage(describeLatestCandidates(5)).catch(() => {});
+    return;
+  }
+
+  // ── /blocklist ──────────────────────────────────────────────
+  if (text === "/blocklist") {
+    const result = listBlacklist();
+    if (result.count === 0) {
+      await sendMessage("No blacklisted tokens.").catch(() => {});
+    } else {
+      const lines = result.blacklist.map((e, i) =>
+        `${i + 1}. ${e.symbol || "?"} (${e.mint.slice(0, 8)}...) | ${e.reason} | ${e.added_at?.slice(0, 10) || "?"}`
+      );
+      await sendMessage(`🚫 Blacklisted tokens (${result.count}):\n\n${lines.join("\n")}`).catch(() => {});
+    }
+    return;
+  }
+
+  // ── /block <mint> [reason] ──────────────────────────────────
+  const blockMatch = text.match(/^\/block\s+(.+)$/i);
+  if (blockMatch) {
+    const parts = blockMatch[1].trim().split(/\s+/);
+    const mint = parts[0];
+    const reason = parts.slice(1).join(" ") || "blocked via Telegram";
+    try {
+      const result = addToBlacklist({ mint, symbol: "?", reason });
+      if (result.blacklisted) {
+        await sendMessage(`✅ Blacklisted \`${mint.slice(0, 12)}...\`\nReason: ${reason}`).catch(() => {});
+      } else if (result.already_blacklisted) {
+        await sendMessage(`ℹ️ Already blacklisted: \`${mint.slice(0, 12)}...\`\nReason: ${result.reason}`).catch(() => {});
+      } else {
+        await sendMessage(`❌ Failed: ${result.error || "unknown error"}`).catch(() => {});
+      }
+    } catch (e) {
+      await sendMessage(`Error: ${e.message}`).catch(() => {});
+    }
+    return;
+  }
+
+  // ── /unblock <mint> ─────────────────────────────────────────
+  const unblockMatch = text.match(/^\/unblock\s+(.+)$/i);
+  if (unblockMatch) {
+    const mint = unblockMatch[1].trim();
+    try {
+      const result = removeFromBlacklist({ mint });
+      if (result.removed) {
+        await sendMessage(`✅ Removed \`${mint.slice(0, 12)}...\` from blacklist`).catch(() => {});
+      } else {
+        await sendMessage(`❌ ${result.error || "unknown error"}`).catch(() => {});
+      }
+    } catch (e) {
+      await sendMessage(`Error: ${e.message}`).catch(() => {});
+    }
     return;
   }
 

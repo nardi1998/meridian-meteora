@@ -140,6 +140,7 @@ export function trackPosition({
     failed_target_trailing_trigger: null,
     failed_target_trailing_drop: null,
     failed_target_observation_started_at: null,
+    recovery_exit_dipped: false,
   };
   pushEvent(state, { action: "deploy", position, pool_name: pool_name || pool });
   save(state);

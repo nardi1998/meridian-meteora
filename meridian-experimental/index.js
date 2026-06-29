@@ -1102,12 +1102,9 @@ function getDeterministicCloseRule(position, managementConfig) {
     (position.age_minutes ?? 0) < 120 &&
     (position.age_minutes ?? 0) >= 3
   ) {
-    if (position.pnl_pct < -5) {
-      if (!tracked) tracked = {};
-      if (!tracked.recovery_exit_dipped) {
-        tracked.recovery_exit_dipped = true;
-        saveState();
-      }
+    if (position.pnl_pct < -5 && tracked && !tracked.recovery_exit_dipped) {
+      tracked.recovery_exit_dipped = true;
+      saveState();
     }
     if (tracked?.recovery_exit_dipped && position.pnl_pct >= 0.5) {
       return { action: "CLOSE", rule: 9, reason: `recovery exit: dipped below -5% then recovered to +${position.pnl_pct.toFixed(2)}%` };
@@ -1136,8 +1133,7 @@ function getDeterministicCloseRule(position, managementConfig) {
     // Peak < 0.6% after 2 hours → 1-hour observation period
     if (peak < 0.6) {
       // Start observation period if not started
-      if (!tracked) tracked = {};
-      if (!tracked.failed_target_observation_started_at) {
+      if (tracked && !tracked.failed_target_observation_started_at) {
         tracked.failed_target_observation_started_at = new Date().toISOString();
         saveState();
       }
@@ -2140,6 +2136,13 @@ async function telegramHandler(msg) {
     } else {
       await sendMessage("Autonomous cycles are already running.").catch(() => {});
     }
+    return;
+  }
+
+  // ── /stop ──────────────────────────────────────────────────
+  if (text === "/stop") {
+    await sendMessage("🛑 Shutting down...").catch(() => {});
+    await shutdown("telegram command");
     return;
   }
 

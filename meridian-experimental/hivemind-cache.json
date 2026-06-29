@@ -1,0 +1,182 @@
+{
+  "sharedLessons": [
+    {
+      "id": "lesson:agt_f985be3d2681157832e4a042:1782614982770",
+      "rule": "FAILED: TEST-SOL, strategy=spot, bin_step=100, volatility=2, fee_tvl_ratio=0.05, organic=85, bin_range={\"min\":-50,\"max\":0,\"bins_below\":50,\"bins_above\":0} → PnL -30.93%, range efficiency 100%. Reason: test close.",
+      "tags": [
+        "failed"
+      ],
+      "role": null,
+      "outcome": "bad",
+      "sourceType": "performance",
+      "score": 57.52,
+      "created_at": "2026-06-28T02:49:42.770Z"
+    },
+    {
+      "id": "lesson:agt_3d0a34e25ca068cde5b69b56:1782174206947",
+      "rule": "FAILED: ANSEM-SOL, strategy=spot, bin_step=null, volatility=3.8188, fee_tvl_ratio=null, organic=null, bin_range={\"min\":-399,\"max\":-349,\"bins_below\":50,\"bins_above\":0}, entry(mcap=959K, tvl=76K, vol=21K), exit(mcap=576K, tvl=78K, vol=24K) → PnL -9.43%, range efficiency 100%. Reason: Trailing TP: Stop loss: PnL -12.05% = -12%.",
+      "tags": [
+        "failed"
+      ],
+      "role": null,
+      "outcome": "bad",
+      "sourceType": "performance",
+      "score": 57.52,
+      "created_at": "2026-06-23T00:23:26.947Z"
+    },
+    {
+      "id": "lesson:agt_d3838642c6b9f852a4c37dce:1782018666930",
+      "rule": "FAILED: Islands-SOL, strategy=spot, bin_step=null, volatility=3.1671, fee_tvl_ratio=null, organic=null, bin_range={\"min\":-457,\"max\":-400,\"bins_below\":57,\"bins_above\":0} → PnL -17.35%, range efficiency 100%. Reason: Trailing TP stop loss.",
+      "tags": [
+        "failed"
+      ],
+      "role": null,
+      "outcome": "bad",
+      "sourceType": "performance",
+      "score": 57.52,
+      "created_at": "2026-06-21T05:11:06.930Z"
+    },
+    {
+      "id": "lesson:agt_272527db3df820750b4c9d6b:1781826748909",
+      "rule": "FAILED: Chaton-SOL, strategy=spot, bin_step=null, volatility=3.044, fee_tvl_ratio=null, organic=null, bin_range={\"min\":-597,\"max\":-557,\"bins_below\":40,\"bins_above\":0}, entry(mcap=203K, tvl=18K, vol=4K), exit(mcap=122K, tvl=11K, vol=4K) → PnL -18.66%, range efficiency 96.6%. Reason: Rule 3: dumped far below range (loss 29% = 25% max).",
+      "tags": [
+        "failed"
+      ],
+      "role": null,
+      "outcome": "bad",
+      "sourceType": "performance",
+      "score": 57.52,
+      "created_at": "2026-06-18T23:52:28.910Z"
+    },
+    {
+      "id": "lesson:agt_8dc15348badac96443bc1566:1782672383682",
+      "rule": "PREFER: world-SOL-type pools (volatility=0.7, bin_step=100) with strategy=\"bid_ask\" — 99.8% in-range efficiency, PnL +14.98%.",
+      "tags": [
+        "efficient",
+        "volatile",
+        "bid_ask+spot (60/40, 150 bins)",
+        "tempo:normal",
+        "stable",
+        "bid_ask",
+        "tempo:wide",
+        "TRAILING_TP",
+        "bid_ask+spot",
+        "trinity"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-28T18:46:23.682Z"
+    },
+    {
+      "id": "lesson:agt_wichita_new:1782672244740",
+      "rule": "PREFER: world-SOL-type pools (volatility=2.5207, bin_step=100) with strategy=\"spot\" — 95.7% in-range efficiency, PnL +1.82%.",
+      "tags": [
+        "spot",
+        "efficient",
+        "spot_wallet_1h_v1"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-28T18:44:04.740Z"
+    },
+    {
+      "id": "lesson:agt_2df06fb880e2f374aea7db81:1781678535591",
+      "rule": "PREFER: SPCX-SOL-type pools (volatility=2.8144, bin_step=100) with strategy=\"spot\" — 94.4% in-range efficiency, PnL +1.21%.",
+      "tags": [
+        "spot_bidask",
+        "bins_44",
+        "spot",
+        "live",
+        "fee_winner",
+        "efficient"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-17T06:42:15.591Z"
+    },
+    {
+      "id": "lesson:Itsaar:1782644244461",
+      "rule": "PREFER: QUEST-SOL-type pools (volatility=4.3391, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.24%. Entry: mcap=681K, tvl=42K, vol=28K.",
+      "tags": [
+        "spot",
+        "spot_wallet_1h_v1",
+        "fee_winner",
+        "efficient"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-28T10:57:24.461Z"
+    },
+    {
+      "id": "lesson:agt_c3a57fb613c900f9db57cc82:1781501215635",
+      "rule": "PREFER: CHANCE-SOL-type pools (volatility=0, bin_step=null) with strategy=\"spot\" — 100% in-range efficiency, PnL +4.26%.",
+      "tags": [
+        "spot_bid_ask_mix",
+        "bins_40",
+        "efficient",
+        "spot",
+        "live",
+        "bins_48"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-15T05:26:55.635Z"
+    },
+    {
+      "id": "lesson:Itsaar:1782644245980",
+      "rule": "PREFER: WEN-SOL-type pools (volatility=4.7251, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +0.41%. Entry: mcap=826K, tvl=97K, vol=130K.",
+      "tags": [
+        "spot",
+        "spot_wallet_1h_v1",
+        "efficient"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-28T10:57:25.980Z"
+    },
+    {
+      "id": "lesson:agt_30859355184f63d1572316bf:1780957856662",
+      "rule": "PREFER: HUNTER-SOL-type pools (volatility=3.9132, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +4.53%. Entry: mcap=316K, tvl=10K, vol=8K.",
+      "tags": [
+        "efficient",
+        "spot",
+        "fee_winner"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-08T22:30:56.662Z"
+    },
+    {
+      "id": "lesson:agt_58c62b02c4029259b84bfdc9:1782517272555",
+      "rule": "PREFER: FLKR-SOL-type pools (volatility=4.3352, bin_step=null) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.05%.",
+      "tags": [
+        "efficient",
+        "fee_winner",
+        "spot",
+        "regime_bottom_spot",
+        "spot_wallet_1h_v1"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-26T23:41:12.555Z"
+    }
+  ],
+  "presets": [],
+  "pulledAt": "2026-06-28T19:00:09.506Z"
+}

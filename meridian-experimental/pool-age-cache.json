@@ -1,0 +1,632 @@
+{
+  "8sQZ4H4jqnFwUG8e2Y9Sbr3gJxL4cVssc7eQz7M19t7y": {
+    "first_seen": 1780616001140,
+    "token_created_at": 1779471284000,
+    "name": "KINS-SOL"
+  },
+  "9bL8Pptpb8M2jEAb63EoarA6Po6Akarpha3JPzQfXGS3": {
+    "first_seen": 1780616001141,
+    "token_created_at": 1779831737000,
+    "name": "GACHA-SOL"
+  },
+  "2C1XgnTarjmMNZpup44BL3rjsuWLPgsF3pHjzwRiXthS": {
+    "first_seen": 1780616001141,
+    "token_created_at": 1780584429000,
+    "name": "Bountywork-SOL"
+  },
+  "J9qgZAYeycmj5Ct9KmC8RfQZZDVzGwf5VfRoN4KNjnME": {
+    "first_seen": 1780616001142,
+    "token_created_at": 1780366220000,
+    "name": "Magpie-SOL"
+  },
+  "CooYGSxxPqriMAoSnfzQxHPSvtHyUzb4foMtHfDdmMyA": {
+    "first_seen": 1780616415627,
+    "token_created_at": 1780578564000,
+    "name": "SV151-SOL"
+  },
+  "DR2gsFMcFiontN2TBECjNoyy9S5npHPmSTnWZjXi9khL": {
+    "first_seen": 1780616415627,
+    "token_created_at": 1780157434000,
+    "name": "DATBIHGAH-SOL"
+  },
+  "6WkjJNpnFYmuHLg18zX4b8JaoGFBXNqwnektaSdofXTZ": {
+    "first_seen": 1780617604230,
+    "token_created_at": 1780324835000,
+    "name": "GYM-SOL"
+  },
+  "BRHNunv6MzznkDQAev7aEBmQANudm7NC44MuLVz6FMf6": {
+    "first_seen": 1780618826934,
+    "token_created_at": 1780387525000,
+    "name": "HUNTER-SOL"
+  },
+  "BGRTiYMPfpfYANXxbAsgTW7KMPt6DTjahEytAZDvFwi3": {
+    "first_seen": 1780619303789,
+    "token_created_at": 1779482751000,
+    "name": "RICH-SOL"
+  },
+  "AW7Vp5wt2euwo4E7g8A3y7QEnZ211KwqziiPPULgAKzg": {
+    "first_seen": 1780620660899,
+    "token_created_at": 1778972445000,
+    "name": "JARS-SOL"
+  },
+  "4gpyCFwGaGcHjqQCMPCQag3KCRzvEkmTpoLS6LJP16LH": {
+    "first_seen": 1780626613188,
+    "token_created_at": 1779763256000,
+    "name": "grail-SOL"
+  },
+  "Fh9xpqKKu1ypx4ZMe5gZTjEQffXvbn1K634jVkNgYPvX": {
+    "first_seen": 1780645864865,
+    "token_created_at": 1779806998000,
+    "name": "ZINC-SOL"
+  },
+  "HxKnk686QhcjSTgKbztBKX4b9GkDUGb9pFT8YkL5HxTC": {
+    "first_seen": 1780670999825,
+    "token_created_at": 1779806998000,
+    "name": "ZINC-SOL"
+  },
+  "Ft1GbAGR13mRnYu9rGNAkSox7CysS6WnAVFw2RWqriPa": {
+    "first_seen": 1780677158210,
+    "token_created_at": 1778531043000,
+    "name": "WORLDCUP-SOL"
+  },
+  "8UYCgRrxZc3XKY8PBJDSKubAUP4mpbxoj1EZJ7A5G9wy": {
+    "first_seen": 1780677158211,
+    "token_created_at": 1778531043000,
+    "name": "WORLDCUP-SOL"
+  },
+  "FkGUBBLu8GGxhZy9UJiGCbD6YiFz4XustYuKgbvrL3F": {
+    "first_seen": 1780677603295,
+    "token_created_at": 1779815010000,
+    "name": "FCM-SOL"
+  },
+  "CpKbsvT2isHiqD6uHrUkScEE6i9Tj97Sd16LUe4MGRH": {
+    "first_seen": 1780677603295,
+    "token_created_at": 1779181791000,
+    "name": "TOESCOIN-SOL"
+  },
+  "Bmovbz2FMD3qgTYfKE7wJHJbm8MJDvHCn9ZCAreCA9RR": {
+    "first_seen": 1780687715274,
+    "token_created_at": 1778533653000,
+    "name": "RKC-SOL"
+  },
+  "7jGPSLQviMSquBM4vrryywvLN3ruevfbcN81fcDp1ZFH": {
+    "first_seen": 1780687870801,
+    "token_created_at": 1780387525000,
+    "name": "HUNTER-SOL"
+  },
+  "4fAQF2roWPBwWg5Z2pLaBkkxkbmtM94EKeBGNynLcAAW": {
+    "first_seen": 1780699202878,
+    "token_created_at": 1778402542000,
+    "name": "BABYTROLL-SOL"
+  },
+  "Bka6b2stA1gJMeJ1md6o6R8TyHbcU4D9iwLySc45va5E": {
+    "first_seen": 1780726205062,
+    "token_created_at": 1780387525000,
+    "name": "HUNTER-SOL"
+  },
+  "69ZsbMHZrWZRrMsoVjt6SKpxxkcSmUbX8gVtBd64BycA": {
+    "first_seen": 1780777205038,
+    "token_created_at": 1780651908000,
+    "name": "SLAB-SOL"
+  },
+  "ANsLxNuWdYhgNp6uLsSHtyp4LfHjT2G1Fketo5843sPF": {
+    "first_seen": 1780860007532,
+    "token_created_at": 1778531043000,
+    "name": "WORLDCUP-SOL"
+  },
+  "7EXyMv5BjGjApPBQNC2EMaqMgtVdn15dzAx7qebQpDKL": {
+    "first_seen": 1780930777543,
+    "token_created_at": 1780694192000,
+    "name": "PARQ-SOL"
+  },
+  "3p9epZaseeqyYYqUnokugeKdW1M8tfDYJ94dciLa2K3o": {
+    "first_seen": 1780930777543,
+    "token_created_at": 1780694192000,
+    "name": "PARQ-SOL"
+  },
+  "CgSL6ngrPjQA91RbnsbGgKowHyEmhvpwZPFXSQZKMgHr": {
+    "first_seen": 1780930777544,
+    "token_created_at": 1780686532000,
+    "name": "$tupid-SOL"
+  },
+  "Fwfwp1rgNwEqwzpQjvZXgR4S2jC1B86t2Ft8JQB4sJNU": {
+    "first_seen": 1780930777545,
+    "token_created_at": 1780873924000,
+    "name": "LIFE-SOL"
+  },
+  "2rLXrMvGta3TgveizhDjUgiHShJupw6srEboiAo6JbS2": {
+    "first_seen": 1780930777546,
+    "token_created_at": 1780891158000,
+    "name": "GO-SOL"
+  },
+  "CQEYFv3KGnJ6xxRyrUNWbXjPHGnbyCbjuZDTGocV92ug": {
+    "first_seen": 1780948055225,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-SOL"
+  },
+  "CAg2vAUeQ7e38diUupLNM7fh3V3Pop3x3L1B7gV8h1a1": {
+    "first_seen": 1780951505183,
+    "token_created_at": 1779763256000,
+    "name": "grail-SOL"
+  },
+  "5tvrY49aruLYdGF2ZGy94vmrAUvRGp874hr5ipRtj98b": {
+    "first_seen": 1780959031824,
+    "token_created_at": 1778531043000,
+    "name": "WORLDCUP-USDC"
+  },
+  "78Poq25hb4PVSzCb9nRDsBih8EsFmGUgCFgMTkX7GCSC": {
+    "first_seen": 1780960082157,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-SOL"
+  },
+  "9ebZunGbxE8742uDsz6TnouE3nva8WcnMC8n2CLAyxak": {
+    "first_seen": 1780966804713,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-SOL"
+  },
+  "CLVNwm82HVEDF8FHTvZPF6vfqxnvkU3Y9BdQtFEiHNmU": {
+    "first_seen": 1780977607405,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-USDC"
+  },
+  "7HkfBJpXPfo1gL7XQXjd1v4tGWsgvrH9Duoqw2ymcpqG": {
+    "first_seen": 1781000593826,
+    "token_created_at": 1780971255000,
+    "name": "CGO-SOL"
+  },
+  "DuCQeKXQm6HkJ25qWAt1HTSEwPr7iWVXdUD8Zc4ut7cw": {
+    "first_seen": 1781011204937,
+    "token_created_at": 1780670621000,
+    "name": "DUCK-SOL"
+  },
+  "7YHcN8SbaUYiJdk24ugBzTrkHcmc2pv53A93tNCQbTEc": {
+    "first_seen": 1781051407161,
+    "token_created_at": 1781016765000,
+    "name": "Billy-SOL"
+  },
+  "FpL5jRR7v62wAbeRfnc37LH21ry2BDzsWYaWfGZwDtBy": {
+    "first_seen": 1781052034789,
+    "token_created_at": 1779806998000,
+    "name": "ZINC-USDC"
+  },
+  "EwhK7dz5vSkXpm5rcGp3SUyiXWZZjcZubxsoJcVnjkow": {
+    "first_seen": 1781062129242,
+    "token_created_at": 1781032367000,
+    "name": "Pnut-SOL"
+  },
+  "HgRhWnmKZMJqNzjrhTixnJ5CSsM4GYPDjhBVnJd6dgNE": {
+    "first_seen": 1781072693448,
+    "token_created_at": 1781048621000,
+    "name": "BRIM-SOL"
+  },
+  "AeUfFU6LU159YSBQvhLbXmh5bW2BqCgAFi5zUSQMnUc7": {
+    "first_seen": 1781078229743,
+    "token_created_at": 1781057825000,
+    "name": "CHANCE-SOL"
+  },
+  "Hzsx5pCjvPAYhXr6vhAV35C7KSTfacvyQEcE6P3PjRep": {
+    "first_seen": 1781100010546,
+    "token_created_at": 1780619578000,
+    "name": "poke-SOL"
+  },
+  "DYJCNWHcjANHxPcfLFxAhQHup1Q36Ccia5MyyHSK4avK": {
+    "first_seen": 1781114344318,
+    "token_created_at": 1781087077000,
+    "name": "MMG-SOL"
+  },
+  "DppCdvQySrc34iypqT76zN5GCA9BAVQu2jnnS1FJK9f1": {
+    "first_seen": 1781166307419,
+    "token_created_at": 1781144589000,
+    "name": "1B-SOL"
+  },
+  "AhbjVQ6dGpYhkSVd9cqwsszAgmmeDTrZMERB7uKSSy6N": {
+    "first_seen": 1781166307420,
+    "token_created_at": 1781144589000,
+    "name": "1B-SOL"
+  },
+  "EvMTf7rxweoHTSiQYLQNVpRRUJanyHNX3NJtYVDrzj9p": {
+    "first_seen": 1781430662453,
+    "token_created_at": 1780599598000,
+    "name": "ZERO-USDC"
+  },
+  "HUAX7nT4QAyCuRk9MsswtSPsdUmGejM1KtpGyAooYbRv": {
+    "first_seen": 1781430662455,
+    "token_created_at": 1781297910000,
+    "name": "Islands-SOL"
+  },
+  "8eAiYBthqQqQ29ntrRJoEhg7RF2vZya56P4wKDMvKHHV": {
+    "first_seen": 1781430662456,
+    "token_created_at": 1781297910000,
+    "name": "Islands-SOL"
+  },
+  "FxtewwzHZFCYgkGJDCz8KymfFwW5nXV1B9UMeHTV2u2F": {
+    "first_seen": 1781430662456,
+    "token_created_at": 1781365295000,
+    "name": "TURTLE-SOL"
+  },
+  "2aXSgGgsSMazk7Vgs1ZRnuccX2mVWSVXHnCCMz4rByjZ": {
+    "first_seen": 1781435103943,
+    "token_created_at": 1781365295000,
+    "name": "TURTLE-SOL"
+  },
+  "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA": {
+    "first_seen": 1781435404317,
+    "token_created_at": 1780040668000,
+    "name": "drooling-SOL"
+  },
+  "J1X93JsE5aJJ8V1KYw3WTKWhNSZ3kannc8K7S5aHARfv": {
+    "first_seen": 1781439071391,
+    "token_created_at": 1781359611000,
+    "name": "xWorld-SOL"
+  },
+  "3VtpbhqTRwqcbr3BYPtwcKrD2A7U6qu4RFApyLHhNRLs": {
+    "first_seen": 1781443803804,
+    "token_created_at": 1781252959000,
+    "name": "WOC-SOL"
+  },
+  "G7EQn2bdJT5JhQuLUCSQyp7t6kMZkAgNpAgFb4RqaRhK": {
+    "first_seen": 1781471172890,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-SOL"
+  },
+  "EadTxuHoc4ctUDEzunfjcpSyVwzonfkEUkaX3VLqZSw": {
+    "first_seen": 1781490005377,
+    "token_created_at": 1781359128000,
+    "name": "01-SOL"
+  },
+  "54yqt6Hrpc1y8WLffPMrYpmGGW3ja6zjw3LdcUTUBudM": {
+    "first_seen": 1781510409224,
+    "token_created_at": 1781479691000,
+    "name": "JAMESON-SOL"
+  },
+  "2VZWK43rhK7T8FEC1trXPkjf8brBQRwjgXqSoT4qQBW2": {
+    "first_seen": 1781518806093,
+    "token_created_at": 1781480401000,
+    "name": "Chaton-SOL"
+  },
+  "5BZwoJcZ9A63LiHKCNiJBZMVyJH8cyKPEdNwYdi3ev4p": {
+    "first_seen": 1781542617237,
+    "token_created_at": 1781517146000,
+    "name": "Chaton-SOL"
+  },
+  "93BhZwZ7Up5JXCfqZA8Kn5BXN23V5CbT5w73mbHRHdyh": {
+    "first_seen": 1781547944796,
+    "token_created_at": 1781517146000,
+    "name": "Chaton-SOL"
+  },
+  "A2hNWknFBHiT3HVyMk2GuEQc4yQpGwt9HaMPTjWD4Cap": {
+    "first_seen": 1781569561907,
+    "token_created_at": 1781276633000,
+    "name": "Merlin-SOL"
+  },
+  "4NTkKwwtWB6Q8DvwNCkJMtVTF8XutSz22qAsRaFxLbii": {
+    "first_seen": 1781572048512,
+    "token_created_at": 1779866638000,
+    "name": "SPCX-SOL"
+  },
+  "7M7DU5Uf1BpUjC1t5nSfWA8YnwQU1sjijqgPLbE1w88L": {
+    "first_seen": 1781614216361,
+    "token_created_at": 1780599598000,
+    "name": "ZERO-SOL"
+  },
+  "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o": {
+    "first_seen": 1781617205823,
+    "token_created_at": 1781384517000,
+    "name": "ANSEM-SOL"
+  },
+  "34bwwWm5vF4Y1LKhT9oEaGWxRFfvCaBPk8gaVR63Rg4h": {
+    "first_seen": 1781642434427,
+    "token_created_at": 1781276633000,
+    "name": "Merlin-SOL"
+  },
+  "FdxSu3HT8tLKsWEnQZApggEji9dyBDaDVL1vLseE2W28": {
+    "first_seen": 1781677263477,
+    "token_created_at": 1781651975000,
+    "name": "Meepcat-SOL"
+  },
+  "9wPZFy3tuAtR7WxxzV1DFcuyrtRD6ccamk4VgxVszLyf": {
+    "first_seen": 1781677263478,
+    "token_created_at": 1781651975000,
+    "name": "Meepcat-SOL"
+  },
+  "GyMdmBcTovrzjuVJBP3C6D6xNKxgzBoTt2YLx7AYw7i5": {
+    "first_seen": 1781682002882,
+    "token_created_at": 1781641240000,
+    "name": "OGFLOKI-SOL"
+  },
+  "DrU2dJeGKZTD7rd75FzS7rdtG7D51o9mtSbPiUgwY13V": {
+    "first_seen": 1781690404744,
+    "token_created_at": 1781480401000,
+    "name": "Chaton-SOL"
+  },
+  "3tkhEubMYjTJkHVF267oAqAX5APwE3NhiffDLuxg62RR": {
+    "first_seen": 1781702409473,
+    "token_created_at": 1781621851000,
+    "name": "EMC-SOL"
+  },
+  "55UwpYHRRYkmiz6P9pGTDBU6eVwgftghqkNqRAPBbN1q": {
+    "first_seen": 1781751012770,
+    "token_created_at": 1781724543000,
+    "name": "RIV-SOL"
+  },
+  "tg1axrLA1KmLsEwteSKQeVYiZq6n1yHPSuqsy61n9XU": {
+    "first_seen": 1781761411720,
+    "token_created_at": 1781724543000,
+    "name": "RIV-SOL"
+  },
+  "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm": {
+    "first_seen": 1781779205195,
+    "token_created_at": 1781687610000,
+    "name": "滑る猫-SOL"
+  },
+  "CiZn7kJjjGXmKdEUbLv9fpKA9iFz7cuWsHHcrtNL16fy": {
+    "first_seen": 1781782597386,
+    "token_created_at": 1781218093000,
+    "name": "Joby-SOL"
+  },
+  "9ed7gUyZH9A2JqkWWhine6cN2h9e5k7hHdiDr7rAyETx": {
+    "first_seen": 1781813404156,
+    "token_created_at": 1780044189000,
+    "name": "SON-SOL"
+  },
+  "FKmFWJ68cQbp8Wvr8d8Rm6KjU1JoszyKh5Z5BmYKLtvU": {
+    "first_seen": 1781813404159,
+    "token_created_at": 1781787935000,
+    "name": "GTAVI-SOL"
+  },
+  "EhkJwiYUgLAqhKi22vvS4tN73RmkfwhqWL1gvewVJMbC": {
+    "first_seen": 1781813404159,
+    "token_created_at": 1781783306000,
+    "name": "FLKR-SOL"
+  },
+  "9PaStBeB1viXYd3BY2XdxbLvF1bHVgRM7NwGL9wBpT7C": {
+    "first_seen": 1781825821486,
+    "token_created_at": 1781796738000,
+    "name": "Vort-SOL"
+  },
+  "6E6ezZ6norZCxrigjh46vAFbqwnmY7MLbG3kdiskhscm": {
+    "first_seen": 1781833204813,
+    "token_created_at": 1781276633000,
+    "name": "Merlin-SOL"
+  },
+  "2u7uJRqWJEanpk1Eyu9XC7RUFjjeESY8oggBCwwU74Wv": {
+    "first_seen": 1781858614736,
+    "token_created_at": 1781783306000,
+    "name": "FLKR-SOL"
+  },
+  "ErpVZTsdqcudbYksYCQta8s99tzQkjjypPd82KSzFQbq": {
+    "first_seen": 1781860209601,
+    "token_created_at": 1781218354000,
+    "name": "NEST-SOL"
+  },
+  "2mZ5e97fbhHrLFWYc27W1KKR2ngRhk2yFfERiY476ybe": {
+    "first_seen": 1781865001293,
+    "token_created_at": 1781783306000,
+    "name": "FLKR-USDC"
+  },
+  "ADFGRL9uQU1ATKL4FQXNFTa1bcEZTDFNN8YXrmxnYXjm": {
+    "first_seen": 1781878805374,
+    "token_created_at": 1781048621000,
+    "name": "BRIM-SOL"
+  },
+  "Ac9iNAPJi5oz42b1Puc16JqEuqbepoMGa8knAnom8UjX": {
+    "first_seen": 1781918869836,
+    "token_created_at": 1781891972000,
+    "name": "bullieve-SOL"
+  },
+  "HEB7r3kVJLhocbWsgYSgQrTo88GRAtH29gX1ev3Cd9hX": {
+    "first_seen": 1781918869836,
+    "token_created_at": 1780599598000,
+    "name": "ZERO-SOL"
+  },
+  "FgSX7iSe4CEkNG17kHcVrhJivdmE8D4BaDBRnEjVFRBs": {
+    "first_seen": 1781922015874,
+    "token_created_at": 1781535655000,
+    "name": "JAMESON-SOL"
+  },
+  "8ouXYNyVP2YAbBpWvGq6sXYXKcSybe8XcQiD47mG9ihT": {
+    "first_seen": 1781922015874,
+    "token_created_at": 1781535655000,
+    "name": "JAMESON-SOL"
+  },
+  "GX75sPwBgaameFzj6MFGTst6BeTEAn6hvRb1wfXfo1Tm": {
+    "first_seen": 1781934236984,
+    "token_created_at": 1781891972000,
+    "name": "bullieve-SOL"
+  },
+  "7t4QCjxNTzv5PrpL1QmLHeVg7qVrrhUqTVm143BWJ8DB": {
+    "first_seen": 1781937603852,
+    "token_created_at": 1779397322000,
+    "name": "SOLANGELES-SOL"
+  },
+  "EGRR8G7mhLNrNRsnoyibkqdmn46CbAYB1cAg6Nik3qHo": {
+    "first_seen": 1781939431758,
+    "token_created_at": 1780655418000,
+    "name": "GutGenug-SOL"
+  },
+  "D6JuYS1qKsJWkUDCx8pnH2BFNDkuhNvLjDYoksZEdJGJ": {
+    "first_seen": 1781953201352,
+    "token_created_at": 1781338271000,
+    "name": "COZY-SOL"
+  },
+  "8yeWELcBWpho4BbfedcJetK2X22xgaX68NGaPTZYPaqR": {
+    "first_seen": 1781966428023,
+    "token_created_at": 1779654298000,
+    "name": "PARALOOM-SOL"
+  },
+  "2Fo6kBXuBqjK3gvqJgnpX8omMvgjHFn74miV8JWVR8ae": {
+    "first_seen": 1781971090803,
+    "token_created_at": 1781943787000,
+    "name": "glippy-SOL"
+  },
+  "7NEqhVC6SZSwr2FzHW37wp4cGxmRFXJJ942EuP5oV5ds": {
+    "first_seen": 1781971090804,
+    "token_created_at": 1781943787000,
+    "name": "glippy-SOL"
+  },
+  "6rkN7wcxsbYLeemcWKkGEiG2KnFjxrruEixuhXYkfouZ": {
+    "first_seen": 1781978945451,
+    "token_created_at": 1781952686000,
+    "name": "LIGMA-SOL"
+  },
+  "3oPSzAD8qU8vNtkBPhXEV5cQ5FEcSLvAPuCuC7rbXf9i": {
+    "first_seen": 1782019203721,
+    "token_created_at": 1781993413000,
+    "name": "TRENCHES-SOL"
+  },
+  "4U8ftLKMhqkRqaNBSAdcJwPaYgRUKbWX1SFJmtMFK74F": {
+    "first_seen": 1782047425060,
+    "token_created_at": 1780599598000,
+    "name": "ZERO-USDC"
+  },
+  "7mHYRRu2LLQw6xHoXFngonkLTEKDEPUJsvFYcEX5K7Wy": {
+    "first_seen": 1782099618208,
+    "token_created_at": 1781297839000,
+    "name": "INFERRA-SOL"
+  },
+  "57sJdLZbdHBziTi1HPvzfn9sUqhDR3Y4pX2PMqkXxtJi": {
+    "first_seen": 1782111607154,
+    "token_created_at": 1781292896000,
+    "name": "ICPX-SOL"
+  },
+  "5iLAvxh9KD6WNxqnA1nwAF8nBo5G6UHT18vBzo2CQwRm": {
+    "first_seen": 1782129083794,
+    "token_created_at": 1782097561000,
+    "name": "Fugu-SOL"
+  },
+  "2t49tCdyemL1epSMnrDmRogRGTNTMpZzZCQbC8ZwumdZ": {
+    "first_seen": 1782148290773,
+    "token_created_at": 1782104525000,
+    "name": "CONDOR-SOL"
+  },
+  "4im8yHLYZT866BEbq1BWZy11EwwChQPGYqHGHdxv4Xdo": {
+    "first_seen": 1782156611803,
+    "token_created_at": 1781796291000,
+    "name": "VSK-SOL"
+  },
+  "3b9otCCBHfohNdHCtGVxnBmJDuFZdNEv5rXdD1hkc9RF": {
+    "first_seen": 1782165221770,
+    "token_created_at": 1781660270000,
+    "name": "FARM-SOL"
+  },
+  "DiHo2GdLCQf4UdNGFyFJ8iX42fDGEcTRez4WVGLDXCcm": {
+    "first_seen": 1782195016049,
+    "token_created_at": 1782150328000,
+    "name": "QUEST-SOL"
+  },
+  "435ydRproGCSjASA5PkMkSwfwTv3mYPodMPX1SzqFzLA": {
+    "first_seen": 1782195016050,
+    "token_created_at": 1782150328000,
+    "name": "QUEST-SOL"
+  },
+  "6CqZUYDqQ9aLBeTAq1AmxhijC8kxoU395xCrZVCPYKg9": {
+    "first_seen": 1782198524501,
+    "token_created_at": 1781987722000,
+    "name": "POKÉFIGHT-SOL"
+  },
+  "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi": {
+    "first_seen": 1782258621665,
+    "token_created_at": 1782110585000,
+    "name": "CATWIF-SOL"
+  },
+  "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav": {
+    "first_seen": 1782264021583,
+    "token_created_at": 1781816687000,
+    "name": "world-SOL"
+  },
+  "D6YRchD8QzgeFJy97e8J4f9fXWg3Y2rwfG1TjbCox7iz": {
+    "first_seen": 1782306691136,
+    "token_created_at": 1782144030000,
+    "name": "RUST-USDC"
+  },
+  "3hfo5Jkm1eNUxpjqdrCWWafsEUgR7WG2P5ztbVe1FBQu": {
+    "first_seen": 1782310203585,
+    "token_created_at": 1782265178000,
+    "name": "WEN-SOL"
+  },
+  "5xNSmvbB8wp1SBbUqpcVoDc1jNYep3KcD6yVSPmT52yi": {
+    "first_seen": 1782310203586,
+    "token_created_at": 1782265178000,
+    "name": "WEN-SOL"
+  },
+  "iDsZxpnCjsoyW5A7tywucn3QohLw4iFbRY6wunLGzY8": {
+    "first_seen": 1782325176225,
+    "token_created_at": 1782058204000,
+    "name": "WCANIME-SOL"
+  },
+  "6MTeqiBSXTRgRJSZ3vemyTeNrYknc4WpSeB23JFxW1CU": {
+    "first_seen": 1782325176227,
+    "token_created_at": 1782277873000,
+    "name": "WEN-SOL"
+  },
+  "5tKeEuW2syo3wXDBFRhZPkYg4YtCNyjwd6zj5oTXnPVh": {
+    "first_seen": 1782368108234,
+    "token_created_at": 1782335191000,
+    "name": "GLUE-SOL"
+  },
+  "2f8kZZKQC98gBkv2cUz37e3AXoYubQYyCDoT1XLBzfYG": {
+    "first_seen": 1782402303917,
+    "token_created_at": 1781816687000,
+    "name": "world-SOL"
+  },
+  "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT": {
+    "first_seen": 1782443702859,
+    "token_created_at": 1781305197000,
+    "name": "Chameleon-SOL"
+  },
+  "49MmqRP5dsZ3Yot6P2AeTJ4ZHnyBhnpmXCsxPpzaDzWV": {
+    "first_seen": 1782451845842,
+    "token_created_at": 1782425768000,
+    "name": "VALORA-SOL"
+  },
+  "EHY2sVmgfn18R27nsXYemnxDQMjtvCGCjwsYB9qoH6rU": {
+    "first_seen": 1782461702915,
+    "token_created_at": 1782435992000,
+    "name": "piss-SOL"
+  },
+  "Bzq3x7HnAKF3yiPtB1877tEapkCyUCCb3x78VntSijnU": {
+    "first_seen": 1782497703056,
+    "token_created_at": 1780806147000,
+    "name": "Jotchua-KINS"
+  },
+  "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5": {
+    "first_seen": 1782505801770,
+    "token_created_at": 1781611434000,
+    "name": "traindog-SOL"
+  },
+  "4akDGZgFTbK38FjCr3GbH51QhKHeZeQwZTQgYZMkHshR": {
+    "first_seen": 1782533649628,
+    "token_created_at": 1782446690000,
+    "name": "liquititty-SOL"
+  },
+  "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1": {
+    "first_seen": 1782573302918,
+    "token_created_at": 1782490985000,
+    "name": "Bepe-SOL"
+  },
+  "AUvX4hEMi9t43aqovA5tEAA5AZ7yugcpHa8SkJVEoEKa": {
+    "first_seen": 1782577420931,
+    "token_created_at": 1781643948000,
+    "name": "ANSEM-SOL"
+  },
+  "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4": {
+    "first_seen": 1782636279756,
+    "token_created_at": 1781644517000,
+    "name": "Hobbes-SOL"
+  },
+  "D2UcHwsHRgaimVraWgd6qqoGos3Br2CLy1UUVLFbAUb6": {
+    "first_seen": 1782647102851,
+    "token_created_at": 1782621325000,
+    "name": "CLIVE-SOL"
+  },
+  "KG3tEX6wVC6NEpYBk1Eb2fzvyKwVzE1Wn1Xd53gDLt2": {
+    "first_seen": 1782663302690,
+    "token_created_at": 1782628405000,
+    "name": "🐂🀄️-SOL"
+  },
+  "E38rkvuxQ2EcAn2QZURtMc9ryk5Z1rNgRGubQt8xhUBh": {
+    "first_seen": 1782663302693,
+    "token_created_at": 1782628405000,
+    "name": "🐂🀄️-SOL"
+  }
+}

@@ -728,7 +728,8 @@ export function formatGmgnCandidateForPrompt(p) {
     if (parts) indLine = `\n  Indicators ${interval}: ${parts}`;
   }
 
-  const header = [sym, launchpad, age, mcap, binStep].filter(Boolean).join(" | ");
+  const cooldown = p.cooldown_info ? `⚠ cooldown: ${p.cooldown_info}` : "";
+  const header = [sym, launchpad, age, mcap, binStep, cooldown].filter(Boolean).join(" | ");
   const pool = [tvl, feeTvl, vol, volatility, ath].filter(Boolean).join(" | ");
   const risk = [top10, dev, bot, fresh, bundler].filter(Boolean).join(" | ");
   const traction = [holders, fees, smart, kol].filter(Boolean).join(" | ");

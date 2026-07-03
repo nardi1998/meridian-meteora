@@ -620,6 +620,10 @@ export async function getTopCandidates({ limit = 10 } = {}) {
         pushFilteredReason(filteredOut, p, `volatility ${p.volatility ?? "unknown"} unusable`);
         return false;
       }
+      if (config.screening.maxVolatility != null && Number(p.volatility) > config.screening.maxVolatility) {
+        pushFilteredReason(filteredOut, p, `volatility ${p.volatility} above maxVolatility ${config.screening.maxVolatility}`);
+        return false;
+      }
       if (occupiedPools.has(p.pool)) {
         pushFilteredReason(filteredOut, p, "already have an open position in this pool");
         return false;
@@ -628,15 +632,14 @@ export async function getTopCandidates({ limit = 10 } = {}) {
         pushFilteredReason(filteredOut, p, "already holding this base token in another pool");
         return false;
       }
-      if (isPoolOnCooldown(p.pool)) {
-        log("screening", `Filtered cooldown pool ${p.name} (${p.pool.slice(0, 8)})`);
-        pushFilteredReason(filteredOut, p, "pool cooldown active");
-        return false;
-      }
-      if (isBaseMintOnCooldown(p.base?.mint)) {
-        log("screening", `Filtered cooldown token ${p.base?.symbol} (${p.base?.mint?.slice(0, 8)})`);
-        pushFilteredReason(filteredOut, p, "token cooldown active");
-        return false;
+      const poolCooldown = isPoolOnCooldown(p.pool);
+      const mintCooldown = isBaseMintOnCooldown(p.base?.mint);
+      if (poolCooldown || mintCooldown) {
+        const reasons = [];
+        if (poolCooldown) reasons.push("pool cooldown");
+        if (mintCooldown) reasons.push("token cooldown");
+        p.cooldown_info = reasons.join(" + ");
+        log("screening", `Cooldown noted for ${p.name} (${p.pool.slice(0, 8)}): ${p.cooldown_info}`);
       }
       return true;
     })
@@ -786,6 +789,9 @@ function condensePool(p) {
     price_trend: p.price_trend,
     min_price: p.min_price,
     max_price: p.max_price,
+
+    // Cooldown status (soft — LLM can override)
+    cooldown: p.cooldown_info || null,
 
     // Activity trends
     volume_change_pct: fix(p.volume_change_pct, 1),

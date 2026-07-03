@@ -117,15 +117,16 @@ Before `deploy_position` executes:
 - Single-side SOL deploys must keep `bins_above=0`
 - SOL balance must cover `amount_y + gasReserve`
 - `blockedLaunchpads` enforced in `getTopCandidates()` before LLM sees candidates
+- **Order block coverage**: If volatility-based `bins_below` doesn't cover the order block zone (default: 20% below current price), automatically extend to cover it
 
 ---
 
 ## bins_below Calculation (SCREENER)
 
-Linear formula based on pool volatility (set in screener prompt, `index.js`). The lower/upper bounds are configurable, with a hard safety floor of 35 bins:
+Primary formula based on pool volatility (set in screener prompt, `index.js`). The lower/upper bounds are configurable, with a hard safety floor of 35 bins:
 
 ```
-bins_below = round(minBinsBelow + (volatility / 5) * (maxBinsBelow - minBinsBelow))
+bins_below = round(minBinsBelow + sqrt(volatility) * 30)
 clamped to [minBinsBelow, maxBinsBelow]
 ```
 
@@ -133,6 +134,28 @@ clamped to [minBinsBelow, maxBinsBelow]
 - Low valid volatility → minBinsBelow
 - High volatility (5+) → maxBinsBelow
 - Any value in between is valid (continuous, not tiered)
+
+### Order Block Detection (multi-timeframe)
+
+After the volatility-based calculation, the system detects order blocks across multiple timeframes with priority:
+
+```
+1H → 30M → 15M → 5M
+```
+
+Order Block Detection Logic:
+1. Find consolidation zone (small candle bodies, tight range)
+2. Look for impulsive move after consolidation (large candle closing strongly)
+3. The consolidation zone is the order block (institutional accumulation)
+
+If an order block is detected, bins_below is extended to cover it:
+```
+bins_below = max(volatility_bins, order_block_bins)
+```
+
+This guarantees that if price pulls back to the order block (institutional support zone), the LP position remains in range and continues earning fees. Default coverage: 20% below current price.
+
+Config: `orderBlockTimeframes` (default: ["1H", "30M", "15M", "5M"])
 
 ---
 

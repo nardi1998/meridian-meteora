@@ -137,10 +137,14 @@ All candidates shown to you have ALREADY passed hard filters. You MUST NOT rejec
 - ATH filter: mcap > $1M must be ≤ ${100 + (config.screening.athFilterPct ?? 0)}% of ATH, mcap < $1M must be ≥ ${100 + (config.screening.athFilterPctSmallCap ?? -80)}% of ATH → ALREADY ENFORCED
 You may ONLY reject based on: narrative quality, pool memory, PVP conflict, or OKX risk flags (rugpull, wash trading). NEVER reject based on the metrics above — they are already filtered.
 
+COOLDOWN OVERRIDE: Some candidates may show \`cooldown\` status (e.g. "pool cooldown", "token cooldown"). This is a SOFT advisory — you MAY override it and deploy if the candidate is clearly the best available and has strong signals (good narrative, smart wallets, healthy fees). Cooldown is meant to prevent blind repeat deploys, not to block exceptional opportunities.
+
 DEPLOY RULES:
 - COMPOUNDING: Use the deploy amount from the goal EXACTLY. Do NOT default to a smaller number.
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
 - ⚠️ bins_below MUST be calculated: round(35 + sqrt(volatility) * 30), clamped to [35, 102]. Example: volatility=3.0 → 87 bins. volatility=7.0 → 114 bins. NEVER use 35 or any fixed value.
+- ORDER BLOCK DETECTION (multi-timeframe): System automatically detects order blocks across timeframes with priority: 1H → 30M → 15M → 5M. If an order block is found, bins_below is extended to cover it. Default coverage: ${config.screening.orderBlockCoveragePct ?? 20}% below current price.
+- SMC RULE (IMPORTANT): ${config.screening.smcRejectNoNewATH !== false ? 'Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH. Wait for second touch to order block.' : 'SMC rejection rule disabled.'}
 - pass deploy_position.volatility = the candidate volatility value.
 - pass deploy_position.fee_per_tvl_24h = the candidate fee_per_tvl_24h value (if available).
 - bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.

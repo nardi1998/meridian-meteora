@@ -148,6 +148,24 @@ Example: volatility=3.0 → bins_below = round(35 + 1.732 * 30) = round(35 + 52)
 Example: volatility=7.0 → bins_below = round(35 + 2.646 * 30) = round(35 + 79) = 114
 NEVER use 35 or any other fixed value. ALWAYS calculate from volatility.
 
+⚠️ ORDER BLOCK DETECTION (multi-timeframe, automatic):
+System automatically detects order blocks across multiple timeframes with priority:
+1H → 30M → 15M → 5M
+
+Order Block = Consolidation zone before impulsive move (institutional accumulation).
+If an order block is detected, bins_below is extended to cover it.
+Default coverage: orderBlockCoveragePct (default 20%) below current price.
+
+The detection checks for:
+- Small candle bodies (consolidation) followed by large impulsive candles
+- Price must be within acceptable distance from current price
+- Order block strength must meet minimum threshold
+
+⚠️ SMC RULE (Smart Money Concepts):
+Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH.
+This indicates institutions may have filled their orders.
+CAN open if price returns to order block (second touch).
+
 Guidelines (only when user hasn't specified):
 - Strategy: use the active strategy's lp_strategy field (bid_ask or spot)
 - Deposit: single-sided SOL only. Use amount_y/amount_sol and keep amount_x=0.
@@ -394,7 +412,7 @@ WARNING: This executes a real on-chain transaction.`,
 Non-GMGN changes persist to user-config.json; GMGN tuning persists to gmgn-config.json. Changes take effect immediately — no restart needed.
 
 VALID KEYS (use EXACTLY these key names, nothing else):
-Screening: screeningSource, minFeeActiveTvlRatio, minTvl, maxTvl, minVolume, minOrganic, minQuoteOrganic, minHolders, minMcap, maxMcap, minBinStep, maxBinStep, timeframe, category, minTokenFeesSol, excludeHighSupplyConcentration, useDiscordSignals, discordSignalMode, avoidPvpSymbols, blockPvpSymbols, maxBundlePct, maxBotHoldersPct, maxTop10Pct, allowedLaunchpads, blockedLaunchpads, minTokenAgeHours, maxTokenAgeHours, athFilterPct
+Screening: screeningSource, minFeeActiveTvlRatio, minTvl, maxTvl, minVolume, minOrganic, minQuoteOrganic, minHolders, minMcap, maxMcap, minBinStep, maxBinStep, timeframe, category, minTokenFeesSol, excludeHighSupplyConcentration, useDiscordSignals, discordSignalMode, avoidPvpSymbols, blockPvpSymbols, maxBundlePct, maxBotHoldersPct, allowedLaunchpads, blockedLaunchpads, minTokenAgeHours, maxTokenAgeHours, athFilterPct, athFilterPctSmallCap, maxVolatility
 GMGN (persisted to gmgn-config.json): gmgnApiKey, gmgnBaseUrl, gmgnInterval, gmgnOrderBy, gmgnDirection, gmgnLimit, gmgnEnrichLimit, gmgnRequestDelayMs, gmgnMaxRetries, gmgnHoldersLimit, gmgnKlineResolution, gmgnKlineLookbackMinutes, gmgnFilters, gmgnPlatforms, gmgnMinMcap, gmgnMaxMcap, gmgnMinVolume, gmgnMinHolders, gmgnMinTokenAgeHours, gmgnMaxTokenAgeHours, gmgnAthFilterPct, gmgnMaxTop10HolderRate, gmgnMaxBundlerRate, gmgnMaxRatTraderRate, gmgnMaxFreshWalletRate, gmgnMaxDevTeamHoldRate, gmgnMaxBotDegenRate, gmgnMaxSniperCount, gmgnMaxSniperHoldRate, gmgnPreferredKolNames, gmgnPreferredKolMinHoldPct, gmgnDumpKolNames, gmgnDumpKolMinHoldPct, gmgnRequireKol, gmgnMinKolCount, gmgnMinSmartDegenCount, gmgnMinTotalFeeSol, gmgnIndicatorFilter, gmgnIndicatorInterval, gmgnRequireBullishSupertrend, gmgnRejectAlreadyAtBottom, gmgnRequireAboveSupertrend, gmgnMinRsi, gmgnMaxRsi, gmgnRequireBbPosition
 Management: minClaimAmount, autoSwapAfterClaim, outOfRangeBinsToClose, outOfRangeWaitMinutes, oorCooldownTriggerCount, oorCooldownHours, repeatDeployCooldownEnabled, repeatDeployCooldownTriggerCount, repeatDeployCooldownHours, repeatDeployCooldownScope, repeatDeployCooldownMinFeeEarnedPct, minVolumeToRebalance, stopLossPct, takeProfitPct, takeProfitFeePct, trailingTakeProfit, trailingTriggerPct, trailingDropPct, pnlSanityMaxDiffPct, solMode, minSolToOpen, deployAmountSol, gasReserve, positionSizePct, minAgeBeforeYieldCheck
 Risk: maxPositions, maxDeployAmount
@@ -403,6 +421,7 @@ Models: managementModel, screeningModel, generalModel, temperature, maxTokens, m
 Strategy: strategy, binsBelow, minBinsBelow, maxBinsBelow, defaultBinsBelow
 Hive/API: hiveMindUrl, hiveMindApiKey, agentId, hiveMindPullMode, publicApiKey, agentMeridianApiUrl, lpAgentRelayEnabled
 Indicators: chartIndicatorsEnabled, indicatorEntryPreset, indicatorExitPreset, rsiLength, indicatorIntervals, indicatorCandles, rsiOversold, rsiOverbought, requireAllIntervals
+Order Block: orderBlockCoveragePct, orderBlockTimeframes, smcRejectNoNewATH
 
 Reason is optional but helpful — logged as a lesson when provided.`,
       parameters: {

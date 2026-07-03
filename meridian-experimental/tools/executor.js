@@ -22,6 +22,7 @@ import { addSmartWallet, removeSmartWallet, listSmartWallets, checkSmartWalletsO
 import { getTokenInfo, getTokenHolders, getTokenNarrative } from "./token.js";
 import { config, reloadScreeningThresholds, MIN_SAFE_BINS_BELOW } from "../config.js";
 import { getRecentDecisions } from "../decision-log.js";
+import { findOrderBlock, calculateBinsForOrderBlock, getOrderBlockSummary } from "./orderblock.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -313,12 +314,16 @@ const toolMap = {
       blockPvpSymbols: ["screening", "blockPvpSymbols"],
       maxBundlePct:     ["screening", "maxBundlePct"],
       maxBotHoldersPct: ["screening", "maxBotHoldersPct"],
-      maxTop10Pct: ["screening", "maxTop10Pct"],
+      // maxTop10Pct HARDCODED at 40 — not configurable at runtime
       allowedLaunchpads: ["screening", "allowedLaunchpads"],
       blockedLaunchpads: ["screening", "blockedLaunchpads"],
       minTokenAgeHours: ["screening", "minTokenAgeHours"],
       maxTokenAgeHours: ["screening", "maxTokenAgeHours"],
       athFilterPct:     ["screening", "athFilterPct"],
+      maxVolatility:    ["screening", "maxVolatility"],
+      orderBlockCoveragePct: ["screening", "orderBlockCoveragePct"],
+      orderBlockTimeframes: ["screening", "orderBlockTimeframes"],
+      smcRejectNoNewATH: ["screening", "smcRejectNoNewATH"],
       minFeePerTvl24h: ["management", "minFeePerTvl24h"],
       // management
       minClaimAmount: ["management", "minClaimAmount"],
@@ -886,6 +891,65 @@ async function runSafetyChecks(name, args) {
       if (requestedVolatility != null && requestedVolatility > 0) {
         args.bins_below = requestedBinsBelow;
         log("deploy", ` bins_below overridden to ${requestedBinsBelow} (from volatility ${requestedVolatility})`);
+      }
+
+      // Order block detection: multi-timeframe analysis (1H → 30M → 15M → 5M)
+      const orderBlockCoveragePct = Number(config.screening.orderBlockCoveragePct ?? 20);
+      if (orderBlockCoveragePct > 0 && args.pool_address && args.base_mint) {
+        try {
+          const activeBinData = await getActiveBin({ pool_address: args.pool_address });
+          if (activeBinData?.price && activeBinData.price > 0) {
+            const currentPrice = activeBinData.price;
+            
+            // Find order block across multiple timeframes
+            const orderBlock = await findOrderBlock(args.base_mint, currentPrice, {
+              timeframes: config.screening.orderBlockTimeframes || ["1H", "30M", "15M", "5M"],
+              maxDistancePct: orderBlockCoveragePct,
+            });
+
+            // SMC Rule: Check for rejection pattern
+            if (orderBlock.rejected && !orderBlock.canOpen) {
+              _deployLock = false;
+              return {
+                pass: false,
+                reason: `SMC Rule: ${orderBlock.reason}. Wait for second touch to order block.`,
+              };
+            }
+
+            if (orderBlock.found) {
+              // Calculate bins needed to cover the order block
+              const binStep = args.bin_step ?? 100;
+              const binsNeededForOB = calculateBinsForOrderBlock(orderBlock, currentPrice, binStep);
+              
+              const currentBinsBelow = Number(args.bins_below ?? requestedBinsBelow);
+              
+              log("deploy", ` Order block detected: ${getOrderBlockSummary(orderBlock)}`);
+              log("deploy", ` Bins needed for OB: ${binsNeededForOB}, current bins_below: ${currentBinsBelow}`);
+              
+              if (binsNeededForOB > currentBinsBelow) {
+                args.bins_below = Math.min(binsNeededForOB, config.strategy.maxBinsBelow);
+                log("deploy", ` bins_below extended to ${args.bins_below} to cover order block (was ${currentBinsBelow})`);
+              } else {
+                log("deploy", ` Order block already covered by volatility-based range`);
+              }
+            } else {
+              log("deploy", ` No order block detected, using default coverage (${orderBlockCoveragePct}%)`);
+              
+              // Fallback to percentage-based coverage if no OB detected
+              const orderBlockLowPrice = currentPrice * (1 - orderBlockCoveragePct / 100);
+              const priceRangePct = (currentPrice - orderBlockLowPrice) / currentPrice * 100;
+              const binsNeededForDefault = Math.ceil(priceRangePct / (binStep / 100));
+              
+              const currentBinsBelow = Number(args.bins_below ?? requestedBinsBelow);
+              if (binsNeededForDefault > currentBinsBelow) {
+                args.bins_below = Math.min(binsNeededForDefault, config.strategy.maxBinsBelow);
+                log("deploy", ` bins_below extended to ${args.bins_below} for default ${orderBlockCoveragePct}% coverage`);
+              }
+            }
+          }
+        } catch (e) {
+          log("deploy", ` order block detection skipped: ${e.message}`);
+        }
       }
 
       return { pass: true };

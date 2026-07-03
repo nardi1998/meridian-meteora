@@ -104,7 +104,7 @@ export const config = {
     blockPvpSymbols:   u.blockPvpSymbols   ?? false, // hard-filter PVP rivals before the LLM sees them
     maxBundlePct:      u.maxBundlePct      ?? 30,  // max bundle holding % (OKX advanced-info)
     maxBotHoldersPct:  u.maxBotHoldersPct  ?? 30,  // max bot holder addresses % (Jupiter audit)
-    maxTop10Pct:       u.maxTop10Pct       ?? 60,  // max top 10 holders concentration
+    maxTop10Pct:       40,                   // HARDCODED — max top 10 holders concentration. Not overridable by user-config.
     allowedLaunchpads: u.allowedLaunchpads ?? [],  // allow-list launchpads, [] = no allow-list
     blockedLaunchpads:  u.blockedLaunchpads  ?? [],  // e.g. ["letsbonk.fun", "pump.fun"]
     minTokenAgeHours:   u.minTokenAgeHours   ?? null, // null = no minimum
@@ -113,6 +113,9 @@ export const config = {
     athFilterPct:       u.athFilterPct       ?? null, // e.g. -20 = only deploy if price is >= 20% below ATH
     athFilterPctSmallCap: u.athFilterPctSmallCap ?? -80, // e.g. -80 = small cap (mcap < $1M) must be >= 20% of ATH
     maxVolatility:      u.maxVolatility      ?? 10,   // reject pools above this volatility threshold
+    orderBlockCoveragePct: u.orderBlockCoveragePct ?? 20, // ensure LP range covers order block zone (% below current price)
+    orderBlockTimeframes: u.orderBlockTimeframes ?? ["1H", "30M", "15M", "5M"], // timeframes to check for order blocks (priority order)
+    smcRejectNoNewATH: u.smcRejectNoNewATH ?? true, // reject entry if OB/FVG touched and rejected without new ATH
   },
 
   gmgn: {
@@ -341,7 +344,6 @@ export function reloadScreeningThresholds() {
     if (fresh.screeningSource != null) s.source = fresh.screeningSource;
     if (fresh.minFeeActiveTvlRatio != null) s.minFeeActiveTvlRatio = fresh.minFeeActiveTvlRatio;
     if (fresh.minTokenFeesSol  != null) s.minTokenFeesSol  = Math.max(25, fresh.minTokenFeesSol); // HARDCODED FLOOR: 25 SOL minimum
-    if (fresh.maxTop10Pct      != null) s.maxTop10Pct      = fresh.maxTop10Pct;
     if (fresh.useDiscordSignals !== undefined) s.useDiscordSignals = fresh.useDiscordSignals;
     if (fresh.discordSignalMode != null) s.discordSignalMode = fresh.discordSignalMode;
     if (fresh.excludeHighSupplyConcentration !== undefined) s.excludeHighSupplyConcentration = fresh.excludeHighSupplyConcentration;
@@ -368,6 +370,9 @@ export function reloadScreeningThresholds() {
     if (fresh.maxVolatility   != null) s.maxVolatility   = fresh.maxVolatility;
     if (fresh.athFilterPct    !== undefined) s.athFilterPct    = fresh.athFilterPct;
     if (fresh.athFilterPctSmallCap !== undefined) s.athFilterPctSmallCap = fresh.athFilterPctSmallCap;
+    if (fresh.orderBlockCoveragePct != null) s.orderBlockCoveragePct = fresh.orderBlockCoveragePct;
+    if (fresh.orderBlockTimeframes != null) s.orderBlockTimeframes = fresh.orderBlockTimeframes;
+    if (fresh.smcRejectNoNewATH !== undefined) s.smcRejectNoNewATH = fresh.smcRejectNoNewATH;
     const minBinsBelow = numericConfig(fresh.minBinsBelow) ?? config.strategy.minBinsBelow;
     const maxBinsBelow = numericConfig(fresh.maxBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.maxBinsBelow;
     const defaultBinsBelow = numericConfig(fresh.defaultBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.defaultBinsBelow ?? maxBinsBelow;

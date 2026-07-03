@@ -160,6 +160,7 @@ All fields are optional — defaults shown. Edit `user-config.json`.
 | `category` | `trending` | Pool category filter for screening |
 | `takeProfitPct` | `5` | Close position when PnL reaches this % threshold |
 | `outOfRangeWaitMinutes` | `30` | Minutes a position can be out of range before alerting / acting |
+| `orderBlockCoveragePct` | `20` | Ensure LP range covers order block zone (% below current price) |
 
 ---
 

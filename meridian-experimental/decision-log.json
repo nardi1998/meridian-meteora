@@ -1,1138 +1,576 @@
 {
   "decisions": [
     {
-      "id": "dec_1782673201208_r4fiim",
-      "ts": "2026-06-28T19:00:01.208Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782671401428_3fqant",
-      "ts": "2026-06-28T18:30:01.428Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782669601303_x2wicf",
-      "ts": "2026-06-28T18:00:01.303Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782667801465_y1k3ib",
-      "ts": "2026-06-28T17:30:01.465Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782666450931_t3kn50",
-      "ts": "2026-06-28T17:07:30.931Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Deploy attempt did not succeed",
-      "reason": "The deploy failed with a Meteora error code 6004 (likely an oracle/pool configuration issue). The system is blocking further deployment attempts this session. Let me report accurately. --- ⛔ **NO DEPLOY** Cycle finished with no valid entry. **BEST LOOKING CANDIDATE** 🐂🀄️-SOL (KG3tEX6wVC6NEpYBk1Eb2fzvyKwVzE1Wn1Xd53gDLt2) **WHY SKIPPED** 🐂🀄️-SOL Pool 1 was selected — strong fee_tvl (2.42%), $13.8K volume, $1.14M mcap, a recent lesson specifically praising this pool type (+2.2% PnL), and d",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782666336846_oka54n",
-      "ts": "2026-06-28T17:05:36.846Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "KG3tEX6wVC6NEpYBk1Eb2fzvyKwVzE1Wn1Xd53gDLt2",
-      "pool_name": "🐂🀄️-SOL",
-      "position": "FQ8PS9t6SmtW6CnYhz8gkcDDaNusNycW7VUdQ5qnJibh",
-      "summary": "Closed at 2.20%",
-      "reason": "Rule 3: pumped far above range",
-      "risks": [
-        "out of range 6m",
-        "volatility 6.1657"
-      ],
-      "metrics": {
-        "pnl_usd": 0.018716296999999993,
-        "pnl_pct": 2.2019245475161555,
-        "fees_usd": 0.018695792000000003,
-        "minutes_held": 49
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782666122978_virrk5",
-      "ts": "2026-06-28T17:02:02.978Z",
+      "id": "dec_1782865843768_upkyme",
+      "ts": "2026-07-01T00:30:43.768Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm",
-      "pool_name": "滑る猫-SOL",
-      "position": "AuBGLVczY4AYeecUYYJC5VjTTf6MpxY2ry9FnZ9MexEy",
+      "pool": "AcqSzoHdjznY7mybdCzn29aBKDyyosz3WjHiGtGAzx6t",
+      "pool_name": "SUPERMAN-SOL",
+      "position": "9gC4wv72QaHYMDnbksn52ut8SUAQXCuK9f6SieGE1qna",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -581→-489 around active bin -489",
+      "reason": "Chosen range -509→-427 around active bin -427",
       "risks": [
-        "volatility 3.5654",
-        "fee/TVL 0.426%"
+        "volatility 2.4276",
+        "fee/TVL 0.5045%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -489,
-        "min_bin": -581,
-        "max_bin": -489,
+        "active_bin": -427,
+        "min_bin": -509,
+        "max_bin": -427,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782665153993_xyynbe",
-      "ts": "2026-06-28T16:45:53.993Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "**Analysis of all 3 candidates:** **Hobbes-SOL** — ❌ Volatility 6.07 exceeds the evolved maxVolatility threshold (5.4) from past lessons — losers cluster at ~4.7. Tokenomics red flag in narrative (25% dev supply, 100% fees to dev). Top10 concentration at 44.93%. Smart wallets: 0. Recent PnL drift -2.30%. **Chameleon-SOL** — ❌ Best narrative (specific viral game origin) but pool has been closed 3 times for low yield in the last 48h. 14 past deploys averaging 0.05% PnL. 1h price -16.92%. No smar",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782664269106_7vux65",
-      "ts": "2026-06-28T16:31:09.106Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "The deployment was blocked. The first attempt failed because I missed the `pool_address` parameter, and the system's session guard prevents retries. Let me report the real result. --- ⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDATE Chameleon-SOL (Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT) WHY SKIPPED The target pool (Chameleon-SOL) was selected with strong conviction — highest fee_tvl_ratio (0.9191), highest volume ($6072), a genuine narrative tied to the viral MEC",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782663380495_oekjj5",
-      "ts": "2026-06-28T16:16:20.495Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "KG3tEX6wVC6NEpYBk1Eb2fzvyKwVzE1Wn1Xd53gDLt2",
-      "pool_name": "🐂🀄️-SOL",
-      "position": "FQ8PS9t6SmtW6CnYhz8gkcDDaNusNycW7VUdQ5qnJibh",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -523→-421 around active bin -421",
-      "risks": [
-        "volatility 6.1657",
-        "fee/TVL 4.1235%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -421,
-        "min_bin": -523,
-        "max_bin": -421,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782662400670_on9nwq",
-      "ts": "2026-06-28T16:00:00.670Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782660639080_iawwx4",
-      "ts": "2026-06-28T15:30:39.080Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "4WZjUFwXV6ZxXUPkZMRF9vQ45Wo7YKq5YstEBpVUyygX",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -563→-502 around active bin -502",
-      "risks": [
-        "volatility 0.7229",
-        "fee/TVL 0.3792%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -502,
-        "min_bin": -563,
-        "max_bin": -502,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782659754852_zkita2",
-      "ts": "2026-06-28T15:15:54.852Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5",
-      "pool_name": "traindog-SOL",
-      "position": "9CVwFD3gNqLsh3XnbkT7dxJfEcauCz9i1NKcL3QgucVs",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -721→-622 around active bin -622",
-      "risks": [
-        "volatility 4.5907",
-        "fee/TVL 0.2956%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -622,
-        "min_bin": -721,
-        "max_bin": -622,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782659260902_o6bfao",
-      "ts": "2026-06-28T15:07:40.902Z",
+      "id": "dec_1782865519841_u04s2v",
+      "ts": "2026-07-01T00:25:19.841Z",
       "type": "close",
       "actor": "MANAGER",
       "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
       "pool_name": "CATWIF-SOL",
-      "position": "HSJXXSYBH8MCivdGzHD2FokbYvywiLgZXowJutDfB1GU",
-      "summary": "Closed at -0.00%",
+      "position": "DmakpEjF7YzWWnBH5ycHb9Wu7omeySrrPh6W6srZgwxr",
+      "summary": "Closed at 0.19%",
       "reason": "agent decision",
+      "risks": [
+        "volatility 2.0896"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0016332822534770308,
+        "pnl_pct": 0.19215109749516276,
+        "fees_usd": 0.002542607535444909,
+        "minutes_held": 84
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782865502007_ra0xcb",
+      "ts": "2026-07-01T00:25:02.007Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "AeUfFU6LU159YSBQvhLbXmh5bW2BqCgAFi5zUSQMnUc7",
+      "pool_name": "CHANCE-SOL",
+      "position": "3z2nurF3ej2fHyu8L4hoxFSEF4XVtzpWnuozNg2i9qne",
+      "summary": "Closed at 0.18%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 3.4237"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0015277756545033494,
+        "pnl_pct": 0.1797391961884412,
+        "fees_usd": 0.0019526155964535237,
+        "minutes_held": 129
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782864000973_0gzjaj",
+      "ts": "2026-07-01T00:00:00.973Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782862200969_od6mj6",
+      "ts": "2026-06-30T23:30:00.969Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782860438275_vpsiz5",
+      "ts": "2026-06-30T23:00:38.275Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "DmakpEjF7YzWWnBH5ycHb9Wu7omeySrrPh6W6srZgwxr",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -429→-351 around active bin -351",
+      "risks": [
+        "volatility 2.0896",
+        "fee/TVL 0.1795%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -351,
+        "min_bin": -429,
+        "max_bin": -351,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782859506714_wqdji6",
+      "ts": "2026-06-30T22:45:06.714Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $689084, price 15.1% of ATH < 25% - traindog-SOL: price 81.9% of ATH > 80% limit",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $689084, price 15.1% of ATH < 25%",
+        "traindog-SOL: price 81.9% of ATH > 80% limit"
+      ]
+    },
+    {
+      "id": "dec_1782858602484_wj854x",
+      "ts": "2026-06-30T22:30:02.484Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $722392, price 15.9% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $722392, price 15.9% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782858153419_8s4nny",
+      "ts": "2026-06-30T22:22:33.419Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "BS8vQknefALrkSyr323CWo29sra34bHUrZP3NWu5j2UT",
+      "summary": "Closed at 0.01%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 2.2143"
+      ],
+      "metrics": {
+        "pnl_usd": 0.00008439058032372326,
+        "pnl_pct": 0.009928303719341499,
+        "fees_usd": 0.00009087913736202378,
+        "minutes_held": 51
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782857745055_9tuh0m",
+      "ts": "2026-06-30T22:15:45.055Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "AeUfFU6LU159YSBQvhLbXmh5bW2BqCgAFi5zUSQMnUc7",
+      "pool_name": "CHANCE-SOL",
+      "position": "3z2nurF3ej2fHyu8L4hoxFSEF4XVtzpWnuozNg2i9qne",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -539→-448 around active bin -448",
+      "risks": [
+        "volatility 3.4237",
+        "fee/TVL 0.4941%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -448,
+        "min_bin": -539,
+        "max_bin": -448,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782856807445_mwxkab",
+      "ts": "2026-06-30T22:00:07.445Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CHANCE-SOL: price 82.0% of ATH > 80% limit - SUPERMAN-SOL: small cap: mcap $620907, price 13.5% of ATH < 25% - CS-SOL: price 90.9% of ATH > 80% limit",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CHANCE-SOL: price 82.0% of ATH > 80% limit",
+        "SUPERMAN-SOL: small cap: mcap $620907, price 13.5% of ATH < 25%",
+        "CS-SOL: price 90.9% of ATH > 80% limit"
+      ]
+    },
+    {
+      "id": "dec_1782855903814_2vxmd4",
+      "ts": "2026-06-30T21:45:03.814Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $635545, price 14.0% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $635545, price 14.0% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782855034449_z6p232",
+      "ts": "2026-06-30T21:30:34.449Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "BS8vQknefALrkSyr323CWo29sra34bHUrZP3NWu5j2UT",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -449→-369 around active bin -369",
+      "risks": [
+        "volatility 2.2143",
+        "fee/TVL 0.1755%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -369,
+        "min_bin": -449,
+        "max_bin": -369,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782854878681_uo34hz",
+      "ts": "2026-06-30T21:27:58.681Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $724163, price 15.8% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $724163, price 15.8% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782854869449_pzv7db",
+      "ts": "2026-06-30T21:27:49.449Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "AeUfFU6LU159YSBQvhLbXmh5bW2BqCgAFi5zUSQMnUc7",
+      "pool_name": "CHANCE-SOL",
+      "position": "Fq5AoJBzwKbSb4RGmDtC4VxCrHgnVGkQ3paq2YY9h7SD",
+      "summary": "Closed at 0.05%",
+      "reason": "Rule 3: pumped far above range",
       "risks": [
         "out of range 5m",
-        "volatility 3.5915"
+        "volatility 5.0415"
       ],
       "metrics": {
-        "pnl_usd": -3.8999999985023237e-7,
-        "pnl_pct": -0.00004588247313563637,
-        "fees_usd": 0.0000030019999999999956,
-        "minutes_held": 6
+        "pnl_usd": 0.00040788740000596846,
+        "pnl_pct": 0.04798691101640905,
+        "fees_usd": 0.0004121924000060418,
+        "minutes_held": 42
       },
       "rejected": []
     },
     {
-      "id": "dec_1782658857663_tpt3i5",
-      "ts": "2026-06-28T15:00:57.663Z",
+      "id": "dec_1782854104106_houylm",
+      "ts": "2026-06-30T21:15:04.106Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $718744, price 15.8% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $718744, price 15.8% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782853202181_66f3gp",
+      "ts": "2026-06-30T21:00:02.181Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $695140, price 15.2% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $695140, price 15.2% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782853192908_85q2oo",
+      "ts": "2026-06-30T20:59:52.908Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "EjjhQqtCoMfk4CUn9h8g7cXQXWRti4nRUowmZffcS6w",
+      "summary": "Closed at 0.46%",
+      "reason": "Rule 8: failed target: peak 0.55% < 0.6%, taking +0.50% during observation",
+      "risks": [
+        "volatility 2.4843"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0039005768652176087,
+        "pnl_pct": 0.4588922856191147,
+        "fees_usd": 0.004954514187492696,
+        "minutes_held": 179
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782852336014_oblf4s",
+      "ts": "2026-06-30T20:45:36.014Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "AeUfFU6LU159YSBQvhLbXmh5bW2BqCgAFi5zUSQMnUc7",
+      "pool_name": "CHANCE-SOL",
+      "position": "Fq5AoJBzwKbSb4RGmDtC4VxCrHgnVGkQ3paq2YY9h7SD",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -566→-464 around active bin -464",
+      "risks": [
+        "volatility 5.0415",
+        "fee/TVL 1.3185%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -464,
+        "min_bin": -566,
+        "max_bin": -464,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782852288130_4wcufs",
+      "ts": "2026-06-30T20:44:48.130Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "AYtpykMoBQ1V2vypf8X7BAi7JFCsYMtr3eu9QvbYesdK",
+      "summary": "Closed at -0.00%",
+      "reason": "Rule 3: pumped far above range",
+      "risks": [
+        "out of range 13m",
+        "volatility 3.2951"
+      ],
+      "metrics": {
+        "pnl_usd": -7.049999999342305e-7,
+        "pnl_pct": -0.00008294125940411005,
+        "fees_usd": 0.000004985999999999998,
+        "minutes_held": 13
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782851460923_t77wvn",
+      "ts": "2026-06-30T20:31:00.923Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "AYtpykMoBQ1V2vypf8X7BAi7JFCsYMtr3eu9QvbYesdK",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -609→-520 around active bin -520",
+      "risks": [
+        "volatility 3.2951",
+        "fee/TVL 0.5145%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -520,
+        "min_bin": -609,
+        "max_bin": -520,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782850507442_ok5dph",
+      "ts": "2026-06-30T20:15:07.442Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $745732, price 16.0% of ATH < 25% - Bepe-SOL: small cap: mcap $408631, price 24.1% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $745732, price 16.0% of ATH < 25%",
+        "Bepe-SOL: small cap: mcap $408631, price 24.1% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782849602337_1b0iho",
+      "ts": "2026-06-30T20:00:02.337Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $590554, price 13.8% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $590554, price 13.8% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782848705915_8gu4sf",
+      "ts": "2026-06-30T19:45:05.915Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $604473, price 12.9% of ATH < 25% - Bepe-SOL: small cap: mcap $410282, price 23.7% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $604473, price 12.9% of ATH < 25%",
+        "Bepe-SOL: small cap: mcap $410282, price 23.7% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782847802354_xcrb1m",
+      "ts": "2026-06-30T19:30:02.354Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $614342, price 13.1% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $614342, price 13.1% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782846903372_thv2hk",
+      "ts": "2026-06-30T19:15:03.372Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $603799, price 12.9% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $603799, price 12.9% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782846106960_g7cr6k",
+      "ts": "2026-06-30T19:01:46.960Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "Ht3Nd5S6zDfPxhNesyBr2saj2A8Nmzx6mFCCDs8Vsj5w",
+      "summary": "Closed at 0.25%",
+      "reason": "Rule 8: failed target — peak 0.85% < 1%",
+      "risks": [
+        "volatility 4.6954"
+      ],
+      "metrics": {
+        "pnl_usd": 0.002161881376637198,
+        "pnl_pct": 0.2543397586795956,
+        "fees_usd": 0.009685584,
+        "minutes_held": 120
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782846001485_1jshfb",
+      "ts": "2026-06-30T19:00:01.485Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782844201282_3pyv7s",
+      "ts": "2026-06-30T18:30:01.282Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782842437463_b5mr6r",
+      "ts": "2026-06-30T18:00:37.463Z",
       "type": "deploy",
       "actor": "SCREENER",
       "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
       "pool_name": "CATWIF-SOL",
-      "position": "HSJXXSYBH8MCivdGzHD2FokbYvywiLgZXowJutDfB1GU",
+      "position": "EjjhQqtCoMfk4CUn9h8g7cXQXWRti4nRUowmZffcS6w",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -602→-510 around active bin -510",
+      "reason": "Chosen range -453→-371 around active bin -371",
       "risks": [
-        "volatility 3.5915",
-        "fee/TVL 0.4819%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -510,
-        "min_bin": -602,
-        "max_bin": -510,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782657074948_uzm8do",
-      "ts": "2026-06-28T14:31:14.948Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "CxMLTZb2rkmv1XnzqaxPrHKuVSnbT4qmDACkH447EmTe",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -564→-479 around active bin -479",
-      "risks": [
-        "volatility 2.7451",
-        "fee/TVL 0.8258%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -479,
-        "min_bin": -564,
-        "max_bin": -479,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782655201419_n28a05",
-      "ts": "2026-06-28T14:00:01.419Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782655060672_8yv8hz",
-      "ts": "2026-06-28T13:57:40.672Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
-      "pool_name": "CATWIF-SOL",
-      "position": "237Q48cL8GDmRVEZDsb1tsmJZhkVaWLVLFpCh4WWeuXM",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -606→-523 around active bin -523",
-      "risks": [
-        "volatility 2.5692",
-        "fee/TVL 0.3592%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -523,
-        "min_bin": -606,
-        "max_bin": -523,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782654986256_pp29oe",
-      "ts": "2026-06-28T13:56:26.256Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "Aao34WwjLaFDebcC4myM5TBxGorcuQ7cURikDBwnGpr7",
-      "summary": "Closed at -0.00%",
-      "reason": "Rule 3: pumped far above range",
-      "risks": [
-        "out of range 4m",
-        "volatility 2.0599"
-      ],
-      "metrics": {
-        "pnl_usd": -6.260000000590793e-7,
-        "pnl_pct": -0.00007364717978514224,
-        "fees_usd": 0.000004647,
-        "minutes_held": 10
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782654372592_b5o4pa",
-      "ts": "2026-06-28T13:46:12.592Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "Aao34WwjLaFDebcC4myM5TBxGorcuQ7cURikDBwnGpr7",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -622→-544 around active bin -544",
-      "risks": [
-        "volatility 2.0599",
-        "fee/TVL 0.2452%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -544,
-        "min_bin": -622,
-        "max_bin": -544,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782653446673_l4zuwq",
-      "ts": "2026-06-28T13:30:46.673Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3VtpbhqTRwqcbr3BYPtwcKrD2A7U6qu4RFApyLHhNRLs",
-      "pool_name": "WOC-SOL",
-      "position": "5AxRmpQ8v7BEH96hTFpS1j9Jb6NPyVhKed1BHfPnvHze",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -651→-558 around active bin -558",
-      "risks": [
-        "volatility 3.7287",
-        "fee/TVL 0.6682%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -558,
-        "min_bin": -651,
-        "max_bin": -558,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782652554249_01m9vq",
-      "ts": "2026-06-28T13:15:54.249Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "Now let me analyze each candidate carefully against the criteria. **Chameleon-SOL**: 13 deploys, 1% win rate — abysmal track record. Fee/TVL 0.29% keeps triggering low-yield closes. No narrative from Jupiter, no smart wallets. Volatility 1.7 is too low for solid fee generation. **traindog-SOL**: Only 1 past deploy (+0.53%, profitable). But no narrative from Jupiter, no smart wallets, fee/TVL 0.29% is low, and price just pumped +28% in 1h — risky post-pump entry. **poke-SOL**: 3 deploys, 0.67%",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782651695940_59b0qs",
-      "ts": "2026-06-28T13:01:35.940Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "The deploy was blocked due to a concurrent process. The wallet shows 2.09 SOL (not deducted), and no open positions exist — the transaction did not go through. I must report this honestly. ⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDATE traindog-SOL WHY SKIPPED Deploy was blocked by the system — \"deploy already in progress\" on first attempt, and retry was denied. The wallet balance confirms no SOL was spent (2.09 SOL vs initial 1.224 SOL) and no position exists. This i",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782651620147_pn8k7z",
-      "ts": "2026-06-28T13:00:20.147Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "GsanP9TofMS6ySmtJRKDcnaKJwFivSdiJWv7gavWWnVp",
-      "summary": "Closed position",
-      "reason": "Rule 3: pumped far above range - active bin (-543) above upper bin (-554)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782649800697_pks40f",
-      "ts": "2026-06-28T12:30:00.697Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782649789260_hnib85",
-      "ts": "2026-06-28T12:29:49.260Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "The deploy failed due to an expired transaction (block height exceeded) on the first attempt, and the system blocked a retry. Here's my report: ⛔ NO DEPLOY **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** Chameleon-SOL **WHY SKIPPED** Chameleon-SOL had the strongest case — strong narrative (viral MECCHA CHAMELEON game), excellent fee/TVL ratio at 1.89%, clean audit, and no PVP/OKX flags. But the on-chain deploy transaction failed due to block height expiration and the syste",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782649665811_okql30",
-      "ts": "2026-06-28T12:27:45.811Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "D2UcHwsHRgaimVraWgd6qqoGos3Br2CLy1UUVLFbAUb6",
-      "pool_name": "CLIVE-SOL",
-      "position": "VphLDVnDigdSVbfH5BwrU56RzhShGYeNr1SBJH6vCwg",
-      "summary": "Closed at 2.08%",
-      "reason": "Trailing TP: peak 2.86% → current 1.69% (dropped 1.17% >= 1%)",
-      "risks": [
-        "volatility 4.3402"
-      ],
-      "metrics": {
-        "pnl_usd": 0.01771032624067892,
-        "pnl_pct": 2.0835749727752795,
-        "fees_usd": 0.034562666055983245,
-        "minutes_held": 41
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782648090794_qxt22j",
-      "ts": "2026-06-28T12:01:30.794Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "HorGR9bZzVLQGuVSAH5ksWMwcfJ7T2ZZPgLPsWypXdZQ",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -520→-418 around active bin -418",
-      "risks": [
-        "volatility 5.4149",
-        "fee/TVL 3.6613%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -418,
-        "min_bin": -520,
-        "max_bin": -418,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782647186642_8ydubs",
-      "ts": "2026-06-28T11:46:26.642Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "D2UcHwsHRgaimVraWgd6qqoGos3Br2CLy1UUVLFbAUb6",
-      "pool_name": "CLIVE-SOL",
-      "position": "VphLDVnDigdSVbfH5BwrU56RzhShGYeNr1SBJH6vCwg",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -591→-494 around active bin -494",
-      "risks": [
-        "volatility 4.3402",
-        "fee/TVL 1.2264%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -494,
-        "min_bin": -591,
-        "max_bin": -494,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782646220458_vqbd3s",
-      "ts": "2026-06-28T11:30:20.458Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "BffVTo5YrPBdPaGBJSgXSXs1u8rKmLjHyGcZQWuFkvNi",
-      "summary": "Closed at 0.65%",
-      "reason": "Rule 6: Whale Escape; Net Dep -15777 USD (-50.6% of TVL ($15419))",
-      "risks": [
-        "volatility 4.8892"
-      ],
-      "metrics": {
-        "pnl_usd": 0.005546064374150617,
-        "pnl_pct": 0.6524793622268049,
-        "fees_usd": 0.005524910034770768,
-        "minutes_held": 44
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782646200911_o77jsa",
-      "ts": "2026-06-28T11:30:00.911Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782644400796_y2lyga",
-      "ts": "2026-06-28T11:00:00.796Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782643577352_t40o34",
-      "ts": "2026-06-28T10:46:17.352Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "BffVTo5YrPBdPaGBJSgXSXs1u8rKmLjHyGcZQWuFkvNi",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -482→-381 around active bin -381",
-      "risks": [
-        "volatility 4.8892",
-        "fee/TVL 1.7996%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -381,
-        "min_bin": -482,
-        "max_bin": -381,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782642781348_burrxw",
-      "ts": "2026-06-28T10:33:01.348Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "Cxk7k3vJymRX1gG6teSXKvXgQCTHNcczCzzz9uiQgDKr",
-      "summary": "Closed at -0.00%",
-      "reason": "⚡ Trailing TP: Out of range for 30m (limit: 30m) — OOR",
-      "risks": [
-        "out of range 30m",
-        "volatility 6.1347"
-      ],
-      "metrics": {
-        "pnl_usd": -0.0000010680000001039858,
-        "pnl_pct": -0.00012564747273332026,
-        "fees_usd": 0.000006509999999999988,
-        "minutes_held": 32
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782642659126_as50ep",
-      "ts": "2026-06-28T10:30:59.126Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "DhvC7iuuiAAUec7gVvrMur61dSXyTZxQgP9WFttRU1K6",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -615→-519 around active bin -519",
-      "risks": [
-        "volatility 4.1387",
-        "fee/TVL 0.3273%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -519,
-        "min_bin": -615,
-        "max_bin": -519,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782642401952_k2p9ax",
-      "ts": "2026-06-28T10:26:41.952Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "CUVvH96B8VdsaMpmzjsmEckzBd145aB4xhn3W2RRDBb9",
-      "summary": "Closed at 0.28%",
-      "reason": "agent decision",
-      "risks": [
-        "out of range 1m",
-        "volatility 4.1731"
-      ],
-      "metrics": {
-        "pnl_usd": 0.0024200830647331806,
-        "pnl_pct": 0.2847158690487932,
-        "fees_usd": 0.0024154770647332323,
-        "minutes_held": 55
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782640860169_j2afmk",
-      "ts": "2026-06-28T10:01:00.169Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "Cxk7k3vJymRX1gG6teSXKvXgQCTHNcczCzzz9uiQgDKr",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -635→-533 around active bin -533",
-      "risks": [
-        "volatility 6.1347",
-        "fee/TVL 2.0319%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -533,
-        "min_bin": -635,
-        "max_bin": -533,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782639047169_ikp2uf",
-      "ts": "2026-06-28T09:30:47.169Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "CUVvH96B8VdsaMpmzjsmEckzBd145aB4xhn3W2RRDBb9",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -488→-392 around active bin -392",
-      "risks": [
-        "volatility 4.1731",
-        "fee/TVL 2.3213%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -392,
-        "min_bin": -488,
-        "max_bin": -392,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782637279082_aerioh",
-      "ts": "2026-06-28T09:01:19.082Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "3o3EQGCMQwnHyqnHsDGvc9vbxqvAVCLRz3xfM9ptaZYi",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -591→-507 around active bin -507",
-      "risks": [
-        "volatility 2.6169",
-        "fee/TVL 0.7453%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -507,
-        "min_bin": -591,
-        "max_bin": -507,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782636369260_7vzqpe",
-      "ts": "2026-06-28T08:46:09.260Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "2XQ2Mbmt4PaqBfbNViy9M6vvLcPZepAQ8M7tSU4RaUQ4",
-      "pool_name": "Hobbes-SOL",
-      "position": "13j8qt71a7pjUm42kMKAyuAdSAdAb2Bmr4NZKTHStktq",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -489→-387 around active bin -387",
-      "risks": [
-        "volatility 6.7572",
-        "fee/TVL 1.6945%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -387,
-        "min_bin": -489,
-        "max_bin": -387,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782636334993_2t4nw4",
-      "ts": "2026-06-28T08:45:34.993Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "Bepe-SOL",
-      "position": "96Wu3KtWbnhQiSCK5yWqTEEH6mB868eFQPybxqQcvjL",
-      "summary": "Closed at 0.17%",
-      "reason": "agent decision",
-      "risks": [
-        "volatility 5.1273"
-      ],
-      "metrics": {
-        "pnl_usd": 0.0014469610095165786,
-        "pnl_pct": 0.17023126776377365,
-        "fees_usd": 0.003436588,
-        "minutes_held": 74
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782636225511_rxomxh",
-      "ts": "2026-06-28T08:43:45.511Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "A5Yc5Ura7TnnbzWcqjsyPQsKZBH5oTJ6gyhDSwkgmFjf",
-      "summary": "Closed at 0.11%",
-      "reason": "agent decision",
-      "risks": [
-        "volatility 2.8722"
-      ],
-      "metrics": {
-        "pnl_usd": 0.0009425109596634673,
-        "pnl_pct": 0.1108836757089032,
-        "fees_usd": 0.009266303483040075,
-        "minutes_held": 101
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782635401141_icfa0l",
-      "ts": "2026-06-28T08:30:01.141Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782633601461_72lgms",
-      "ts": "2026-06-28T08:00:01.461Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782631851734_ys6g9h",
-      "ts": "2026-06-28T07:30:51.734Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "pool_name": "3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1",
-      "position": "96Wu3KtWbnhQiSCK5yWqTEEH6mB868eFQPybxqQcvjL",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -587→-485 around active bin -485",
-      "risks": [
-        "volatility 5.1273"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -485,
-        "min_bin": -587,
-        "max_bin": -485,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782631702204_oacqdj",
-      "ts": "2026-06-28T07:28:22.204Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm",
-      "pool_name": "滑る猫-SOL",
-      "position": "12EW3xDGw83nL8VmBv4bZ4f7Z9oWgkp39r5AAxt6T4xc",
-      "summary": "Closed at 0.37%",
-      "reason": "agent decision",
-      "risks": [
-        "volatility 5.1672"
-      ],
-      "metrics": {
-        "pnl_usd": 0.0031314040802430387,
-        "pnl_pct": 0.36840169358711283,
-        "fees_usd": 0.003467608,
-        "minutes_held": 70
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782630116280_svgo8n",
-      "ts": "2026-06-28T07:01:56.280Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "A5Yc5Ura7TnnbzWcqjsyPQsKZBH5oTJ6gyhDSwkgmFjf",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -442→-356 around active bin -356",
-      "risks": [
-        "volatility 2.8722",
-        "fee/TVL 0.9197%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -356,
-        "min_bin": -442,
-        "max_bin": -356,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782629138221_x0mfrh",
-      "ts": "2026-06-28T06:45:38.221Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "❌ **ANSEM-SOL** — High PVP risk (rival pool $502K TVL vs $35K), 1% win rate over 24 deploys, repeatedly closed for low yield/whipsaw. Just closed hours ago. Hard pass. ❌ **Bepe-SOL** — No smart wallets, low volume ($4.4K), mediocre fee/TVL (0.5%), narrative mentions \"robot pushes\" (inorganic signal), low volatility (1.63). No real conviction. ❌ **Chameleon-SOL** — 13 deploys with 1% win rate, repeatedly closed for low yield (most recently hours ago). Fee/TVL at 0.16% is barely above threshold.",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782628287278_0r68r0",
-      "ts": "2026-06-28T06:31:27.278Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "Zero smart wallets across all pools. Confirmed skip. ⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDATE ANSEM-SOL WHY SKIPPED ANSEM-SOL has the strongest fee/TVL (1.10%) by a wide margin and a real Ansem/KOL origin story, but it's hit by a major PVP conflict — rival The Black Bull token has $500k TVL, 7,931 holders, and the same symbol making this a risky head-to-head. Without any smart-wallet confirmation to override that risk, the setup isn't exceptional enough to justi",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782627442185_gt794j",
-      "ts": "2026-06-28T06:17:22.185Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm",
-      "pool_name": "滑る猫-SOL",
-      "position": "12EW3xDGw83nL8VmBv4bZ4f7Z9oWgkp39r5AAxt6T4xc",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -589→-487 around active bin -487",
-      "risks": [
-        "volatility 5.1672",
-        "fee/TVL 0.3918%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -487,
-        "min_bin": -589,
-        "max_bin": -487,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782626427251_bu3ifj",
-      "ts": "2026-06-28T06:00:27.251Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDATE ANSEM-SOL WHY SKIPPED All three candidates have fatal flaws. **ANSEM-SOL** has 24 past deploys with only 1% win rate and a PVP symbol conflict with The Black Bull — pool memory is a strong skip. **Bepe-SOL** has no pool history but its narrative explicitly mentions \"automatic signal robot pushes\" which is a flagged rug/bot-driven signal. **Chameleon-SOL** has 13 past deploys with a 1% win rate and was closed yesterday for",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782625554497_b09h1z",
-      "ts": "2026-06-28T05:45:54.497Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "Here's my full assessment: **ANSEM-SOL** — Strong metrics (fee_tvl=0.65%, vol=$11K, mcap=$840K) but crushed by a **HIGH PVP conflict** with a rival ANSEM pool that has 10x the TVL and 4x the holders. Pool memory is atrocious — 24 deploys with a 1% win rate and OOR in 5/6 cycles. No narrative available from the tool. Hard pass. **Bepe-SOL** — The pre-loaded narrative explicitly mentions \"automatic signal robot pushes\" → this is a **hard skip** per the rules (narrative referencing bots/automated",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782624645084_x7pqgg",
-      "ts": "2026-06-28T05:30:45.084Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "After careful review of both candidates, here's my assessment: **ANSEM-SOL** — Strong fee/TVL (0.952) and a decent narrative tied to KOL Ansem, but hit by a **major PVP conflict**: rival \"The Black Bull\" pool at $321k TVL (8x larger) with 7,078 holders owns the same symbol. This ANSEM pool at $40k TVL is NOT the dominant variant — PVP rule says avoid unless clearly stronger. Also 0 smart wallets and a history of repeatedly getting pumped out of range (6 of 10 recent closes = \"pumped far above r",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782623780134_ifhpjp",
-      "ts": "2026-06-28T05:16:20.134Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "Here's my analysis: **CANDIDATE EVALUATION:** | Pool | fee_tvl | Vol | Mcap | Volatility | Narrative | Smart Wallets | Key Issue | |---|---|---|---|---|---|---|---| | **ANSEM-SOL** | **1.654** | $16.7K | $844K | 4.77 | Solid (Ansem/KOL) | 0 | **PVP HIGH** — rival pool $339K TVL, same symbol; also trend -0.09% drift, OOR 5/6 last cycles | | **traindog-SOL** | 0.338 | $4.8K | $559K | 4.51 | Weak (generic dog/AI slop) | 0 | Low volume, weak narrative, volatility near loser cluster (~4.7) | | **Ch",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782622883570_bp076o",
-      "ts": "2026-06-28T05:01:23.570Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "After thorough analysis of all 6 candidates, here's my assessment: --- ⛔ **NO DEPLOY** Cycle finished with no valid entry. **BEST LOOKING CANDIDATE** ANSEM-SOL **WHY SKIPPED** ANSEM has the strongest fee_tvl ratio (2.1084) by a wide margin, but its pool memory tells a grim story — 24 past deploys with routine exits for \"pumped far above range\" and \"low yield\", plus a HIGH PVP conflict flag against a rival pool with the same symbol. Zero smart wallets present and the most recent deploy (30 m",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782621950572_brgux0",
-      "ts": "2026-06-28T04:45:50.572Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDATE ANSEM-SOL WHY SKIPPED ANSEM dominates in fee_tvl (1.67x), volume ($16K), and mcap ($879K) — the three highest-weighted signals — but carries HIGH PVP conflict with The Black Bull (same symbol, $312K rival TVL vs $37K). ANSEM is the weaker variant, making it a hard skip per PVP rules. The remaining four candidates all have weak fee_tvl ratios (0.27-0.51), low volume ($2.8K-$7.7K), and zero smart-wallet confirmation. No pool",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782621265898_y3ecih",
-      "ts": "2026-06-28T04:34:25.898Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "CemEk3Xs5aQ14jtfHm92RZ7ntZCNCaD9hEyBLT2K2k4d",
-      "summary": "Closed at -0.00%",
-      "reason": "Rule 3: pumped far above range",
-      "risks": [
-        "out of range 14m",
-        "volatility 4.5924"
-      ],
-      "metrics": {
-        "pnl_usd": -1.9999999989472883e-8,
-        "pnl_pct": -0.0000023529528015871234,
-        "fees_usd": 0,
-        "minutes_held": 15
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782621000832_8bjj5p",
-      "ts": "2026-06-28T04:30:00.832Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782620364978_8a04i8",
-      "ts": "2026-06-28T04:19:24.978Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "CemEk3Xs5aQ14jtfHm92RZ7ntZCNCaD9hEyBLT2K2k4d",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -470→-371 around active bin -371",
-      "risks": [
-        "volatility 4.5924",
-        "fee/TVL 1.3314%"
+        "volatility 2.4843",
+        "fee/TVL 0.3071%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
         "active_bin": -371,
-        "min_bin": -470,
+        "min_bin": -453,
         "max_bin": -371,
         "downside_pct": null,
         "upside_pct": null
@@ -1140,133 +578,168 @@
       "rejected": []
     },
     {
-      "id": "dec_1782620308576_jgqxzx",
-      "ts": "2026-06-28T04:18:28.576Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "4u8bSPLYgsM3AhrbXnrXX9imqBqqiUMh5g737YiAiU7H",
-      "summary": "Closed at 0.18%",
-      "reason": "Rule 3: pumped far above range",
-      "risks": [
-        "out of range 1m",
-        "volatility 2.0713"
-      ],
-      "metrics": {
-        "pnl_usd": 0.001501283999999825,
-        "pnl_pct": 0.1766218714724749,
-        "fees_usd": 0.001498141,
-        "minutes_held": 146
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782619200951_80cfhl",
-      "ts": "2026-06-28T04:00:00.951Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782617401425_shmgj7",
-      "ts": "2026-06-28T03:30:01.425Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782615601442_yjv41h",
-      "ts": "2026-06-28T03:00:01.445Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782613801451_zwnmiy",
-      "ts": "2026-06-28T02:30:01.451Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782612952979_7ksv1q",
-      "ts": "2026-06-28T02:15:52.979Z",
+      "id": "dec_1782841533331_moh6a8",
+      "ts": "2026-06-30T17:45:33.331Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "Hzsx5pCjvPAYhXr6vhAV35C7KSTfacvyQEcE6P3PjRep",
-      "pool_name": "poke-SOL",
-      "position": "AqXgJf9sPjxwE7yBCU1T72NVQ1AsgpoW43nM995Xuc7X",
+      "pool": "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5",
+      "pool_name": "traindog-SOL",
+      "position": "DE33jp5fxhEwZaEjwJc3TRW2LxrKFLw337w33fKqzCHU",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -437→-360 around active bin -360",
+      "reason": "Chosen range -627→-525 around active bin -525",
       "risks": [
-        "volatility 1.9606",
-        "fee/TVL 0.3043%"
+        "volatility 5.5663",
+        "fee/TVL 0.3631%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -360,
-        "min_bin": -437,
-        "max_bin": -360,
+        "active_bin": -525,
+        "min_bin": -627,
+        "max_bin": -525,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782612909220_uibhcm",
-      "ts": "2026-06-28T02:15:09.220Z",
+      "id": "dec_1782840627399_pa9u1z",
+      "ts": "2026-06-30T17:30:27.399Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "Looking at this single candidate carefully. Let me evaluate it against the requirements: **traindog-SOL Analysis:** 1. **Narrative**: Jupiter ChainInsight returns *\"no narrative currently available\"*. The pre-loaded `narrative_untrusted` mentions \"AI slop traindog\" — but there's no verifiable, specific origin story or real catalyst. This is a weak narrative signal. 2. **Smart wallets**: 0 present — no confirmation signal at all. 3. **Pool memory**: 3 past deploys, 1% win rate, avg PnL +0.18%",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782840066793_cvueux",
+      "ts": "2026-06-30T17:21:06.793Z",
       "type": "close",
       "actor": "MANAGER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "C9p6vv75zt9FiUUg1wRAaN1xscCPeo8cJ15YHk7USgNA",
-      "summary": "Closed at 0.11%",
-      "reason": "Rule 3: pumped far above range — active bin -311 is 38 bins above upper bound -349, well past OOR threshold",
+      "pool": "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5",
+      "pool_name": "traindog-SOL",
+      "position": "7bHYn2SRM89xaj9yGRditMBigYeqcAjJQdK6ScSCK2qZ",
+      "summary": "Closed at -0.00%",
+      "reason": "agent decision",
       "risks": [
-        "out of range 1m",
-        "volatility 4.2609"
+        "out of range 2m",
+        "volatility 3.9152"
       ],
       "metrics": {
-        "pnl_usd": 0.0009281991581581162,
-        "pnl_pct": 0.1092002772510867,
-        "fees_usd": 0.000925176158158022,
-        "minutes_held": 73
+        "pnl_usd": -5.00000019165725e-9,
+        "pnl_pct": -5.882369222063347e-7,
+        "fees_usd": 2.899999999998868e-8,
+        "minutes_held": 5
       },
       "rejected": []
     },
     {
-      "id": "dec_1782612002309_ihkm5g",
-      "ts": "2026-06-28T02:00:02.309Z",
+      "id": "dec_1782839744949_ibt1gt",
+      "ts": "2026-06-30T17:15:44.949Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5",
+      "pool_name": "traindog-SOL",
+      "position": "7bHYn2SRM89xaj9yGRditMBigYeqcAjJQdK6ScSCK2qZ",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -622→-528 around active bin -528",
+      "risks": [
+        "volatility 3.9152",
+        "fee/TVL 0.2942%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -528,
+        "min_bin": -622,
+        "max_bin": -528,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782838870962_xhvlkx",
+      "ts": "2026-06-30T17:01:10.962Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "Ht3Nd5S6zDfPxhNesyBr2saj2A8Nmzx6mFCCDs8Vsj5w",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -598→-498 around active bin -498",
+      "risks": [
+        "volatility 4.6954",
+        "fee/TVL 0.7889%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -498,
+        "min_bin": -598,
+        "max_bin": -498,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782837927329_ejqkvk",
+      "ts": "2026-06-30T16:45:27.329Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "**Pool Memory** shows 7 past deploys with avg PnL +0.17% and 1% win rate — the last 3 all closed via \"Rule 3: pumped far above range\" (range breaches). The narrative_untrusted mentions **\"automatic signal robot pushes\"** — explicit bot/automation language → strong skip per rules. **Narrative API returned nothing** — no real story. **Smart wallets: 0**. Only 1 candidate → requires exceptional conviction, which is absent here. ⛔ NO DEPLOY Cycle finished with no valid entry. BEST LOOKING CANDIDA",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782837026324_446pho",
+      "ts": "2026-06-30T16:30:26.324Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "## Analysis Single candidate: **Bepe-SOL** — let's evaluate conviction. **Narrative check:** Jupiter ChainInsight returns no narrative at all. The `narrative_untrusted` field mentions \"automatic signal robot pushes\" — this is a hard **SKIP** signal per the rules (references bots/automation/inorganic accumulation). No real story, no catalyst. **Smart wallets:** 0 present — no confirmation. **Pool memory:** 7 deploys, win rate 1% — historically terrible, though recent drift is slightly positiv",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782836162052_x2hi49",
+      "ts": "2026-06-30T16:16:02.052Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "4i9ozw2k2d7KJwW3A5Gj714VKUwt7tSiSiTwke6gguVq",
+      "summary": "Closed at 0.30%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 2.0031"
+      ],
+      "metrics": {
+        "pnl_usd": 0.002562075418549914,
+        "pnl_pct": 0.301421132516344,
+        "fees_usd": 0.0028541416338847183,
+        "minutes_held": 74
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782835201718_mg4qqj",
+      "ts": "2026-06-30T16:00:01.718Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1279,190 +752,293 @@
       "rejected": []
     },
     {
-      "id": "dec_1782611541679_tqgmqr",
-      "ts": "2026-06-28T01:52:21.679Z",
+      "id": "dec_1782833457724_pj4y43",
+      "ts": "2026-06-30T15:30:57.724Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "4u8bSPLYgsM3AhrbXnrXX9imqBqqiUMh5g737YiAiU7H",
+      "pool": "FjCgxnAoQYio2nQFyALQrgmV9cCSd3mbVSDSv2bDnWm5",
+      "pool_name": "traindog-SOL",
+      "position": "5wAsjscR9a6JTUUw3Ur8MzqchrSqXFbWSLjZEAFeqKRc",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -495→-417 around active bin -417",
+      "reason": "Chosen range -606→-527 around active bin -527",
       "risks": [
-        "volatility 2.0713",
-        "fee/TVL 0.295%"
+        "volatility 2.154",
+        "fee/TVL 0.2186%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -417,
-        "min_bin": -495,
-        "max_bin": -417,
+        "active_bin": -527,
+        "min_bin": -606,
+        "max_bin": -527,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782611486577_0fjmnm",
-      "ts": "2026-06-28T01:51:26.577Z",
+      "id": "dec_1782832504770_hnea5c",
+      "ts": "2026-06-30T15:15:04.770Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- SUPERMAN-SOL: small cap: mcap $900000, price 19.5% of ATH < 25%",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "SUPERMAN-SOL: small cap: mcap $900000, price 19.5% of ATH < 25%"
+      ]
+    },
+    {
+      "id": "dec_1782831681603_52wotc",
+      "ts": "2026-06-30T15:01:21.603Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "4i9ozw2k2d7KJwW3A5Gj714VKUwt7tSiSiTwke6gguVq",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -454→-377 around active bin -377",
+      "risks": [
+        "volatility 2.0031",
+        "fee/TVL 0.7872%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -377,
+        "min_bin": -454,
+        "max_bin": -377,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782830742434_ihlrlw",
+      "ts": "2026-06-30T14:45:42.434Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "Let me evaluate each candidate carefully. **CATWIF-SOL**: Fee/TVL 0.83% (top), volume $21K (strong), volatility 1.989 (low/stable), 93% WR, strong 1h momentum +18.74% with 520 net buyers, and cooldown expired. **Bepe-SOL**: Volume only $3.8K (weak), narrative mentions \"automatic signal robot pushes\" (bot-driven signal — negative). **traindog-SOL**: Volatility 6.76 exceeds the learned maxVolatility of 5.4 from 380-position evolution (losers clustered at ~4.7), fee/TVL only 0.32%, volume $3.2K.",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782829856477_w1jpim",
+      "ts": "2026-06-30T14:30:56.477Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "After thorough analysis, none of these candidates qualify. Here's my assessment: **Bepe-SOL (8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5):** Strong fee_tvl=1.194% but the narrative_untrusted explicitly mentions **\"automatic signal robot pushes\"** — a clear skip signal per the rules (references automated/inorganic accumulation). Pool memory also shows 1% win rate over 7 deploys with most closed due to \"pumped far above range.\" **Bepe-SOL (3s6hDHCwGM8HR4FRNgj9BxEWTYmpTJXZKNVCT8wBB3v1):** Same n",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782829165879_03o4f6",
+      "ts": "2026-06-30T14:19:25.879Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "## ⛔ NO DEPLOY — System Lock **deploy_position** failed — another session holds the deploy lock. Confirmed 0 positions on wallet, SOL balance unchanged (2.115 SOL). The tool blocked both attempts and refuses retries this session. ### BEST CANDIDATE **Bepe-SOL** (8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5) ### WHY IT WON (would have deployed) - **Highest fee_tvl_ratio (1.33%)** — strongest signal in the batch, 2.5x weight - **Volatility 4.25** — ideal sweet spot (above 3 for fee generation,",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782828791677_cw52vg",
+      "ts": "2026-06-30T14:13:11.677Z",
       "type": "close",
       "actor": "MANAGER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "13tpnce3k9faD2cnjLsZrDHTjhnZJxXrhgGJhWLRptNt",
-      "summary": "Closed at 0.01%",
-      "reason": "Rule 3: pumped far above range",
-      "risks": [
-        "out of range 7m",
-        "volatility 2.7207"
-      ],
-      "metrics": {
-        "pnl_usd": 0.0000696979999998959,
-        "pnl_pct": 0.00819976962573188,
-        "fees_usd": 0.000074079,
-        "minutes_held": 20
-      },
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "EZZaz418JxjT3M136aKPya9nHVikUdS7WWd6CwfcRAJ1",
+      "summary": "Closed position",
+      "reason": "agent decision",
+      "risks": [],
+      "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782610236713_85bc6g",
-      "ts": "2026-06-28T01:30:36.713Z",
-      "type": "deploy",
+      "id": "dec_1782828117315_2k3e03",
+      "ts": "2026-06-30T14:01:57.315Z",
+      "type": "no_deploy",
       "actor": "SCREENER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "13tpnce3k9faD2cnjLsZrDHTjhnZJxXrhgGJhWLRptNt",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -512→-428 around active bin -428",
-      "risks": [
-        "volatility 2.7207",
-        "fee/TVL 0.1507%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -428,
-        "min_bin": -512,
-        "max_bin": -428,
-        "downside_pct": null,
-        "upside_pct": null
-      },
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "## ⛔ NO DEPLOY Cycle finished with no valid entry. **BEST LOOKING CANDIDATE** Bepe-SOL (8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5) **WHY SKIPPED** The strongest candidate (Bepe-SOL) had excellent metrics — 2.78% fee/TVL, $13.4K volume, clean 16% bots, and 7 consecutive profitable deploys — but the transaction failed on simulation with an \"AccountOwnedByWrongProgram\" error. The system blocked retries. No other candidate was strong enough to justify deploying instead. **REJECTED** - **Bepe-",
+      "risks": [],
+      "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782609390755_v2o11l",
-      "ts": "2026-06-28T01:16:30.755Z",
+      "id": "dec_1782827255823_esjvr8",
+      "ts": "2026-06-30T13:47:35.823Z",
       "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
       "summary": "Deploy attempt did not succeed",
-      "reason": "Situation is clear. Let me report out. --- ⛔ **NO DEPLOY** **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** drooling-SOL **WHY SKIPPED** drooling-SOL was the clear winner — 100% win rate across 28 past deploys, strong metrics (highest volume $5.8K, highest mcap $1M, good fee/TVL 0.16%), positive momentum (+4% 1h), and a solid viral cat-meme narrative. However, the deployment failed due to a parameter error on first attempt (missing `pool_address`) and the system blocked re",
+      "reason": "The deploy was blocked by the system — another deploy is already in progress from this session. I cannot retry per the system rule. Let me report the outcome. ⛔ **NO DEPLOY** **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** CATWIF-SOL (sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi) **WHY SKIPPED** Deploy was attempted on CATWIF-SOL (◎0.85 SOL | bid_ask | 72 bins below) but the transaction was blocked — another deploy is already in progress within this session. Could not proce",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782608813196_t3xwbg",
-      "ts": "2026-06-28T01:06:53.196Z",
+      "id": "dec_1782826314047_kz0ula",
+      "ts": "2026-06-30T13:31:54.047Z",
       "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "Looking at the single candidate critically: **drooling-SOL**: 28 past deploys, avg PnL just 0.17%, win rate 1%. The last 10 closures were all low-yield or out-of-range exits — the most recent was **15 minutes ago** for \"low yield (fee/TVL below threshold).\" Base mint was in cooldown for repeated fee-generating deploys. Fee/TVL at 0.1621% is anaemic. Volatility at 1.8 is well below healthy range. Zero smart wallets. No smart-wallet override. Despite a decent narrative (Billi cat meme), the evid",
+      "summary": "Deploy attempt did not succeed",
+      "reason": "The deployment was blocked after a transient network failure (stale block height exceeded). Here's the honest report: ⛔ **NO DEPLOY** **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** Bepe-SOL (8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5) **WHY SKIPPED** Deploy was attempted and approved — the pool passed all checks with strong conviction (7/7 profitable history, 100% win rate, 223.84 SOL in fees paid, price -18% dip ideal for entry). However, the blockchain transaction exp",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782608786895_cumbdf",
-      "ts": "2026-06-28T01:06:26.895Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "4a3JN49HQqG7S7yHdBzqMruHVoemWSYBX4tuSgi1Wcjx",
-      "summary": "Closed at 0.01%",
-      "reason": "Trailing TP: Out of range for 35m (limit: 30m)",
-      "risks": [
-        "out of range 35m",
-        "volatility 1.509"
-      ],
-      "metrics": {
-        "pnl_usd": 0.00006974400000014924,
-        "pnl_pct": 0.00820518324712184,
-        "fees_usd": 0.00006973999999999999,
-        "minutes_held": 50
-      },
-      "rejected": []
+      "id": "dec_1782825302953_fsd8er",
+      "ts": "2026-06-30T13:15:02.953Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CATWIF-SOL: already have an open position in this pool",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CATWIF-SOL: already have an open position in this pool"
+      ]
     },
     {
-      "id": "dec_1782608473847_0mh9r0",
-      "ts": "2026-06-28T01:01:13.847Z",
+      "id": "dec_1782824470973_5hlkzg",
+      "ts": "2026-06-30T13:01:10.973Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "51bq8gcfTcWJMYiuvnMh41RJY8sqW3czQQQPhsCDRM1o",
-      "pool_name": "ANSEM-SOL",
-      "position": "C9p6vv75zt9FiUUg1wRAaN1xscCPeo8cJ15YHk7USgNA",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "GgJ9Q62BZisZfMGX4YqpTbjNSF36YA7GKTGwGgr91v4d",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -446→-349 around active bin -349",
+      "reason": "Chosen range -442→-371 around active bin -371",
       "risks": [
-        "volatility 4.2609",
-        "fee/TVL 0.8605%"
+        "volatility 1.4419",
+        "fee/TVL 0.3272%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -349,
-        "min_bin": -446,
-        "max_bin": -349,
+        "active_bin": -371,
+        "min_bin": -442,
+        "max_bin": -371,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782607899806_voukrx",
-      "ts": "2026-06-28T00:51:39.806Z",
+      "id": "dec_1782823533072_cjcd55",
+      "ts": "2026-06-30T12:45:33.072Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "AMpoPmoWXUDk6kQcZLcLfTUspzL5NnCw2GytRyn5GACF",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -431→-362 around active bin -362",
+      "risks": [
+        "volatility 1.31"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -362,
+        "min_bin": -431,
+        "max_bin": -362,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782822602494_rhud7v",
+      "ts": "2026-06-30T12:30:02.494Z",
       "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "Let me evaluate both pools carefully. **ANSEM-SOL**: Strong narrative (Ansem KOL origin), high fee_tvl 0.",
+      "summary": "No candidates available",
+      "reason": "- Jotchua-SOL: volatility 0 unusable - CATWIF-SOL: already have an open position in this pool - Bepe-SOL: token cooldown active",
       "risks": [],
       "metrics": {},
-      "rejected": []
+      "rejected": [
+        "Jotchua-SOL: volatility 0 unusable",
+        "CATWIF-SOL: already have an open position in this pool",
+        "Bepe-SOL: token cooldown active"
+      ]
     },
     {
-      "id": "dec_1782607859686_kgzcxb",
-      "ts": "2026-06-28T00:50:59.686Z",
+      "id": "dec_1782822128893_lutp9w",
+      "ts": "2026-06-30T12:22:08.893Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CATWIF-SOL: already have an open position in this pool - Bepe-SOL: token cooldown active",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CATWIF-SOL: already have an open position in this pool",
+        "Bepe-SOL: token cooldown active"
+      ]
+    },
+    {
+      "id": "dec_1782822110870_ym2rv0",
+      "ts": "2026-06-30T12:21:50.870Z",
       "type": "close",
       "actor": "MANAGER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "4EtZmZ2m29V2QsfSrgQHqNwySuiJo39MHbcqJwkJKBFb",
-      "summary": "Closed at 0.02%",
-      "reason": "Trailing TP: Low yield: fee/TVL 0.43% < min 1% (age: 64m, pnl: 0.01%)",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "7Bwd7RyUbpwy7WMHM5LXscNDk11jT8bdazuz7Q7QyRs",
+      "summary": "Closed at 0.39%",
+      "reason": "Rule 8: failed target: peak 0.48% < 0.6%, taking +0.55% during observation",
       "risks": [
-        "volatility 3.299"
+        "volatility 2.4931"
       ],
       "metrics": {
-        "pnl_usd": 0.00018581684949592336,
-        "pnl_pct": 0.021860827683877492,
-        "fees_usd": 0.000194959,
-        "minutes_held": 64
+        "pnl_usd": 0.003281338092749664,
+        "pnl_pct": 0.3860405240820589,
+        "fees_usd": 0.005147015,
+        "minutes_held": 126
       },
       "rejected": []
     },
     {
-      "id": "dec_1782606601228_muwxgb",
-      "ts": "2026-06-28T00:30:01.230Z",
+      "id": "dec_1782820801630_oeztrt",
+      "ts": "2026-06-30T12:00:01.630Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1475,33 +1051,415 @@
       "rejected": []
     },
     {
-      "id": "dec_1782605765569_h1ir7g",
-      "ts": "2026-06-28T00:16:05.569Z",
+      "id": "dec_1782819001651_gll3nr",
+      "ts": "2026-06-30T11:30:01.651Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782817202473_99zgda",
+      "ts": "2026-06-30T11:00:02.473Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782815500292_ykbmhl",
+      "ts": "2026-06-30T10:31:40.292Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "Gaxi5m3avwdorhxasCQMnAZTXwuFaEXYXaDNWNXa4EoT",
-      "pool_name": "Chameleon-SOL",
-      "position": "4a3JN49HQqG7S7yHdBzqMruHVoemWSYBX4tuSgi1Wcjx",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "EcbfKKLKdzcfJJJpogyXVgS9QjJMkvScH9E7ihi3oYy6",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -558→-486 around active bin -486",
+      "reason": "Chosen range -429→-336 around active bin -336",
       "risks": [
-        "volatility 1.509",
-        "fee/TVL 0.7162%"
+        "volatility 3.7016",
+        "fee/TVL 0.1719%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -486,
-        "min_bin": -558,
-        "max_bin": -486,
+        "active_bin": -336,
+        "min_bin": -429,
+        "max_bin": -336,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782604801476_897y2l",
-      "ts": "2026-06-28T00:00:01.476Z",
+      "id": "dec_1782814538692_ey8uds",
+      "ts": "2026-06-30T10:15:38.692Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "7Bwd7RyUbpwy7WMHM5LXscNDk11jT8bdazuz7Q7QyRs",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -556→-474 around active bin -474",
+      "risks": [
+        "volatility 2.4931"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -474,
+        "min_bin": -556,
+        "max_bin": -474,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782813681600_qqjvnd",
+      "ts": "2026-06-30T10:01:21.600Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "Let me evaluate this single candidate thoroughly. **traindog-SOL** — the only candidate. Per rules: with one candidate, deploy only if **strong narrative + smart-wallet confirmation + clean pool metrics**. Let's check: - **Narrative**: \"Traindog is a meme token inspired by the trained dog concept\" — generic dog meme with community activities and Moonshot voting. No specific real-world event, viral moment, or named entity. This falls into the \"generic hype with no identifiable subject\" bucket.",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782812728336_rtzruz",
+      "ts": "2026-06-30T09:45:28.336Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "Based on my analysis of the single candidate: **traindog-SOL** has clean metrics across the board — fees are healthy (160 SOL), low volatility (2.55), decent volume/TVL ratio, positive 1h price action (+11.6%), and the pool memory shows profit history. However: - **0 smart wallets** present — no informed capital backing - **Narrative is weak** — \"trained dog / AI slop meme\" with no Jupiter-powered narrative and no specific viral catalyst or named entity. Generic community-driven meme without s",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782812672477_6sxloe",
+      "ts": "2026-06-30T09:44:32.477Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "3s3yf1jKYBrGRkeXwSbBm71UXELy99jBxQ2EykdA8HfH",
+      "summary": "Closed at 0.01%",
+      "reason": "Trailing TP: Out of range for 30m",
+      "risks": [
+        "out of range 31m",
+        "volatility 2.1929"
+      ],
+      "metrics": {
+        "pnl_usd": 0.00005508152048061543,
+        "pnl_pct": 0.006480195652343505,
+        "fees_usd": 0.00006044352048063987,
+        "minutes_held": 42
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782811841893_vypwmy",
+      "ts": "2026-06-30T09:30:41.893Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "Looking at the single candidate Bepe-SOL closely: **Narrative check**: The Jupiter chain insight returns \"no narrative currently available\" — no real story. The `narrative_untrusted` text mentions **\"automatic signal robot pushes\"** which is a strong skip signal per the rules (references to bots/robots/automated promotion = rug/bot-driven flag). **Smart wallets**: 0 present — no confirmation signal. **Pool memory**: 6 past deploys, avg PnL 0.13% (small), 3/6 exits due to \"pumped far above ran",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782810934428_khctwn",
+      "ts": "2026-06-30T09:15:34.428Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "Let me evaluate this candidate carefully. **Analysis of Bepe-SOL:** **Metrics (all pre-filtered ✅):** bin_step=100, fee_tvl=0.57%, vol=$3.4K, tvl=$21K, volatility=2.65, organic=75, age=88h, top10=17%, bots=16%, fees=220 SOL — all within bounds. **Narrative:** \"BEPE\" is a Bonk+Pepe fusion meme on letsbonk.fun. It's a specific, identifiable token with real mechanics (NFT rewards, LP burning, cross-chain airdrops). However — **\"automatic signal robot pushes\"** is a borderline narrative reference",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782810116868_k4intt",
+      "ts": "2026-06-30T09:01:56.868Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "3s3yf1jKYBrGRkeXwSbBm71UXELy99jBxQ2EykdA8HfH",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -426→-347 around active bin -347",
+      "risks": [
+        "volatility 2.1929",
+        "fee/TVL 0.1566%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -347,
+        "min_bin": -426,
+        "max_bin": -347,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782809102763_ep18ip",
+      "ts": "2026-06-30T08:45:02.763Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CATWIF-SOL: token cooldown active",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CATWIF-SOL: token cooldown active"
+      ]
+    },
+    {
+      "id": "dec_1782808201465_0ewjm9",
+      "ts": "2026-06-30T08:30:01.465Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CATWIF-SOL: token cooldown active",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CATWIF-SOL: token cooldown active"
+      ]
+    },
+    {
+      "id": "dec_1782807853663_h3q9nx",
+      "ts": "2026-06-30T08:24:13.663Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "DC7U2Kg4MrRAqE2nK5z28UtS6e3anTtACQ6fNiUY7182",
+      "summary": "Closed at 0.03%",
+      "reason": "agent decision",
+      "risks": [
+        "out of range 4m",
+        "volatility 1.7921"
+      ],
+      "metrics": {
+        "pnl_usd": 0.00024129526277016922,
+        "pnl_pct": 0.02838777322228959,
+        "fees_usd": 0.0002453592627704584,
+        "minutes_held": 23
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782807344314_bo23mk",
+      "ts": "2026-06-30T08:15:44.314Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No successful deploy in screening cycle",
+      "reason": "⛔ **NO DEPLOY** Cycle finished with no valid entry. **BEST LOOKING CANDIDATE** traindog-SOL **WHY SKIPPED** Only one candidate survived pre-filtering, but it lacks real conviction — no narrative available (no identifiable catalyst), zero smart wallet activity, and the pool memory shows a PnL drift of -0.52% with out-of-range status in 4 of the last 6 cycles. The -11% 1h price drop adds further downside risk, and with 0 smart wallets + no narrative, there's no reason to override caution. A sin",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782806443685_0uhbo4",
+      "ts": "2026-06-30T08:00:43.685Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "DC7U2Kg4MrRAqE2nK5z28UtS6e3anTtACQ6fNiUY7182",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -414→-339 around active bin -339",
+      "risks": [
+        "volatility 1.7921",
+        "fee/TVL 0.2856%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -339,
+        "min_bin": -414,
+        "max_bin": -339,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782805523884_a0qd9q",
+      "ts": "2026-06-30T07:45:23.884Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "JDfJ6S9BEkHjihkNCHwZnkQdwKUnZRp52BLWqkU8TD2C",
+      "summary": "Closed at -0.00%",
+      "reason": "Rule 3: pumped far above range (active=-542, range=-635 to -558, 13 mins OOR)",
+      "risks": [
+        "out of range 14m",
+        "volatility 1.9366"
+      ],
+      "metrics": {
+        "pnl_usd": -3.1999999994258843e-7,
+        "pnl_pct": -0.00003764712064663443,
+        "fees_usd": 0.0000026169999999999904,
+        "minutes_held": 15
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782805439954_trpatj",
+      "ts": "2026-06-30T07:43:59.954Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "No candidates available",
+      "reason": "- CATWIF-SOL: token cooldown active - Bepe-SOL: token cooldown active - BULLWIF-SOL: already have an open position in this pool",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CATWIF-SOL: token cooldown active",
+        "Bepe-SOL: token cooldown active",
+        "BULLWIF-SOL: already have an open position in this pool"
+      ]
+    },
+    {
+      "id": "dec_1782805427109_gu6nr4",
+      "ts": "2026-06-30T07:43:47.109Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "4wNmcGSN42vZrxJyL6C98oTLgQdxJTYaeJNP1ycQ2SwS",
+      "summary": "Closed at 0.26%",
+      "reason": "Rule 3: pumped far above range",
+      "risks": [
+        "out of range 26m",
+        "volatility 4.8814"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0021972249999999693,
+        "pnl_pct": 0.2584975344589892,
+        "fees_usd": 0.002200937,
+        "minutes_held": 72
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782804602259_ssa0fz",
+      "ts": "2026-06-30T07:30:02.259Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "JDfJ6S9BEkHjihkNCHwZnkQdwKUnZRp52BLWqkU8TD2C",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -635→-558 around active bin -558",
+      "risks": [
+        "volatility 1.9366",
+        "fee/TVL 0.3655%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -558,
+        "min_bin": -635,
+        "max_bin": -558,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782804530585_uvpptn",
+      "ts": "2026-06-30T07:28:50.585Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "Cj4jFoMv9c8tXgKMKpUYry5BuzVZ7d4EQup7Q7RpjmLw",
+      "summary": "Closed at -0.00%",
+      "reason": "Rule 3: pumped far above range",
+      "risks": [
+        "out of range 8m",
+        "volatility 3.0292"
+      ],
+      "metrics": {
+        "pnl_usd": -3.199999998315661e-8,
+        "pnl_pct": -0.0000037647097425206556,
+        "fees_usd": 1.0299999999998718e-7,
+        "minutes_held": 13
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782803726664_gx1vip",
+      "ts": "2026-06-30T07:15:26.664Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "Cj4jFoMv9c8tXgKMKpUYry5BuzVZ7d4EQup7Q7RpjmLw",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -434→-347 around active bin -347",
+      "risks": [
+        "volatility 3.0292",
+        "fee/TVL 0.4023%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -347,
+        "min_bin": -434,
+        "max_bin": -347,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782802801701_d0onul",
+      "ts": "2026-06-30T07:00:01.701Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1514,108 +1472,69 @@
       "rejected": []
     },
     {
-      "id": "dec_1782603968573_anbr0u",
-      "ts": "2026-06-27T23:46:08.573Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "4EtZmZ2m29V2QsfSrgQHqNwySuiJo39MHbcqJwkJKBFb",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -519→-430 around active bin -430",
-      "risks": [
-        "volatility 3.299",
-        "fee/TVL 0.9623%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -430,
-        "min_bin": -519,
-        "max_bin": -430,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782603074762_e2o4e5",
-      "ts": "2026-06-27T23:31:14.762Z",
+      "id": "dec_1782801931194_eail5p",
+      "ts": "2026-06-30T06:45:31.194Z",
       "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
-      "summary": "No successful deploy in screening cycle",
-      "reason": "Here's my analysis: **ANSEM-SOL**: Strong fee_tvl (1.96) and volume but HIGH PVP conflict — rival \"The Black Bull\" pool is 3.7x larger ($100K TVL vs $27K). 22 past deploys yielded a 1% win rate and essentially break-even PnL. Last deploy closed hours ago from a whale escape. Price pumped +18% in 1h — late entry risk. No smart wallets to offset PVP concerns. **traindog-SOL**: Fee_tvl 0.68 is modest. Generic \"AI slop\" narrative lacks conviction. No smart wallets. Only 1 prior deploy — insufficie",
+      "summary": "LLM chose no deploy",
+      "reason": "Let me assess this single candidate carefully. **Analysis of traindog-SOL:** - **Narrative**: \"No narrative currently available\" from Jupiter ChainInsight. The untrusted text mentions a generic \"trained dog / AI slop\" theme — no specific origin, no viral event, no named entity. Weak. - **Smart wallets**: 0 present — no conviction signal. - **1h price**: -21.71% — significant dump in progress, high risk of entering a falling knife. - **Pool memory**: PnL drift -0.52% over 6 cycles, out-of-range",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782601200633_nueopo",
-      "ts": "2026-06-27T23:00:00.633Z",
-      "type": "skip",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782600341210_5qwtq1",
-      "ts": "2026-06-27T22:45:41.210Z",
+      "id": "dec_1782801050060_yjzthv",
+      "ts": "2026-06-30T06:30:50.060Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav",
-      "pool_name": "world-SOL",
-      "position": "2Dt798Rw5gPhzr8WuDMrfQMJpFgJw12RoWbTftVWD3JM",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "4wNmcGSN42vZrxJyL6C98oTLgQdxJTYaeJNP1ycQ2SwS",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -437→-378 around active bin -378",
+      "reason": "Chosen range -589→-488 around active bin -488",
       "risks": [
-        "volatility 0.6273",
-        "fee/TVL 0.8183%"
+        "volatility 4.8814",
+        "fee/TVL 1.5003%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -378,
-        "min_bin": -437,
-        "max_bin": -378,
+        "active_bin": -488,
+        "min_bin": -589,
+        "max_bin": -488,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782599491431_9kog17",
-      "ts": "2026-06-27T22:31:31.431Z",
+      "id": "dec_1782800745255_xvt7u2",
+      "ts": "2026-06-30T06:25:45.255Z",
       "type": "close",
       "actor": "MANAGER",
-      "pool": "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav",
-      "pool_name": "world-SOL",
-      "position": "2g1QWkeJXzdSK6uFPANtPxFQhbWreqXfY5KXBfqoAhfY",
-      "summary": "Closed at -0.00%",
-      "reason": "Rule 3: pumped far above range",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "7Ny15ULYYuGrjyTC6osqXzjcHUdnLMTNyZxkY8j7qD8J",
+      "summary": "Closed at 0.38%",
+      "reason": "agent decision",
       "risks": [
-        "out of range 11m",
-        "volatility 2.837"
+        "out of range 2m",
+        "volatility 1.5023"
       ],
       "metrics": {
-        "pnl_usd": -0.0000013549999999806772,
-        "pnl_pct": -0.00015941244905187565,
-        "fees_usd": 0.000008572999999999994,
-        "minutes_held": 14
+        "pnl_usd": 0.0032429388056455233,
+        "pnl_pct": 0.38152256253194244,
+        "fees_usd": 0.003152731805645591,
+        "minutes_held": 99
       },
       "rejected": []
     },
     {
-      "id": "dec_1782599401273_7a10sc",
-      "ts": "2026-06-27T22:30:01.273Z",
+      "id": "dec_1782799201396_kwkbev",
+      "ts": "2026-06-30T06:00:01.396Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1628,83 +1547,116 @@
       "rejected": []
     },
     {
-      "id": "dec_1782598620729_hxnkp5",
-      "ts": "2026-06-27T22:17:00.729Z",
+      "id": "dec_1782797401108_edmb9i",
+      "ts": "2026-06-30T05:30:01.108Z",
+      "type": "skip",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
+      "risks": [],
+      "metrics": {},
+      "rejected": []
+    },
+    {
+      "id": "dec_1782796553394_582u8c",
+      "ts": "2026-06-30T05:15:53.394Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav",
-      "pool_name": "world-SOL",
-      "position": "2g1QWkeJXzdSK6uFPANtPxFQhbWreqXfY5KXBfqoAhfY",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "CVRbfT4QykB6vLGpbCboboQXQozC4tWxxSZRjyq7jEZn",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -484→-398 around active bin -398",
+      "reason": "Chosen range -556→-467 around active bin -467",
       "risks": [
-        "volatility 2.837"
+        "volatility 3.2206"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -398,
-        "min_bin": -484,
-        "max_bin": -398,
+        "active_bin": -467,
+        "min_bin": -556,
+        "max_bin": -467,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782598527942_ki81od",
-      "ts": "2026-06-27T22:15:27.942Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav",
-      "pool_name": "world-SOL",
-      "position": "BwZzqe7bMdPNHf5nuBTEy2XpAHoWYK96AthQgqgD4v8m",
-      "summary": "Closed at -1.30%",
-      "reason": "Rule 6: Whale Escape; Net Dep -90515 USD (-42.4% of TVL ($122909))",
-      "risks": [
-        "volatility 2.0513"
-      ],
-      "metrics": {
-        "pnl_usd": -0.011018354034749489,
-        "pnl_pct": -1.2962785923009748,
-        "fees_usd": 0.01676171798842496,
-        "minutes_held": 29
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782597601148_ar5k47",
-      "ts": "2026-06-27T22:00:01.148Z",
-      "type": "skip",
+      "id": "dec_1782795601661_h60la8",
+      "ts": "2026-06-30T05:00:01.661Z",
+      "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
-      "summary": "Screening skipped",
-      "reason": "Max positions reached (2/2)",
+      "summary": "No candidates available",
+      "reason": "- CS-SOL: volatility 9.1467303477188 above maxVolatility 8 - CATWIF-SOL: already have an open position in this pool - BULLWIF-SOL: token cooldown active",
+      "risks": [],
+      "metrics": {},
+      "rejected": [
+        "CS-SOL: volatility 9.1467303477188 above maxVolatility 8",
+        "CATWIF-SOL: already have an open position in this pool",
+        "BULLWIF-SOL: token cooldown active"
+      ]
+    },
+    {
+      "id": "dec_1782795367073_tfiuoy",
+      "ts": "2026-06-30T04:56:07.073Z",
+      "type": "no_deploy",
+      "actor": "SCREENER",
+      "pool": null,
+      "pool_name": null,
+      "position": null,
+      "summary": "LLM chose no deploy",
+      "reason": "**Pool Memory confirmed**: 1 past deploy — 0% PnL, $0 profit, $0.001 in fees over 88 minutes. Basically flat. --- ## ⛔ NO DEPLOY **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** CS-SOL **WHY SKIPPED** CS-SOL has volatility at **6.58**, which exceeds the **auto-evolved maxVolatility of 5.4** (learned from 380 positions where losses cluster around ~4.7). The pool also has **0 smart wallets**, a mediocre narrative (no real virality), and its only past deploy returned **ze",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782596763786_55cdic",
-      "ts": "2026-06-27T21:46:03.786Z",
+      "id": "dec_1782795327995_538m07",
+      "ts": "2026-06-30T04:55:27.995Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "ESS8Ah1K8B1cMVs5EDfYUnAhp7LF6AuEpJtNz21y7vux",
+      "summary": "Closed at 0.16%",
+      "reason": "Rule 3: pumped far above range — bin active at -561 vs upper bound -573, out of range for 8 minutes",
+      "risks": [
+        "out of range 8m",
+        "volatility 2.1653"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0013935091555262735,
+        "pnl_pct": 0.16394246189468964,
+        "fees_usd": 0.0013988141555263808,
+        "minutes_held": 24
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782794794777_8htjqm",
+      "ts": "2026-06-30T04:46:34.777Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "R88hawBDy3CTiX7F7woKgMJAXbed7f5H38qR4FB2eav",
-      "pool_name": "world-SOL",
-      "position": "BwZzqe7bMdPNHf5nuBTEy2XpAHoWYK96AthQgqgD4v8m",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "7Ny15ULYYuGrjyTC6osqXzjcHUdnLMTNyZxkY8j7qD8J",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -437→-359 around active bin -359",
+      "reason": "Chosen range -431→-359 around active bin -359",
       "risks": [
-        "volatility 2.0513",
-        "fee/TVL 0.2652%"
+        "volatility 1.5023",
+        "fee/TVL 0.5739%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
         "active_bin": -359,
-        "min_bin": -437,
+        "min_bin": -431,
         "max_bin": -359,
         "downside_pct": null,
         "upside_pct": null
@@ -1712,29 +1664,55 @@
       "rejected": []
     },
     {
-      "id": "dec_1782595917807_f6dc29",
-      "ts": "2026-06-27T21:31:57.807Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "2f8kZZKQC98gBkv2cUz37e3AXoYubQYyCDoT1XLBzfYG",
-      "pool_name": "world-SOL",
-      "position": "Dt2LhMY2DhKtfQm65Un2GvkozpNVxEfJWrt7LcuyogRW",
-      "summary": "Closed at 0.02%",
-      "reason": "⚡ Trailing TP: Low yield: fee/TVL 0.38% < min 1% (age: 60m, pnl: 0.02%)",
+      "id": "dec_1782793871428_u05uyv",
+      "ts": "2026-06-30T04:31:11.428Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "ESS8Ah1K8B1cMVs5EDfYUnAhp7LF6AuEpJtNz21y7vux",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -653→-574 around active bin -574",
       "risks": [
-        "volatility 3.9466"
+        "volatility 2.1653",
+        "fee/TVL 1.5675%"
       ],
       "metrics": {
-        "pnl_usd": 0.00013412534904144735,
-        "pnl_pct": 0.015779464709414295,
-        "fees_usd": 0.00013562377103868998,
-        "minutes_held": 60
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -574,
+        "min_bin": -653,
+        "max_bin": -574,
+        "downside_pct": null,
+        "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782595801041_mmrj7y",
-      "ts": "2026-06-27T21:30:01.041Z",
+      "id": "dec_1782793676219_h0lxl0",
+      "ts": "2026-06-30T04:27:56.219Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "DoJbhisUCeZ5FJeXLKU4iksHFg8x2KpnHP4MbsjW1M6N",
+      "summary": "Closed at 0.17%",
+      "reason": "agent decision",
+      "risks": [
+        "out of range 5m",
+        "volatility 4.035"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0014822589999998748,
+        "pnl_pct": 0.1743835430652412,
+        "fees_usd": 0.00148219,
+        "minutes_held": 71
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782792001407_zo5o5b",
+      "ts": "2026-06-30T04:00:01.407Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1747,8 +1725,8 @@
       "rejected": []
     },
     {
-      "id": "dec_1782594001189_v6a6be",
-      "ts": "2026-06-27T21:00:01.189Z",
+      "id": "dec_1782790201011_3dalyn",
+      "ts": "2026-06-30T03:30:01.011Z",
       "type": "skip",
       "actor": "SCREENER",
       "pool": null,
@@ -1761,162 +1739,168 @@
       "rejected": []
     },
     {
-      "id": "dec_1782593217392_7gof3v",
-      "ts": "2026-06-27T20:46:57.392Z",
+      "id": "dec_1782789395397_mlw77v",
+      "ts": "2026-06-30T03:16:35.397Z",
       "type": "deploy",
       "actor": "SCREENER",
-      "pool": "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm",
-      "pool_name": "滑る猫-SOL",
-      "position": "H5JSxE9gkVFgRuxNFEjD7cwoQay2LhGVdb8koPV1jFSR",
+      "pool": "8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5",
+      "pool_name": "Bepe-SOL",
+      "position": "DoJbhisUCeZ5FJeXLKU4iksHFg8x2KpnHP4MbsjW1M6N",
       "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -564→-481 around active bin -481",
+      "reason": "Chosen range -556→-461 around active bin -461",
       "risks": [
-        "volatility 2.5982",
-        "fee/TVL 0.4832%"
+        "volatility 4.035",
+        "fee/TVL 1.1525%"
       ],
       "metrics": {
         "amount_sol": 0.85,
         "strategy": "bid_ask",
-        "active_bin": -481,
-        "min_bin": -564,
-        "max_bin": -481,
+        "active_bin": -461,
+        "min_bin": -556,
+        "max_bin": -461,
         "downside_pct": null,
         "upside_pct": null
       },
       "rejected": []
     },
     {
-      "id": "dec_1782592289729_tb2yms",
-      "ts": "2026-06-27T20:31:29.729Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "2f8kZZKQC98gBkv2cUz37e3AXoYubQYyCDoT1XLBzfYG",
-      "pool_name": "world-SOL",
-      "position": "Dt2LhMY2DhKtfQm65Un2GvkozpNVxEfJWrt7LcuyogRW",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -383→-288 around active bin -288",
-      "risks": [
-        "volatility 3.9466"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -288,
-        "min_bin": -383,
-        "max_bin": -288,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782591217608_7xb497",
-      "ts": "2026-06-27T20:13:37.608Z",
-      "type": "no_deploy",
-      "actor": "SCREENER",
-      "pool": null,
-      "pool_name": null,
-      "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "Here's my final assessment: --- ## ⛔ NO DEPLOY **Cycle finished with no valid entry.** **BEST LOOKING CANDIDATE** ANSEM-SOL (AUvX4hEMi...) **WHY SKIPPED** ANSEM has the strongest metrics by far (fee_tvl=0.55, vol=$15.7K, organic=91, narrative=Ansem KOL-specific) but carries two dealbreakers: **74.89% top10 concentration** (3/4 supply in 10 wallets — extreme whale risk) and a **HIGH PVP symbol conflict** with a rival ANSEM pool. No smart wallets present to offset either risk. The low yie",
-      "risks": [],
-      "metrics": {},
-      "rejected": []
-    },
-    {
-      "id": "dec_1782591123236_3rbog7",
-      "ts": "2026-06-27T20:12:03.236Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "AUvX4hEMi9t43aqovA5tEAA5AZ7yugcpHa8SkJVEoEKa",
-      "pool_name": "ANSEM-SOL",
-      "position": "4VK1Lw1WEf9mSg5H2yPPjLmXAzrVXuVNw1BGYUW7TPhs",
-      "summary": "Closed at -0.00%",
-      "reason": "Rule 3: pumped far above range (active bin -232, range -343 to -252, 3 min OOR)",
-      "risks": [
-        "out of range 3m",
-        "volatility 3.5141"
-      ],
-      "metrics": {
-        "pnl_usd": -1.489999998938174e-7,
-        "pnl_pct": -0.00001752942928164309,
-        "fees_usd": 0.0000012509999999999983,
-        "minutes_held": 10
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782590513846_6gkxc4",
-      "ts": "2026-06-27T20:01:53.846Z",
-      "type": "deploy",
-      "actor": "SCREENER",
-      "pool": "AUvX4hEMi9t43aqovA5tEAA5AZ7yugcpHa8SkJVEoEKa",
-      "pool_name": "ANSEM-SOL",
-      "position": "4VK1Lw1WEf9mSg5H2yPPjLmXAzrVXuVNw1BGYUW7TPhs",
-      "summary": "Deployed 0.85 SOL with bid_ask",
-      "reason": "Chosen range -345→-254 around active bin -254",
-      "risks": [
-        "volatility 3.5141",
-        "fee/TVL 0.3288%"
-      ],
-      "metrics": {
-        "amount_sol": 0.85,
-        "strategy": "bid_ask",
-        "active_bin": -254,
-        "min_bin": -345,
-        "max_bin": -254,
-        "downside_pct": null,
-        "upside_pct": null
-      },
-      "rejected": []
-    },
-    {
-      "id": "dec_1782589575458_09xump",
-      "ts": "2026-06-27T19:46:15.458Z",
+      "id": "dec_1782788439424_whwxll",
+      "ts": "2026-06-30T03:00:39.424Z",
       "type": "no_deploy",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
       "summary": "No successful deploy in screening cycle",
-      "reason": "Now I have a complete picture. Let me evaluate each candidate systematically. **PVP CONFLICT CHECK**: Two ANSEM-SOL pools (same symbol, different mints) — strong avoid signal per rules. **Remaining candidates analysis:** **traindog-SOL**: Best fee_tvl (0.2388) and mcap ($845K), only 1 past deploy with +0.53% PnL. But — 1h price **-18.19%**, generic narrative (\"training dogs\"), no smart wallets, low volatility (1.74) limiting fee capture. **Chameleon-SOL**: Decent fee_tvl (0.1855), decent nar",
+      "reason": "⛔ **NO DEPLOY** Cycle finished with no valid entry. **BEST LOOKING CANDIDATE** Bepe-SOL (8nKjFGCj7W1yEa87XUf3KjvBrvutLGgs2zy2HYLWe2W5) **WHY SKIPPED** All three candidates fail on conviction. The two Bepe pools have strong fee/TVL (1.63%, 1.05%) but their narrative explicitly mentions \"automatic signal robot pushes\" — a hard skip rule for inorganic/bot-driven signals. No smart wallets present to override this. The traindog pool has weak fee/TVL (0.19%), low volume ($2.6K), a generic narrative",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782588667512_z14lqi",
-      "ts": "2026-06-27T19:31:07.512Z",
-      "type": "no_deploy",
+      "id": "dec_1782787566076_widnb2",
+      "ts": "2026-06-30T02:46:06.076Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "sz2UJhf8KWxa115KmwcDuJYnUZx1fxDBetcAxXSboKi",
+      "pool_name": "CATWIF-SOL",
+      "position": "6VgjH9t8TEvy2hxHwyxbTE7v5jBQsUThhLF3p2qhndQK",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -416→-334 around active bin -334",
+      "risks": [
+        "volatility 2.4909",
+        "fee/TVL 0.7905%"
+      ],
+      "metrics": {
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -334,
+        "min_bin": -416,
+        "max_bin": -334,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782787438744_m7gbdc",
+      "ts": "2026-06-30T02:43:58.744Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "GmJPhTSeo9gWXir5VxVPPn233SdKh29KmbpmveUSdEKE",
+      "pool_name": "CS-SOL",
+      "position": "f5o9iPkRqF4WyHihRJo5DUUmeETBX3KddJ5MVwnBW95",
+      "summary": "Closed at -0.00%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 4.4684"
+      ],
+      "metrics": {
+        "pnl_usd": -0.00000810916114801774,
+        "pnl_pct": -0.000954019912610235,
+        "fees_usd": 0.0013203381047797202,
+        "minutes_held": 88
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782787205348_vavg07",
+      "ts": "2026-06-30T02:40:05.348Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "885iC49NV4kX6yyZtCSCYk9FFPGm8nFDMj3nP4BydUqu",
+      "summary": "Closed at 0.33%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 1.4976"
+      ],
+      "metrics": {
+        "pnl_usd": 0.0027975448684991466,
+        "pnl_pct": 0.3291231975228227,
+        "fees_usd": 0.0036594879053991453,
+        "minutes_held": 38
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782786601299_oaiikt",
+      "ts": "2026-06-30T02:30:01.299Z",
+      "type": "skip",
       "actor": "SCREENER",
       "pool": null,
       "pool_name": null,
       "position": null,
-      "summary": "LLM chose no deploy",
-      "reason": "After thorough review of all 4 candidates, here's my assessment: **ANSEM-SOL (AUvX4hEM...)** — Best fee/volume/mcap stats, strong Ansem/KOL narrative, organic 90. But top10 = 74.61% concentration is extreme, plus PVP conflict with the same-symbol rival pool. No smart wallets to override. Too risky. **ANSEM-SOL (51bq8gcf...)** — PVP conflict, 22 past deploys with only 1% win rate, price dropping 13% in 1h. Hard skip. **Chameleon-SOL** — Decent narrative (viral game theme), clean distribution.",
+      "summary": "Screening skipped",
+      "reason": "Max positions reached (2/2)",
       "risks": [],
       "metrics": {},
       "rejected": []
     },
     {
-      "id": "dec_1782587874826_h41zhc",
-      "ts": "2026-06-27T19:17:54.826Z",
-      "type": "close",
-      "actor": "MANAGER",
-      "pool": "CFewdGnZGJjN1PYKxGFpAzFq1Eq1XMVZns1ksWsWHsXA",
-      "pool_name": "drooling-SOL",
-      "position": "BHELo6jNGfXXpVKB9e5kTwTzapqjYRWMCK8keTBQxmXz",
-      "summary": "Closed at -0.00%",
-      "reason": "⚡ Trailing TP: Out of range for 30m (limit: 30m)",
+      "id": "dec_1782784874836_fp1o9t",
+      "ts": "2026-06-30T02:01:14.836Z",
+      "type": "deploy",
+      "actor": "SCREENER",
+      "pool": "DP1qJaN8ZBn59t4AZpTfdCX7RwA24HE2sXpV1y2i7Tpn",
+      "pool_name": "BULLWIF-SOL",
+      "position": "885iC49NV4kX6yyZtCSCYk9FFPGm8nFDMj3nP4BydUqu",
+      "summary": "Deployed 0.85 SOL with bid_ask",
+      "reason": "Chosen range -569→-497 around active bin -497",
       "risks": [
-        "out of range 30m",
-        "volatility 2.1686"
+        "volatility 1.4976",
+        "fee/TVL 0.4347%"
       ],
       "metrics": {
-        "pnl_usd": -1.6999999963296375e-8,
-        "pnl_pct": -0.000002000005172165902,
-        "fees_usd": 0,
-        "minutes_held": 30
+        "amount_sol": 0.85,
+        "strategy": "bid_ask",
+        "active_bin": -497,
+        "min_bin": -569,
+        "max_bin": -497,
+        "downside_pct": null,
+        "upside_pct": null
+      },
+      "rejected": []
+    },
+    {
+      "id": "dec_1782784635935_n1cn9m",
+      "ts": "2026-06-30T01:57:15.935Z",
+      "type": "close",
+      "actor": "MANAGER",
+      "pool": "FuCNgSG8tKsY1LDUGJ7ZtNHdHV4dCtHNuFwvMYmiMUZm",
+      "pool_name": "滑る猫-SOL",
+      "position": "6MYmSRo7hwX1kVMhYE6qFw6wb9ar5xVTg5r2HRbbkAQU",
+      "summary": "Closed at -0.00%",
+      "reason": "agent decision",
+      "risks": [
+        "volatility 4.995"
+      ],
+      "metrics": {
+        "pnl_usd": -0.000004775003685120183,
+        "pnl_pct": -0.000561766989952459,
+        "fees_usd": 5.999999999998995e-8,
+        "minutes_held": 6
       },
       "rejected": []
     }

@@ -1,7 +1,7 @@
 {
   "sharedLessons": [
     {
-      "id": "lesson:agt_f985be3d2681157832e4a042:1782614982770",
+      "id": "lesson:agt_eeed4f467d24f946c63c38b1:1782786790088",
       "rule": "FAILED: TEST-SOL, strategy=spot, bin_step=100, volatility=2, fee_tvl_ratio=0.05, organic=85, bin_range={\"min\":-50,\"max\":0,\"bins_below\":50,\"bins_above\":0} → PnL -30.93%, range efficiency 100%. Reason: test close.",
       "tags": [
         "failed"
@@ -10,19 +10,7 @@
       "outcome": "bad",
       "sourceType": "performance",
       "score": 57.52,
-      "created_at": "2026-06-28T02:49:42.770Z"
-    },
-    {
-      "id": "lesson:agt_3d0a34e25ca068cde5b69b56:1782174206947",
-      "rule": "FAILED: ANSEM-SOL, strategy=spot, bin_step=null, volatility=3.8188, fee_tvl_ratio=null, organic=null, bin_range={\"min\":-399,\"max\":-349,\"bins_below\":50,\"bins_above\":0}, entry(mcap=959K, tvl=76K, vol=21K), exit(mcap=576K, tvl=78K, vol=24K) → PnL -9.43%, range efficiency 100%. Reason: Trailing TP: Stop loss: PnL -12.05% = -12%.",
-      "tags": [
-        "failed"
-      ],
-      "role": null,
-      "outcome": "bad",
-      "sourceType": "performance",
-      "score": 57.52,
-      "created_at": "2026-06-23T00:23:26.947Z"
+      "created_at": "2026-06-30T02:33:10.088Z"
     },
     {
       "id": "lesson:agt_d3838642c6b9f852a4c37dce:1782018666930",
@@ -49,29 +37,29 @@
       "created_at": "2026-06-18T23:52:28.910Z"
     },
     {
-      "id": "lesson:agt_8dc15348badac96443bc1566:1782672383682",
-      "rule": "PREFER: world-SOL-type pools (volatility=0.7, bin_step=100) with strategy=\"bid_ask\" — 99.8% in-range efficiency, PnL +14.98%.",
+      "id": "lesson:agt_7db05c33f1bfc84e6ba9e7d6:1782852300761",
+      "rule": "PREFER: world-SOL-type pools (volatility=2.9057, bin_step=100) with strategy=\"bid_ask\" — 100% in-range efficiency, PnL +6.17%.",
       "tags": [
-        "efficient",
-        "volatile",
-        "bid_ask+spot (60/40, 150 bins)",
-        "tempo:normal",
-        "stable",
         "bid_ask",
-        "tempo:wide",
-        "TRAILING_TP",
+        "trinity",
+        "efficient",
         "bid_ask+spot",
-        "trinity"
+        "tempo:normal",
+        "TRAILING_TP",
+        "stable",
+        "tempo:wide",
+        "volatile",
+        "bid_ask+spot (60/40, 150 bins)"
       ],
       "role": null,
       "outcome": "good",
       "sourceType": "performance",
       "score": 57.28,
-      "created_at": "2026-06-28T18:46:23.682Z"
+      "created_at": "2026-06-30T20:45:00.761Z"
     },
     {
-      "id": "lesson:agt_wichita_new:1782672244740",
-      "rule": "PREFER: world-SOL-type pools (volatility=2.5207, bin_step=100) with strategy=\"spot\" — 95.7% in-range efficiency, PnL +1.82%.",
+      "id": "lesson:agt_ecdcf93755bb5511b99f5a36:1782861653508",
+      "rule": "PREFER: world-SOL-type pools (volatility=2.5498, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.74%.",
       "tags": [
         "spot",
         "efficient",
@@ -81,7 +69,7 @@
       "outcome": "good",
       "sourceType": "performance",
       "score": 57.28,
-      "created_at": "2026-06-28T18:44:04.740Z"
+      "created_at": "2026-06-30T23:20:53.508Z"
     },
     {
       "id": "lesson:agt_2df06fb880e2f374aea7db81:1781678535591",
@@ -101,6 +89,57 @@
       "created_at": "2026-06-17T06:42:15.591Z"
     },
     {
+      "id": "lesson:agt_723f91799ce21934f461e915:1782819542665",
+      "rule": "PREFER: WYNN-SOL-type pools (volatility=3.9884, bin_step=100) with strategy=\"bid_ask\" — 100% in-range efficiency, PnL +1.68%. Entry: mcap=151K, tvl=6K, vol=2K.",
+      "tags": [
+        "bid_ask+spot",
+        "bid_ask",
+        "trinity",
+        "exit_fee_velocity",
+        "volatile",
+        "bid_ask+spot (70/30, 125 bins)",
+        "bid_ask+spot (70/30, 35 bins)",
+        "bid_ask:wave",
+        "efficient",
+        "tempo:wide",
+        "bid_ask+spot (70/30, 85 bins)"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-30T11:39:02.665Z"
+    },
+    {
+      "id": "lesson:agt_2df06fb880e2f374aea7db81:1782858103422",
+      "rule": "PREFER: RTM-SOL-type pools (volatility=4.8543, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +7.28%.",
+      "tags": [
+        "efficient",
+        "spot_wallet_1h_v1",
+        "spot"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-30T22:21:43.422Z"
+    },
+    {
+      "id": "lesson:agt_d4bec56b107944d45ed8189e:1782859570760",
+      "rule": "PREFER: CATWIF-SOL-type pools (volatility=2.3492, bin_step=100) with strategy=\"spot\" — 97.8% in-range efficiency, PnL +6.55%.",
+      "tags": [
+        "spot_wallet_1h_v1",
+        "spot",
+        "spot_bidask",
+        "efficient"
+      ],
+      "role": null,
+      "outcome": "good",
+      "sourceType": "performance",
+      "score": 57.28,
+      "created_at": "2026-06-30T22:46:10.760Z"
+    },
+    {
       "id": "lesson:Itsaar:1782644244461",
       "rule": "PREFER: QUEST-SOL-type pools (volatility=4.3391, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.24%. Entry: mcap=681K, tvl=42K, vol=28K.",
       "tags": [
@@ -116,25 +155,23 @@
       "created_at": "2026-06-28T10:57:24.461Z"
     },
     {
-      "id": "lesson:agt_c3a57fb613c900f9db57cc82:1781501215635",
-      "rule": "PREFER: CHANCE-SOL-type pools (volatility=0, bin_step=null) with strategy=\"spot\" — 100% in-range efficiency, PnL +4.26%.",
+      "id": "lesson:agt_08f219a0a93d95768fa0e3e5:1782863586911",
+      "rule": "PREFER: Bepe-SOL-type pools (volatility=4.0986, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.98%. Entry: mcap=395K, tvl=18K, vol=2K.",
       "tags": [
-        "spot_bid_ask_mix",
-        "bins_40",
+        "spot_wallet_1h_v1",
         "efficient",
         "spot",
-        "live",
-        "bins_48"
+        "spot_on_dump"
       ],
       "role": null,
       "outcome": "good",
       "sourceType": "performance",
       "score": 57.28,
-      "created_at": "2026-06-15T05:26:55.635Z"
+      "created_at": "2026-06-30T23:53:06.911Z"
     },
     {
-      "id": "lesson:Itsaar:1782644245980",
-      "rule": "PREFER: WEN-SOL-type pools (volatility=4.7251, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +0.41%. Entry: mcap=826K, tvl=97K, vol=130K.",
+      "id": "lesson:agt_8751d624d43541984fd24a9a:1782754226186",
+      "rule": "PREFER: WEN-SOL-type pools (volatility=3.3592, bin_step=100) with strategy=\"spot\" — 88.5% in-range efficiency, PnL +6.2%.",
       "tags": [
         "spot",
         "spot_wallet_1h_v1",
@@ -144,39 +181,9 @@
       "outcome": "good",
       "sourceType": "performance",
       "score": 57.28,
-      "created_at": "2026-06-28T10:57:25.980Z"
-    },
-    {
-      "id": "lesson:agt_30859355184f63d1572316bf:1780957856662",
-      "rule": "PREFER: HUNTER-SOL-type pools (volatility=3.9132, bin_step=100) with strategy=\"spot\" — 100% in-range efficiency, PnL +4.53%. Entry: mcap=316K, tvl=10K, vol=8K.",
-      "tags": [
-        "efficient",
-        "spot",
-        "fee_winner"
-      ],
-      "role": null,
-      "outcome": "good",
-      "sourceType": "performance",
-      "score": 57.28,
-      "created_at": "2026-06-08T22:30:56.662Z"
-    },
-    {
-      "id": "lesson:agt_58c62b02c4029259b84bfdc9:1782517272555",
-      "rule": "PREFER: FLKR-SOL-type pools (volatility=4.3352, bin_step=null) with strategy=\"spot\" — 100% in-range efficiency, PnL +3.05%.",
-      "tags": [
-        "efficient",
-        "fee_winner",
-        "spot",
-        "regime_bottom_spot",
-        "spot_wallet_1h_v1"
-      ],
-      "role": null,
-      "outcome": "good",
-      "sourceType": "performance",
-      "score": 57.28,
-      "created_at": "2026-06-26T23:41:12.555Z"
+      "created_at": "2026-06-29T17:30:26.186Z"
     }
   ],
   "presets": [],
-  "pulledAt": "2026-06-28T19:00:09.506Z"
+  "pulledAt": "2026-07-01T00:22:00.907Z"
 }

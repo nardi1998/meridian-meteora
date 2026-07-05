@@ -115,6 +115,9 @@ export const config = {
     maxVolatility:      u.maxVolatility      ?? 10,   // reject pools above this volatility threshold
     orderBlockCoveragePct: u.orderBlockCoveragePct ?? 20, // ensure LP range covers order block zone (% below current price)
     orderBlockTimeframes: u.orderBlockTimeframes ?? ["1H", "30M", "15M", "5M"], // timeframes to check for order blocks (priority order)
+    orderBlockMaxPoolAgeHours: u.orderBlockMaxPoolAgeHours ?? 36, // skip OB detection for pools older than this
+    orderBlockYoungPoolHours: u.orderBlockYoungPoolHours ?? 12, // pools younger than this use shorter timeframes (1H→30M→15M→5M)
+    orderBlockMaxCoverPct: u.orderBlockMaxCoverPct ?? 70, // max cover percentage before falling back to lower timeframe
     smcRejectNoNewATH: u.smcRejectNoNewATH ?? true, // reject entry if OB/FVG touched and rejected without new ATH
   },
 

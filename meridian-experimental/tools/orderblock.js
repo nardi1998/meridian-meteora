@@ -1,10 +1,15 @@
 /**
  * Order Block Detection Module
  * 
- * Detects order blocks across multiple timeframes with priority:
- * 1H → 30M → 15M → 5M
+ * Detects order blocks across multiple timeframes with pool-age priority:
+ * - Pool age < 12h: 1H → 30M → 15M → 5M
+ * - Pool age 12-36h: 2H → 1H → 30M
+ * - Pool age > 36h: SKIP (no OB detection, no coverage fallback)
  * 
- * Order Block = Consolidation zone before impulsive move (institutional accumulation)
+ * Fresh Zone Logic:
+ * - Find FVG/OB that hasn't been touched yet
+ * - If cover >70%, fallback to lower timeframe (30M → 15M → 5M)
+ * - SMC rejection still applies to fresh zones
  * 
  * SMC Rules:
  * - Do NOT open if price already touched OB/FVG and rejected without new ATH
@@ -15,13 +20,96 @@ import { config } from "../config.js";
 import { log } from "../logger.js";
 
 const TIMEFRAME_PRIORITY = ["1H", "30M", "15M", "5M"];
+const MAX_COVER_PCT = 70; // Maximum cover percentage before falling back to lower timeframe
 
 const TIMEFRAME_MS = {
   "5M": 5 * 60 * 1000,
   "15M": 15 * 60 * 1000,
   "30M": 30 * 60 * 1000,
   "1H": 60 * 60 * 1000,
+  "2H": 2 * 60 * 60 * 1000,
 };
+
+/**
+ * Get timeframes based on pool age
+ * @param {number} poolAgeHours - Pool age in hours
+ * @returns {Array|null} - Array of timeframes or null if skip OB detection
+ */
+function getTimeframesForPoolAge(poolAgeHours) {
+  if (poolAgeHours < 12) {
+    return ["1H", "30M", "15M", "5M"];
+  } else if (poolAgeHours <= 36) {
+    return ["2H", "1H", "30M"];
+  }
+  return null; // > 36 hours, skip OB detection
+}
+
+/**
+ * Check if price has touched a zone (FVG/OB)
+ * @param {Array} candles - Candle data
+ * @param {number} zoneHigh - Zone high price
+ * @param {number} zoneLow - Zone low price
+ * @param {number} afterIndex - Only check candles after this index
+ * @returns {boolean} - true if zone was touched
+ */
+function isZoneTouched(candles, zoneHigh, zoneLow, afterIndex = 0) {
+  for (let i = afterIndex; i < candles.length; i++) {
+    const c = candles[i];
+    if (!c) continue;
+    // Touch = candle low entered the zone
+    if (c.low <= zoneHigh && c.low >= zoneLow) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Find all FVGs and OBs below current price, sorted by distance (closest first)
+ * @param {Array} candles - Candle data
+ * @param {string} timeframe - Timeframe label
+ * @param {number} currentPrice - Current price
+ * @returns {Array} - Sorted array of FVGs and OBs below current price
+ */
+function findAllFVGsAndOBs(candles, timeframe, currentPrice) {
+  const fvgResults = detectFVG(candles, timeframe);
+  const obResults = detectAllOrderBlocks(candles, timeframe);
+  
+  const allZones = [];
+  
+  // Add FVGs that are below current price
+  for (const fvg of fvgResults) {
+    if (fvg.high < currentPrice) {
+      allZones.push({
+        ...fvg,
+        zoneType: fvg.type === "bullish" ? "fvg_bullish" : "fvg_bearish",
+        zoneHigh: fvg.high,
+        zoneLow: fvg.low,
+      });
+    }
+  }
+  
+  // Add OBs that are below current price
+  for (const ob of obResults) {
+    if (ob.high < currentPrice) {
+      allZones.push({
+        ...ob,
+        zoneType: `ob_${ob.direction}`,
+        zoneHigh: ob.high,
+        zoneLow: ob.low,
+      });
+    }
+  }
+  
+  // Sort by distance from current price (closest first)
+  allZones.sort((a, b) => {
+    const distA = currentPrice - a.zoneHigh;
+    const distB = currentPrice - b.zoneHigh;
+    return distA - distB;
+  });
+  
+  return allZones;
+}
 
 /**
  * Fetch candle data from Agent Meridian API
@@ -32,7 +120,11 @@ async function fetchCandles(mint, timeframe, limit = 100) {
   if (config.api.publicApiKey) headers["x-api-key"] = config.api.publicApiKey;
 
   // Map our timeframe to API format
-  const apiTimeframe = timeframe === "1H" ? "1HOUR" : timeframe === "30M" ? "30_MINUTE" : timeframe === "15M" ? "15_MINUTE" : "5_MINUTE";
+  const apiTimeframe = timeframe === "2H" ? "2HOUR" 
+    : timeframe === "1H" ? "1HOUR" 
+    : timeframe === "30M" ? "30_MINUTE" 
+    : timeframe === "15M" ? "15_MINUTE" 
+    : "5_MINUTE";
   
   const search = new URLSearchParams({
     interval: apiTimeframe,
@@ -136,6 +228,64 @@ function detectOrderBlock(candles, timeframe) {
   });
 
   return results[0];
+}
+
+/**
+ * Detect ALL order blocks from candle data (returns array)
+ * @param {Array} candles - Array of OHLCV candles
+ * @param {string} timeframe - Timeframe label
+ * @returns {Array} - Array of all order blocks found
+ */
+function detectAllOrderBlocks(candles, timeframe) {
+  if (!candles || candles.length < 10) return [];
+
+  const results = [];
+
+  for (let i = 5; i < candles.length - 3; i++) {
+    const current = candles[i];
+    const next1 = candles[i + 1];
+
+    if (!current || !next1) continue;
+
+    const bodySize = Math.abs(current.close - current.open);
+    const range = current.high - current.low;
+    
+    if (range === 0) continue;
+
+    const bodyRatio = bodySize / range;
+    const isConsolidation = bodyRatio < 0.4;
+
+    if (!isConsolidation) continue;
+
+    const next1Body = Math.abs(next1.close - next1.open);
+    const next1Range = next1.high - next1.low;
+    const next1Ratio = next1Body / next1Range;
+
+    const isImpulsive = next1Ratio > 0.6 && (
+      (next1.close > next1.open && next1.close > current.high) ||
+      (next1.close < next1.open && next1.close < current.low)
+    );
+
+    if (!isImpulsive) continue;
+
+    const isBullishOB = next1.close > next1.open;
+
+    results.push({
+      timeframe,
+      high: current.high,
+      low: current.low,
+      mid: (current.high + current.low) / 2,
+      direction: isBullishOB ? "bullish" : "bearish",
+      strength: 1 - bodyRatio,
+      candleIndex: i,
+      timestamp: current.timestamp || current.time,
+    });
+  }
+
+  // Sort by recency (most recent first)
+  results.sort((a, b) => b.candleIndex - a.candleIndex);
+  
+  return results;
 }
 
 /**
@@ -339,25 +489,52 @@ export function analyzeOBRejection(candles, orderBlock, fvgs, currentPrice) {
 }
 
 /**
- * Find order block across multiple timeframes with priority
+ * Find order block across multiple timeframes with pool-age priority
+ * 
+ * Fresh Zone Logic:
+ * - Find FVG/OB that hasn't been touched yet
+ * - If cover >70%, fallback to lower timeframe (30M → 15M → 5M)
+ * - SMC rejection still applies to fresh zones
  * 
  * @param {string} mint - Token mint address
  * @param {number} currentPrice - Current price for reference
  * @param {Object} options - Options
+ * @param {number} options.poolAgeHours - Pool age in hours (determines timeframes)
+ * @param {Array} options.timeframes - Override timeframes (ignores pool age)
+ * @param {number} options.minStrength - Minimum OB strength (default: 0.5)
+ * @param {number} options.maxDistancePct - Max distance % from current price (default: 20)
+ * @param {number} options.maxCoverPct - Max cover percentage (default: 70)
  * @returns {Object|null} - Order block zone with metadata
  */
 export async function findOrderBlock(mint, currentPrice, options = {}) {
   const {
-    timeframes = config.screening.orderBlockTimeframes || TIMEFRAME_PRIORITY,
+    poolAgeHours,
+    timeframes: overrideTimeframes,
     minStrength = 0.5,
     maxDistancePct = config.screening.orderBlockCoveragePct || 20,
+    maxCoverPct = config.screening.orderBlockMaxCoverPct || MAX_COVER_PCT,
   } = options;
+
+  // Determine timeframes based on pool age
+  let timeframes;
+  if (overrideTimeframes) {
+    timeframes = overrideTimeframes;
+  } else if (poolAgeHours != null) {
+    timeframes = getTimeframesForPoolAge(poolAgeHours);
+    if (timeframes === null) {
+      log("orderblock", `Pool age ${poolAgeHours}h > 36h, skipping OB detection`);
+      return { found: false, skipped: true, reason: "Pool age > 36h" };
+    }
+    log("orderblock", `Pool age: ${poolAgeHours}h → Using timeframes: ${timeframes.join(", ")}`);
+  } else {
+    timeframes = config.screening.orderBlockTimeframes || TIMEFRAME_PRIORITY;
+  }
 
   const maxDistance = currentPrice * (maxDistancePct / 100);
 
   for (const timeframe of timeframes) {
     try {
-      log("orderblock", `Checking ${timeframe} for order block...`);
+      log("orderblock", `Checking ${timeframe} for fresh FVG/OB...`);
       
       const candles = await fetchCandles(mint, timeframe, 100);
       
@@ -366,55 +543,101 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
         continue;
       }
 
-      const ob = detectOrderBlock(candles, timeframe);
-      const fvgs = detectFVG(candles, timeframe);
+      // Find all FVGs and OBs below current price
+      const allZones = findAllFVGsAndOBs(candles, timeframe, currentPrice);
       
-      if (!ob && fvgs.length === 0) {
-        log("orderblock", `${timeframe}: No order block or FVG detected`);
+      if (allZones.length === 0) {
+        log("orderblock", `${timeframe}: No FVG/OB found below current price`);
         continue;
       }
 
-      // Analyze rejection pattern
-      const rejectionAnalysis = analyzeOBRejection(candles, ob, fvgs, currentPrice);
-      
-      if (rejectionAnalysis.rejected && !rejectionAnalysis.canOpen) {
-        log("orderblock", `${timeframe}: REJECTED - ${rejectionAnalysis.reason}`);
-        return {
-          found: false,
-          rejected: true,
-          canOpen: false,
-          timeframe,
-          reason: rejectionAnalysis.reason,
-          analysis: rejectionAnalysis,
-        };
-      }
+      log("orderblock", `${timeframe}: Found ${allZones.length} zones below current price`);
 
-      // Check if OB is within acceptable distance
-      if (ob) {
-        const distance = Math.abs(currentPrice - ob.mid);
+      // Check each zone for freshness and cover percentage
+      for (const zone of allZones) {
+        // Check if zone is too far
+        const distance = currentPrice - zone.zoneHigh;
         if (distance > maxDistance * 2) {
-          log("orderblock", `${timeframe}: Order block too far (${(distance/currentPrice*100).toFixed(1)}% away)`);
+          log("orderblock", `${timeframe}: Zone ${zone.zoneType} too far (${(distance/currentPrice*100).toFixed(1)}% away)`);
           continue;
         }
 
-        // Check strength
-        if (ob.strength < minStrength) {
-          log("orderblock", `${timeframe}: Order block too weak (${(ob.strength*100).toFixed(0)}%)`);
+        // Check zone strength (for OB only)
+        if (zone.zoneType?.startsWith("ob_") && zone.strength < minStrength) {
+          log("orderblock", `${timeframe}: Zone ${zone.zoneType} too weak (${(zone.strength*100).toFixed(0)}%)`);
           continue;
         }
 
-        log("orderblock", `${timeframe}: Found order block at ${ob.low.toFixed(8)}-${ob.high.toFixed(8)} (strength: ${(ob.strength*100).toFixed(0)}%)`);
+        // Check if zone has been touched AFTER it was created
+        const zoneCandleIndex = zone.candleIndex || 0;
+        const touched = isZoneTouched(candles, zone.zoneHigh, zone.zoneLow, zoneCandleIndex + 1);
+        
+        if (touched) {
+          log("orderblock", `${timeframe}: Zone ${zone.zoneType} at ${zone.zoneLow.toFixed(8)}-${zone.zoneHigh.toFixed(8)} already TOUCHED`);
+          continue;
+        }
+
+        // Zone is FRESH - check cover percentage
+        const coverPct = ((currentPrice - zone.zoneLow) / currentPrice) * 100;
+        
+        log("orderblock", `${timeframe}: Fresh ${zone.zoneType} at ${zone.zoneLow.toFixed(8)}-${zone.zoneHigh.toFixed(8)} | Cover: ${coverPct.toFixed(1)}%`);
+        
+        if (coverPct > maxCoverPct) {
+          log("orderblock", `${timeframe}: Cover ${coverPct.toFixed(1)}% exceeds max ${maxCoverPct}%, trying next zone or timeframe`);
+          continue;
+        }
+
+        // Found a fresh zone within cover limit!
+        // Run SMC rejection check on this zone
+        const singleOB = zone.zoneType?.startsWith("ob_") ? {
+          found: true,
+          high: zone.zoneHigh,
+          low: zone.zoneLow,
+          mid: zone.mid,
+          direction: zone.direction,
+        } : null;
+        
+        const singleFVG = zone.zoneType?.startsWith("fvg_") ? [{
+          high: zone.zoneHigh,
+          low: zone.zoneLow,
+          mid: zone.mid,
+          type: zone.zoneType === "fvg_bullish" ? "bullish" : "bearish",
+        }] : [];
+        
+        const rejectionAnalysis = analyzeOBRejection(candles, singleOB, singleFVG, currentPrice);
+        
+        if (rejectionAnalysis.rejected && !rejectionAnalysis.canOpen) {
+          log("orderblock", `${timeframe}: SMC REJECTED - ${rejectionAnalysis.reason}`);
+          return {
+            found: false,
+            rejected: true,
+            canOpen: false,
+            timeframe,
+            reason: rejectionAnalysis.reason,
+            analysis: rejectionAnalysis,
+          };
+        }
+
+        log("orderblock", `${timeframe}: ✅ Using fresh ${zone.zoneType} | Cover: ${coverPct.toFixed(1)}% | Bins needed: ${Math.ceil(coverPct)}`);
 
         return {
-          ...ob,
           found: true,
+          timeframe,
+          type: zone.zoneType,
+          high: zone.zoneHigh,
+          low: zone.zoneLow,
+          mid: (zone.zoneHigh + zone.zoneLow) / 2,
+          coverPct,
+          isFresh: true,
+          direction: zone.direction || "bullish",
+          strength: zone.strength || 0.7,
           distanceFromCurrent: distance,
           distancePct: (distance / currentPrice) * 100,
-          coveredByDefault: ob.low >= (currentPrice - maxDistance),
           rejectionAnalysis,
-          fvgs: fvgs.slice(0, 3), // Return top 3 FVGs
         };
       }
+
+      log("orderblock", `${timeframe}: No fresh zone within ${maxCoverPct}% cover limit`);
 
     } catch (error) {
       log("orderblock", `${timeframe}: Error - ${error.message}`);
@@ -422,7 +645,7 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
     }
   }
 
-  log("orderblock", "No order block found in any timeframe");
+  log("orderblock", "No fresh FVG/OB found within cover limit in any timeframe");
   return { found: false, timeframe: null };
 }
 
@@ -437,6 +660,13 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
 export function calculateBinsForOrderBlock(orderBlock, currentPrice, binStep) {
   if (!orderBlock || !orderBlock.found) return 0;
 
+  // Use coverPct if available (new fresh zone format)
+  if (orderBlock.coverPct != null) {
+    const binsNeeded = Math.ceil(orderBlock.coverPct / (binStep / 100));
+    return Math.max(0, binsNeeded);
+  }
+
+  // Fallback to price difference calculation
   const priceDiff = currentPrice - orderBlock.low;
   const priceDiffPct = (priceDiff / currentPrice) * 100;
   const binsNeeded = Math.ceil(priceDiffPct / (binStep / 100));
@@ -455,9 +685,11 @@ export function getOrderBlockSummary(orderBlock) {
     return "No order block detected";
   }
 
+  const freshTag = orderBlock.isFresh ? " [FRESH]" : "";
+  const coverInfo = orderBlock.coverPct != null ? ` | Cover: ${orderBlock.coverPct.toFixed(1)}%` : "";
   const rejectionInfo = orderBlock.rejectionAnalysis?.rejected 
     ? ` | Touch: ${orderBlock.rejectionAnalysis.touchCount}x`
     : '';
 
-  return `Order Block (${orderBlock.timeframe}): ${orderBlock.low.toFixed(8)}-${orderBlock.high.toFixed(8)} | Direction: ${orderBlock.direction} | Strength: ${(orderBlock.strength * 100).toFixed(0)}% | Distance: ${orderBlock.distancePct.toFixed(1)}%${rejectionInfo}`;
+  return `${orderBlock.type || "OB"} (${orderBlock.timeframe})${freshTag}: ${orderBlock.low.toFixed(8)}-${orderBlock.high.toFixed(8)} | Direction: ${orderBlock.direction} | Strength: ${(orderBlock.strength * 100).toFixed(0)}%${coverInfo}${rejectionInfo}`;
 }

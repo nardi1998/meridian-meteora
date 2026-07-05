@@ -148,13 +148,16 @@ Example: volatility=3.0 → bins_below = round(35 + 1.732 * 30) = round(35 + 52)
 Example: volatility=7.0 → bins_below = round(35 + 2.646 * 30) = round(35 + 79) = 114
 NEVER use 35 or any other fixed value. ALWAYS calculate from volatility.
 
-⚠️ ORDER BLOCK DETECTION (multi-timeframe, automatic):
-System automatically detects order blocks across multiple timeframes with priority:
-1H → 30M → 15M → 5M
+⚠️ ORDER BLOCK DETECTION (multi-timeframe, automatic, pool-age-based):
+System automatically detects order blocks with timeframes based on pool age:
+- Pool age < 12h: 1H → 30M → 15M → 5M
+- Pool age 12-36h: 2H → 1H → 30M
+- Pool age > 36h: SKIP (no OB detection, no coverage fallback)
 
 Order Block = Consolidation zone before impulsive move (institutional accumulation).
 If an order block is detected, bins_below is extended to cover it.
 Default coverage: orderBlockCoveragePct (default 20%) below current price.
+For pools > 36h, only volatility-based bins_below is used (no OB extension).
 
 The detection checks for:
 - Small candle bodies (consolidation) followed by large impulsive candles
@@ -217,6 +220,7 @@ WARNING: This executes a real on-chain transaction. Check DRY_RUN mode.`,
           base_fee: { type: "number", description: "Pool base fee percentage (from discover_pools)" },
           fee_per_tvl_24h: { type: "number", description: "Pool 24h fee/TVL percentage (from discover_pools)" },
           volatility: { type: "number", description: "Pool volatility at deploy time, sourced from max(screening timeframe, 30m)" },
+          token_created_at: { type: "integer", description: "Token creation timestamp (Unix ms). Used for pool age calculation to determine OB timeframes: <12h uses 1H→30M→15M→5M, 12-36h uses 2H→1H→30M, >36h skips OB detection." },
           fee_tvl_ratio: { type: "number", description: "fee/TVL ratio at deploy time" },
           organic_score: { type: "number", description: "Base token organic score at deploy time" },
           initial_value_usd: { type: "number", description: "Estimated USD value being deployed" }
@@ -421,7 +425,7 @@ Models: managementModel, screeningModel, generalModel, temperature, maxTokens, m
 Strategy: strategy, binsBelow, minBinsBelow, maxBinsBelow, defaultBinsBelow
 Hive/API: hiveMindUrl, hiveMindApiKey, agentId, hiveMindPullMode, publicApiKey, agentMeridianApiUrl, lpAgentRelayEnabled
 Indicators: chartIndicatorsEnabled, indicatorEntryPreset, indicatorExitPreset, rsiLength, indicatorIntervals, indicatorCandles, rsiOversold, rsiOverbought, requireAllIntervals
-Order Block: orderBlockCoveragePct, orderBlockTimeframes, smcRejectNoNewATH
+Order Block: orderBlockCoveragePct, orderBlockTimeframes, orderBlockMaxPoolAgeHours, orderBlockYoungPoolHours, orderBlockMaxCoverPct, smcRejectNoNewATH
 
 Reason is optional but helpful — logged as a lesson when provided.`,
       parameters: {

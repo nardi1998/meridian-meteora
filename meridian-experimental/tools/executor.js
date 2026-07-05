@@ -323,6 +323,9 @@ const toolMap = {
       maxVolatility:    ["screening", "maxVolatility"],
       orderBlockCoveragePct: ["screening", "orderBlockCoveragePct"],
       orderBlockTimeframes: ["screening", "orderBlockTimeframes"],
+      orderBlockMaxPoolAgeHours: ["screening", "orderBlockMaxPoolAgeHours"],
+      orderBlockYoungPoolHours: ["screening", "orderBlockYoungPoolHours"],
+      orderBlockMaxCoverPct: ["screening", "orderBlockMaxCoverPct"],
       smcRejectNoNewATH: ["screening", "smcRejectNoNewATH"],
       minFeePerTvl24h: ["management", "minFeePerTvl24h"],
       // management
@@ -893,17 +896,37 @@ async function runSafetyChecks(name, args) {
         log("deploy", ` bins_below overridden to ${requestedBinsBelow} (from volatility ${requestedVolatility})`);
       }
 
-      // Order block detection: multi-timeframe analysis (1H → 30M → 15M → 5M)
+      // Calculate pool age from token created_at
+      const poolAgeHours = args.token_created_at 
+        ? Math.floor((Date.now() - args.token_created_at) / 3_600_000)
+        : null;
+
+      if (poolAgeHours != null) {
+        log("deploy", ` Pool age: ${poolAgeHours} hours`);
+      }
+
+      // Order block detection: pool-age-based timeframes
+      // Pool age < 12h: 1H → 30M → 15M → 5M
+      // Pool age 12-36h: 2H → 1H → 30M
+      // Pool age > 36h: SKIP (no OB detection, no coverage fallback)
       const orderBlockCoveragePct = Number(config.screening.orderBlockCoveragePct ?? 20);
-      if (orderBlockCoveragePct > 0 && args.pool_address && args.base_mint) {
+      const maxPoolAgeHours = Number(config.screening.orderBlockMaxPoolAgeHours ?? 36);
+      const shouldRunOB = orderBlockCoveragePct > 0 && 
+                           args.pool_address && 
+                           args.base_mint &&
+                           (poolAgeHours == null || poolAgeHours <= maxPoolAgeHours);
+
+      if (shouldRunOB) {
         try {
           const activeBinData = await getActiveBin({ pool_address: args.pool_address });
           if (activeBinData?.price && activeBinData.price > 0) {
             const currentPrice = activeBinData.price;
             
-            // Find order block across multiple timeframes
+            // Find fresh FVG/OB with pool age (determines timeframes automatically)
+            // Fresh zone = zone that hasn't been touched yet
+            // If cover >70%, falls back to lower timeframe (30M → 15M → 5M)
             const orderBlock = await findOrderBlock(args.base_mint, currentPrice, {
-              timeframes: config.screening.orderBlockTimeframes || ["1H", "30M", "15M", "5M"],
+              poolAgeHours,
               maxDistancePct: orderBlockCoveragePct,
             });
 
@@ -917,25 +940,26 @@ async function runSafetyChecks(name, args) {
             }
 
             if (orderBlock.found) {
-              // Calculate bins needed to cover the order block
+              // Calculate bins needed to cover the fresh zone
               const binStep = args.bin_step ?? 100;
               const binsNeededForOB = calculateBinsForOrderBlock(orderBlock, currentPrice, binStep);
               
               const currentBinsBelow = Number(args.bins_below ?? requestedBinsBelow);
               
-              log("deploy", ` Order block detected: ${getOrderBlockSummary(orderBlock)}`);
-              log("deploy", ` Bins needed for OB: ${binsNeededForOB}, current bins_below: ${currentBinsBelow}`);
+              log("deploy", ` Fresh zone detected: ${getOrderBlockSummary(orderBlock)}`);
+              log("deploy", ` Cover: ${orderBlock.coverPct?.toFixed(1) || "N/A"}% | Bins needed: ${binsNeededForOB}, current bins_below: ${currentBinsBelow}`);
               
               if (binsNeededForOB > currentBinsBelow) {
                 args.bins_below = Math.min(binsNeededForOB, config.strategy.maxBinsBelow);
-                log("deploy", ` bins_below extended to ${args.bins_below} to cover order block (was ${currentBinsBelow})`);
+                log("deploy", ` bins_below extended to ${args.bins_below} to cover fresh ${orderBlock.type} (was ${currentBinsBelow})`);
               } else {
-                log("deploy", ` Order block already covered by volatility-based range`);
+                log("deploy", ` Fresh ${orderBlock.type} already covered by volatility-based range`);
               }
-            } else {
-              log("deploy", ` No order block detected, using default coverage (${orderBlockCoveragePct}%)`);
+            } else if (!orderBlock.skipped) {
+              // No fresh zone found - use default coverage only if not skipped
+              log("deploy", ` No fresh FVG/OB found within cover limit, using default coverage (${orderBlockCoveragePct}%)`);
               
-              // Fallback to percentage-based coverage if no OB detected
+              const binStep = args.bin_step ?? 100;
               const orderBlockLowPrice = currentPrice * (1 - orderBlockCoveragePct / 100);
               const priceRangePct = (currentPrice - orderBlockLowPrice) / currentPrice * 100;
               const binsNeededForDefault = Math.ceil(priceRangePct / (binStep / 100));
@@ -949,6 +973,11 @@ async function runSafetyChecks(name, args) {
           }
         } catch (e) {
           log("deploy", ` order block detection skipped: ${e.message}`);
+        }
+      } else {
+        // Pool age > maxPoolAgeHours or config disabled
+        if (poolAgeHours != null && poolAgeHours > maxPoolAgeHours) {
+          log("deploy", ` Pool age ${poolAgeHours}h > ${maxPoolAgeHours}h, skipping OB detection and coverage fallback`);
         }
       }
 

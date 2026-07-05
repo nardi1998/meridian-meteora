@@ -143,9 +143,16 @@ DEPLOY RULES:
 - COMPOUNDING: Use the deploy amount from the goal EXACTLY. Do NOT default to a smaller number.
 - strategy = ${config.strategy.strategy} — always use this exact value, never change it.
 - ⚠️ bins_below MUST be calculated: round(35 + sqrt(volatility) * 30), clamped to [35, 102]. Example: volatility=3.0 → 87 bins. volatility=7.0 → 114 bins. NEVER use 35 or any fixed value.
-- ORDER BLOCK DETECTION (multi-timeframe): System automatically detects order blocks across timeframes with priority: 1H → 30M → 15M → 5M. If an order block is found, bins_below is extended to cover it. Default coverage: ${config.screening.orderBlockCoveragePct ?? 20}% below current price.
-- SMC RULE (IMPORTANT): ${config.screening.smcRejectNoNewATH !== false ? 'Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH. Wait for second touch to order block.' : 'SMC rejection rule disabled.'}
+- ORDER BLOCK DETECTION (fresh zone logic):
+  * System detects FVG/OB on 1H timeframe first
+  * Finds the NEAREST fresh (untouched) FVG/OB below current price
+  * If fresh zone requires >${config.screening.orderBlockMaxCoverPct ?? 70}% cover, falls back to 30M → 15M → 5M
+  * Only fresh zones (never touched by price) are used for range extension
+  * Default coverage: ${config.screening.orderBlockCoveragePct ?? 20}% below current price
+  * Pool age > ${config.screening.orderBlockMaxPoolAgeHours ?? 36}h: No OB detection, no coverage fallback
+- SMC RULE (IMPORTANT): ${config.screening.smcRejectNoNewATH !== false ? 'Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH. Wait for second touch to order block. This applies to fresh zones too.' : 'SMC rejection rule disabled.'}
 - pass deploy_position.volatility = the candidate volatility value.
+- pass deploy_position.token_created_at = the candidate token created_at timestamp (for pool age calculation).
 - pass deploy_position.fee_per_tvl_24h = the candidate fee_per_tvl_24h value (if available).
 - bins_above = 0. Single-side SOL only: set amount_y, keep amount_x = 0.
 - Bin steps must be [${config.screening.minBinStep}-${config.screening.maxBinStep}].

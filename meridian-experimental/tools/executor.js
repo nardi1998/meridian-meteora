@@ -909,15 +909,16 @@ async function runSafetyChecks(name, args) {
       }
 
       // Order block detection: pool-age-based timeframes
-      // Pool age < 12h: 1H → 30M → 15M → 5M
-      // Pool age 12-36h: 2H → 1H → 30M
-      // Pool age > 36h: SKIP (no OB detection, no coverage fallback)
+      // Pool age < 12h: 1H → 30M → 15M → 5M (SMC rejection enabled)
+      // Pool age 12-36h: 2H → 1H → 30M (SMC rejection enabled)
+      // Pool age > 36h: 2H → 1H → 30M (SMC rejection disabled)
       const orderBlockCoveragePct = Number(config.screening.orderBlockCoveragePct ?? 20);
-      const maxPoolAgeHours = Number(config.screening.orderBlockMaxPoolAgeHours ?? 36);
       const shouldRunOB = orderBlockCoveragePct > 0 && 
                            args.pool_address && 
-                           args.base_mint &&
-                           (poolAgeHours == null || poolAgeHours <= maxPoolAgeHours);
+                           args.base_mint;
+
+      // Skip SMC for pool age > 36 hours
+      const skipSMC = poolAgeHours != null && poolAgeHours > 36;
 
       if (shouldRunOB) {
         try {
@@ -927,14 +928,16 @@ async function runSafetyChecks(name, args) {
             
             // Find fresh FVG/OB with pool age (determines timeframes automatically)
             // Fresh zone = zone that hasn't been touched yet
-            // If cover >70%, falls back to lower timeframe (30M → 15M → 5M)
+            // If cover >70%, falls back to lower timeframe
+            // SMC rejection disabled for pool age > 36h
             const orderBlock = await findOrderBlock(args.base_mint, currentPrice, {
               poolAgeHours,
               maxDistancePct: orderBlockCoveragePct,
+              skipSMC,
             });
 
-            // SMC Rule: Check for rejection pattern
-            if (orderBlock.rejected && !orderBlock.canOpen) {
+            // SMC Rule: Check for rejection pattern (only if SMC enabled)
+            if (!skipSMC && orderBlock.rejected && !orderBlock.canOpen) {
               _deployLock = false;
               return {
                 pass: false,
@@ -958,8 +961,8 @@ async function runSafetyChecks(name, args) {
               } else {
                 log("deploy", ` Fresh ${orderBlock.type} already covered by volatility-based range`);
               }
-            } else if (!orderBlock.skipped) {
-              // No fresh zone found - use default coverage only if not skipped
+            } else {
+              // No fresh zone found - use default coverage
               log("deploy", ` No fresh FVG/OB found within cover limit, using default coverage (${orderBlockCoveragePct}%)`);
               
               const binStep = args.bin_step ?? 100;
@@ -976,11 +979,6 @@ async function runSafetyChecks(name, args) {
           }
         } catch (e) {
           log("deploy", ` order block detection skipped: ${e.message}`);
-        }
-      } else {
-        // Pool age > maxPoolAgeHours or config disabled
-        if (poolAgeHours != null && poolAgeHours > maxPoolAgeHours) {
-          log("deploy", ` Pool age ${poolAgeHours}h > ${maxPoolAgeHours}h, skipping OB detection and coverage fallback`);
         }
       }
 

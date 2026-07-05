@@ -135,7 +135,7 @@ export const config = {
     maxVolatility:      HARDCODED_FILTERS.maxVolatility,   // HARDCODED — reject pools above this volatility threshold. Not overridable.
     orderBlockCoveragePct: u.orderBlockCoveragePct ?? 20, // ensure LP range covers order block zone (% below current price)
     orderBlockTimeframes: u.orderBlockTimeframes ?? ["1H", "30M", "15M", "5M"], // timeframes to check for order blocks (priority order)
-    orderBlockMaxPoolAgeHours: u.orderBlockMaxPoolAgeHours ?? 36, // skip OB detection for pools older than this
+    orderBlockMaxPoolAgeHours: null, // disabled: always run OB detection, use skipSMC for > 36h
     orderBlockYoungPoolHours: u.orderBlockYoungPoolHours ?? 12, // pools younger than this use shorter timeframes (1H→30M→15M→5M)
     orderBlockMaxCoverPct: u.orderBlockMaxCoverPct ?? 70, // max cover percentage before falling back to lower timeframe
     smcRejectNoNewATH: u.smcRejectNoNewATH ?? true, // reject entry if OB/FVG touched and rejected without new ATH

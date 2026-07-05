@@ -312,15 +312,17 @@ const toolMap = {
       discordSignalMode: ["screening", "discordSignalMode"],
       avoidPvpSymbols: ["screening", "avoidPvpSymbols"],
       blockPvpSymbols: ["screening", "blockPvpSymbols"],
-      maxBundlePct:     ["screening", "maxBundlePct"],
-      maxBotHoldersPct: ["screening", "maxBotHoldersPct"],
-      // maxTop10Pct HARDCODED at 40 — not configurable at runtime
+      // HARDCODED — cannot be changed by agent:
+      // maxBundlePct: 30 (config.js HARDCODED_FILTERS)
+      // maxBotHoldersPct: 35 (config.js HARDCODED_FILTERS)
+      // maxTop10Pct: 40 (config.js HARDCODED_FILTERS)
+      // maxVolatility: 8 (config.js HARDCODED_FILTERS)
+      // gmgnMaxPhishingWalletPct: 0.3 (config.js HARDCODED_FILTERS)
       allowedLaunchpads: ["screening", "allowedLaunchpads"],
       blockedLaunchpads: ["screening", "blockedLaunchpads"],
       minTokenAgeHours: ["screening", "minTokenAgeHours"],
       maxTokenAgeHours: ["screening", "maxTokenAgeHours"],
       athFilterPct:     ["screening", "athFilterPct"],
-      maxVolatility:    ["screening", "maxVolatility"],
       orderBlockCoveragePct: ["screening", "orderBlockCoveragePct"],
       orderBlockTimeframes: ["screening", "orderBlockTimeframes"],
       orderBlockMaxPoolAgeHours: ["screening", "orderBlockMaxPoolAgeHours"],
@@ -333,13 +335,14 @@ const toolMap = {
       autoSwapAfterClaim: ["management", "autoSwapAfterClaim"],
       outOfRangeBinsToClose: ["management", "outOfRangeBinsToClose"],
       outOfRangeWaitMinutes: ["management", "outOfRangeWaitMinutes"],
-      oorCooldownTriggerCount: ["management", "oorCooldownTriggerCount"],
-      oorCooldownHours: ["management", "oorCooldownHours"],
-      repeatDeployCooldownEnabled: ["management", "repeatDeployCooldownEnabled"],
-      repeatDeployCooldownTriggerCount: ["management", "repeatDeployCooldownTriggerCount"],
-      repeatDeployCooldownHours: ["management", "repeatDeployCooldownHours"],
-      repeatDeployCooldownScope: ["management", "repeatDeployCooldownScope"],
-      repeatDeployCooldownMinFeeEarnedPct: ["management", "repeatDeployCooldownMinFeeEarnedPct"],
+      // HARDCODED — cooldown filters (cannot be changed by agent):
+      // oorCooldownTriggerCount: 3 (config.js HARDCODED_FILTERS)
+      // oorCooldownHours: 3 (config.js HARDCODED_FILTERS)
+      // repeatDeployCooldownEnabled: true (config.js HARDCODED_FILTERS)
+      // repeatDeployCooldownTriggerCount: 3 (config.js HARDCODED_FILTERS)
+      // repeatDeployCooldownHours: 0.5 (config.js HARDCODED_FILTERS)
+      // repeatDeployCooldownScope: "token" (config.js HARDCODED_FILTERS)
+      // repeatDeployCooldownMinFeeEarnedPct: 0 (config.js HARDCODED_FILTERS)
       minVolumeToRebalance: ["management", "minVolumeToRebalance"],
       stopLossPct: ["management", "stopLossPct"],
       takeProfitPct: ["management", "takeProfitPct"],

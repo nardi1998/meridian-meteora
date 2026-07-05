@@ -21,6 +21,26 @@ const u = readJsonIfExists(USER_CONFIG_PATH);
 const gmgnUserConfig = readJsonIfExists(GMGN_CONFIG_PATH);
 export const MIN_SAFE_BINS_BELOW = 35;
 
+// ─── HARDCODED PROTECTED FILTERS ────────────────────────
+// These values cannot be changed by the agent via update_config
+export const HARDCODED_FILTERS = {
+  // Screening filters
+  maxVolatility: 8,
+  maxBundlePct: 30,
+  maxBotHoldersPct: 35,
+  maxTop10Pct: 40,
+  gmgnMaxPhishingWalletPct: 0.3,
+  
+  // Cooldown filters (if pool is still good, ignore cooldowns)
+  oorCooldownTriggerCount: 3,
+  oorCooldownHours: 3,
+  repeatDeployCooldownEnabled: true,
+  repeatDeployCooldownTriggerCount: 3,
+  repeatDeployCooldownHours: 0.5,
+  repeatDeployCooldownScope: "token",
+  repeatDeployCooldownMinFeeEarnedPct: 0,
+};
+
 function numericConfig(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
@@ -102,9 +122,9 @@ export const config = {
     discordSignalMode: u.discordSignalMode ?? "merge", // merge | only
     avoidPvpSymbols:   u.avoidPvpSymbols   ?? true, // avoid exact-symbol rivals with real active pools
     blockPvpSymbols:   u.blockPvpSymbols   ?? false, // hard-filter PVP rivals before the LLM sees them
-    maxBundlePct:      u.maxBundlePct      ?? 30,  // max bundle holding % (OKX advanced-info)
-    maxBotHoldersPct:  u.maxBotHoldersPct  ?? 30,  // max bot holder addresses % (Jupiter audit)
-    maxTop10Pct:       40,                   // HARDCODED — max top 10 holders concentration. Not overridable by user-config.
+    maxBundlePct:      HARDCODED_FILTERS.maxBundlePct,  // HARDCODED — max bundle holding % (OKX advanced-info). Not overridable.
+    maxBotHoldersPct:  HARDCODED_FILTERS.maxBotHoldersPct,  // HARDCODED — max bot holder addresses % (Jupiter audit). Not overridable.
+    maxTop10Pct:       HARDCODED_FILTERS.maxTop10Pct,  // HARDCODED — max top 10 holders concentration. Not overridable.
     allowedLaunchpads: u.allowedLaunchpads ?? [],  // allow-list launchpads, [] = no allow-list
     blockedLaunchpads:  u.blockedLaunchpads  ?? [],  // e.g. ["letsbonk.fun", "pump.fun"]
     minTokenAgeHours:   u.minTokenAgeHours   ?? null, // null = no minimum
@@ -112,7 +132,7 @@ export const config = {
     maxPoolTokenAgeDiffDays: u.maxPoolTokenAgeDiffDays ?? 30, // max difference between pool age and token age (days)
     athFilterPct:       u.athFilterPct       ?? null, // e.g. -20 = only deploy if price is >= 20% below ATH
     athFilterPctSmallCap: u.athFilterPctSmallCap ?? -80, // e.g. -80 = small cap (mcap < $1M) must be >= 20% of ATH
-    maxVolatility:      u.maxVolatility      ?? 10,   // reject pools above this volatility threshold
+    maxVolatility:      HARDCODED_FILTERS.maxVolatility,   // HARDCODED — reject pools above this volatility threshold. Not overridable.
     orderBlockCoveragePct: u.orderBlockCoveragePct ?? 20, // ensure LP range covers order block zone (% below current price)
     orderBlockTimeframes: u.orderBlockTimeframes ?? ["1H", "30M", "15M", "5M"], // timeframes to check for order blocks (priority order)
     orderBlockMaxPoolAgeHours: u.orderBlockMaxPoolAgeHours ?? 36, // skip OB detection for pools older than this
@@ -162,7 +182,7 @@ export const config = {
     minTotalFeeSol: gmgnValue("minTotalFeeSol", "gmgnMinTotalFeeSol", 30),
     athFilterPct: gmgnValue("athFilterPct", "gmgnAthFilterPct", null),
     athFilterPctSmallCap: gmgnValue("athFilterPctSmallCap", "gmgnAthFilterPctSmallCap", -80),
-    maxPhishingWalletPct: gmgnValue("maxPhishingWalletPct", "gmgnMaxPhishingWalletPct", 0.3),
+    maxPhishingWalletPct: HARDCODED_FILTERS.gmgnMaxPhishingWalletPct, // HARDCODED — max phishing wallet %. Not overridable.
     preferredKolNames: gmgnArray("preferredKolNames", "gmgnPreferredKolNames", []),
     dumpKolNames: gmgnArray("dumpKolNames", "gmgnDumpKolNames", []),
     indicatorFilter: gmgnValue("indicatorFilter", "gmgnIndicatorFilter", true),
@@ -186,13 +206,14 @@ export const config = {
     autoSwapAfterClaim:    u.autoSwapAfterClaim    ?? false,
     outOfRangeBinsToClose: u.outOfRangeBinsToClose ?? 10,
     outOfRangeWaitMinutes: u.outOfRangeWaitMinutes ?? 30,
-    oorCooldownTriggerCount: u.oorCooldownTriggerCount ?? 3,
-    oorCooldownHours:       u.oorCooldownHours       ?? 12,
-    repeatDeployCooldownEnabled: u.repeatDeployCooldownEnabled ?? true,
-    repeatDeployCooldownTriggerCount: u.repeatDeployCooldownTriggerCount ?? 3,
-    repeatDeployCooldownHours: u.repeatDeployCooldownHours ?? 12,
-    repeatDeployCooldownScope: u.repeatDeployCooldownScope ?? "token", // pool | token | both
-    repeatDeployCooldownMinFeeEarnedPct: u.repeatDeployCooldownMinFeeEarnedPct ?? u.repeatDeployCooldownMinFeeYieldPct ?? 0,
+    // HARDCODED — cooldown filters (if pool is still good, ignore cooldowns)
+    oorCooldownTriggerCount: HARDCODED_FILTERS.oorCooldownTriggerCount,
+    oorCooldownHours:       HARDCODED_FILTERS.oorCooldownHours,
+    repeatDeployCooldownEnabled: HARDCODED_FILTERS.repeatDeployCooldownEnabled,
+    repeatDeployCooldownTriggerCount: HARDCODED_FILTERS.repeatDeployCooldownTriggerCount,
+    repeatDeployCooldownHours: HARDCODED_FILTERS.repeatDeployCooldownHours,
+    repeatDeployCooldownScope: HARDCODED_FILTERS.repeatDeployCooldownScope,
+    repeatDeployCooldownMinFeeEarnedPct: HARDCODED_FILTERS.repeatDeployCooldownMinFeeEarnedPct,
     minVolumeToRebalance:  u.minVolumeToRebalance  ?? 1000,
     stopLossPct:           u.stopLossPct           ?? u.emergencyPriceDropPct ?? -50,
     takeProfitPct:         u.takeProfitPct         ?? u.takeProfitFeePct ?? 5,
@@ -364,13 +385,12 @@ export function reloadScreeningThresholds() {
     if (fresh.category          != null) s.category          = fresh.category;
     if (fresh.minTokenAgeHours  !== undefined) s.minTokenAgeHours = fresh.minTokenAgeHours;
     if (fresh.maxTokenAgeHours  !== undefined) s.maxTokenAgeHours = fresh.maxTokenAgeHours;
-    if (fresh.maxBundlePct      != null) s.maxBundlePct     = fresh.maxBundlePct;
+    // HARDCODED — maxBundlePct, maxBotHoldersPct, maxVolatility are NOT reloaded from user-config
+    // They are fixed in HARDCODED_FILTERS and cannot be changed at runtime
     if (fresh.avoidPvpSymbols   !== undefined) s.avoidPvpSymbols = fresh.avoidPvpSymbols;
     if (fresh.blockPvpSymbols   !== undefined) s.blockPvpSymbols = fresh.blockPvpSymbols;
-    if (fresh.maxBotHoldersPct  != null) s.maxBotHoldersPct = fresh.maxBotHoldersPct;
     if (fresh.allowedLaunchpads !== undefined) s.allowedLaunchpads = fresh.allowedLaunchpads;
     if (fresh.blockedLaunchpads !== undefined) s.blockedLaunchpads = fresh.blockedLaunchpads;
-    if (fresh.maxVolatility   != null) s.maxVolatility   = fresh.maxVolatility;
     if (fresh.athFilterPct    !== undefined) s.athFilterPct    = fresh.athFilterPct;
     if (fresh.athFilterPctSmallCap !== undefined) s.athFilterPctSmallCap = fresh.athFilterPctSmallCap;
     if (fresh.orderBlockCoveragePct != null) s.orderBlockCoveragePct = fresh.orderBlockCoveragePct;

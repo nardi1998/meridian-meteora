@@ -1221,14 +1221,9 @@ function deriveOpenPnlPct(binData, solMode = false) {
   const unclaimedFees = solMode
     ? safeNum(binData.unrealizedPnl?.unclaimedFeeTokenX?.amountSol) + safeNum(binData.unrealizedPnl?.unclaimedFeeTokenY?.amountSol)
     : safeNum(binData.unrealizedPnl?.unclaimedFeeTokenX?.usd) + safeNum(binData.unrealizedPnl?.unclaimedFeeTokenY?.usd);
-  const withdrawals = solMode
-    ? safeNum(binData.allTimeWithdrawals?.total?.sol)
-    : safeNum(binData.allTimeWithdrawals?.total?.usd);
-  const fees = solMode
-    ? safeNum(binData.allTimeFees?.total?.sol)
-    : safeNum(binData.allTimeFees?.total?.usd);
 
-  const pnl = balances + unclaimedFees + withdrawals + fees - deposit;
+  const currentValue = balances + unclaimedFees;
+  const pnl = currentValue - deposit;
   return (pnl / deposit) * 100;
 }
 
@@ -1357,13 +1352,6 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
           : binData
             ? deriveOpenPnlPct(binData, config.management.solMode)
             : null;
-        const pnlPctDiff = reportedPnlPct != null && derivedPnlPct != null
-          ? Math.abs(reportedPnlPct - derivedPnlPct)
-          : null;
-        const pnlPctSuspicious = pnlPctDiff != null && pnlPctDiff > (config.management.pnlSanityMaxDiffPct ?? 5);
-        if (pnlPctSuspicious) {
-          log("positions_warn", `Suspicious pnl_pct for ${positionAddress.slice(0, 8)}: reported=${reportedPnlPct.toFixed(2)} derived=${derivedPnlPct.toFixed(2)} diff=${pnlPctDiff.toFixed(2)} — using derived`);
-        }
         // Always prefer derived PnL (calculated from raw balances/deposits) over API reported PnL
         const finalPnlPct = derivedPnlPct != null ? derivedPnlPct : reportedPnlPct;
 

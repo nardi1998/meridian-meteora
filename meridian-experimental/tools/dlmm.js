@@ -1362,8 +1362,10 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
           : null;
         const pnlPctSuspicious = pnlPctDiff != null && pnlPctDiff > (config.management.pnlSanityMaxDiffPct ?? 5);
         if (pnlPctSuspicious) {
-          log("positions_warn", `Suspicious pnl_pct for ${positionAddress.slice(0, 8)}: reported=${reportedPnlPct.toFixed(2)} derived=${derivedPnlPct.toFixed(2)} diff=${pnlPctDiff.toFixed(2)}`);
+          log("positions_warn", `Suspicious pnl_pct for ${positionAddress.slice(0, 8)}: reported=${reportedPnlPct.toFixed(2)} derived=${derivedPnlPct.toFixed(2)} diff=${pnlPctDiff.toFixed(2)} — using derived`);
         }
+        // Use derived PnL when reported vs derived differ by more than threshold
+        const finalPnlPct = pnlPctSuspicious && derivedPnlPct != null ? derivedPnlPct : reportedPnlPct;
 
         positions.push({
           position:           positionAddress,
@@ -1435,7 +1437,7 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
             ? Math.round(parseFloat(binData.pnlUsd || 0) * 10000) / 10000
             : null,
           pnl_pct:            (lpData || binData)
-            ? Math.round(reportedPnlPct * 100) / 100
+            ? Math.round((finalPnlPct ?? reportedPnlPct ?? 0) * 100) / 100
             : null,
           pnl_pct_derived:    derivedPnlPct != null ? Math.round(derivedPnlPct * 100) / 100 : null,
           pnl_pct_diff:       pnlPctDiff != null ? Math.round(pnlPctDiff * 100) / 100 : null,

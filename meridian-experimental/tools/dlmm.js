@@ -1428,8 +1428,6 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
             ? Math.round((finalPnlPct ?? reportedPnlPct ?? 0) * 100) / 100
             : null,
           pnl_pct_derived:    derivedPnlPct != null ? Math.round(derivedPnlPct * 100) / 100 : null,
-          pnl_pct_diff:       pnlPctDiff != null ? Math.round(pnlPctDiff * 100) / 100 : null,
-          pnl_pct_suspicious: !!pnlPctSuspicious,
           unclaimed_fees_true_usd: lpData
             ? Math.round(safeNum(lpData.unCollectedFee) * 10000) / 10000
             : binData

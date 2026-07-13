@@ -917,9 +917,6 @@ async function runSafetyChecks(name, args) {
                            args.pool_address && 
                            args.base_mint;
 
-      // Skip SMC for pool age > 36 hours
-      const skipSMC = poolAgeHours != null && poolAgeHours > 36;
-
       if (shouldRunOB) {
         try {
           const activeBinData = await getActiveBin({ pool_address: args.pool_address });
@@ -929,15 +926,14 @@ async function runSafetyChecks(name, args) {
             // Find fresh FVG/OB with pool age (determines timeframes automatically)
             // Fresh zone = zone that hasn't been touched yet
             // If cover >70%, falls back to lower timeframe
-            // SMC rejection disabled for pool age > 36h
+            // SMC rejection always enabled (all pool ages)
             const orderBlock = await findOrderBlock(args.base_mint, currentPrice, {
               poolAgeHours,
               maxDistancePct: orderBlockCoveragePct,
-              skipSMC,
             });
 
-            // SMC Rule: Check for rejection pattern (only if SMC enabled)
-            if (!skipSMC && orderBlock.rejected && !orderBlock.canOpen) {
+            // SMC Rule: Check for rejection pattern
+            if (orderBlock.rejected && !orderBlock.canOpen) {
               _deployLock = false;
               return {
                 pass: false,

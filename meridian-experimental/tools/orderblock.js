@@ -3,18 +3,16 @@
  * 
  * Detects order blocks across multiple timeframes with pool-age priority:
  * - Pool age < 12h: 1H → 30M → 15M → 5M
- * - Pool age 12-36h: 2H → 1H → 30M
- * - Pool age > 36h: 2H → 1H → 30M (SMC rejection disabled)
+ * - Pool age >= 12h: 2H → 1H → 30M
  * 
  * Fresh Zone Logic:
  * - Find FVG/OB that hasn't been touched yet
  * - If cover >70%, fallback to lower timeframe
- * - SMC rejection applies except for pool age > 36h
+ * - SMC rejection always enabled
  * 
  * SMC Rules:
  * - Do NOT open if price already touched OB/FVG and rejected without new ATH
  * - CAN open if price returns to OB (second touch)
- * - Pool age > 36h: SMC rejection disabled (always can open)
  */
 
 import { config } from "../config.js";
@@ -40,7 +38,6 @@ function getTimeframesForPoolAge(poolAgeHours) {
   if (poolAgeHours < 12) {
     return ["1H", "30M", "15M", "5M"];
   }
-  // Pool age >= 12 hours (including > 36 hours)
   return ["2H", "1H", "30M"];
 }
 
@@ -504,7 +501,6 @@ export function analyzeOBRejection(candles, orderBlock, fvgs, currentPrice) {
  * @param {number} options.minStrength - Minimum OB strength (default: 0.5)
  * @param {number} options.maxDistancePct - Max distance % from current price (default: 20)
  * @param {number} options.maxCoverPct - Max cover percentage (default: 70)
- * @param {boolean} options.skipSMC - Skip SMC rejection check (default: false)
  * @returns {Object|null} - Order block zone with metadata
  */
 export async function findOrderBlock(mint, currentPrice, options = {}) {
@@ -514,7 +510,6 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
     minStrength = 0.5,
     maxDistancePct = config.screening.orderBlockCoveragePct || 20,
     maxCoverPct = config.screening.orderBlockMaxCoverPct || MAX_COVER_PCT,
-    skipSMC = false,
   } = options;
 
   // Determine timeframes based on pool age
@@ -523,7 +518,7 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
     timeframes = overrideTimeframes;
   } else if (poolAgeHours != null) {
     timeframes = getTimeframesForPoolAge(poolAgeHours);
-    log("orderblock", `Pool age: ${poolAgeHours}h → Using timeframes: ${timeframes.join(", ")}${skipSMC ? " (SMC disabled)" : ""}`);
+    log("orderblock", `Pool age: ${poolAgeHours}h → Using timeframes: ${timeframes.join(", ")}`);
   } else {
     timeframes = config.screening.orderBlockTimeframes || TIMEFRAME_PRIORITY;
   }
@@ -587,40 +582,34 @@ export async function findOrderBlock(mint, currentPrice, options = {}) {
 
         // Found a fresh zone within cover limit!
 
-        // Skip SMC rejection check if skipSMC is true (pool age > 36h)
-        let rejectionAnalysis = { rejected: false, canOpen: true, reason: "SMC check skipped" };
+        // Run SMC rejection check on this zone
+        const singleOB = zone.zoneType?.startsWith("ob_") ? {
+          found: true,
+          high: zone.zoneHigh,
+          low: zone.zoneLow,
+          mid: zone.mid,
+          direction: zone.direction,
+        } : null;
         
-        if (!skipSMC) {
-          const singleOB = zone.zoneType?.startsWith("ob_") ? {
-            found: true,
-            high: zone.zoneHigh,
-            low: zone.zoneLow,
-            mid: zone.mid,
-            direction: zone.direction,
-          } : null;
-          
-          const singleFVG = zone.zoneType?.startsWith("fvg_") ? [{
-            high: zone.zoneHigh,
-            low: zone.zoneLow,
-            mid: zone.mid,
-            type: zone.zoneType === "fvg_bullish" ? "bullish" : "bearish",
-          }] : [];
-          
-          rejectionAnalysis = analyzeOBRejection(candles, singleOB, singleFVG, currentPrice);
-          
-          if (rejectionAnalysis.rejected && !rejectionAnalysis.canOpen) {
-            log("orderblock", `${timeframe}: SMC REJECTED - ${rejectionAnalysis.reason}`);
-            return {
-              found: false,
-              rejected: true,
-              canOpen: false,
-              timeframe,
-              reason: rejectionAnalysis.reason,
-              analysis: rejectionAnalysis,
-            };
-          }
-        } else {
-          log("orderblock", `${timeframe}: SMC check skipped (pool age > 36h)`);
+        const singleFVG = zone.zoneType?.startsWith("fvg_") ? [{
+          high: zone.zoneHigh,
+          low: zone.zoneLow,
+          mid: zone.mid,
+          type: zone.zoneType === "fvg_bullish" ? "bullish" : "bearish",
+        }] : [];
+        
+        const rejectionAnalysis = analyzeOBRejection(candles, singleOB, singleFVG, currentPrice);
+        
+        if (rejectionAnalysis.rejected && !rejectionAnalysis.canOpen) {
+          log("orderblock", `${timeframe}: SMC REJECTED - ${rejectionAnalysis.reason}`);
+          return {
+            found: false,
+            rejected: true,
+            canOpen: false,
+            timeframe,
+            reason: rejectionAnalysis.reason,
+            analysis: rejectionAnalysis,
+          };
         }
 
         log("orderblock", `${timeframe}: ✅ Using fresh ${zone.zoneType} | Cover: ${coverPct.toFixed(1)}% | Bins needed: ${Math.ceil(coverPct)}`);

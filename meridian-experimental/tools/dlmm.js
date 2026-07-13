@@ -1116,12 +1116,12 @@ export async function getPositionPnl({ pool_address, position_address }) {
       ? safeNum(p.unrealizedPnl?.balancesSol)
       : safeNum(p.unrealizedPnl?.balances);
     const reportedPnlPct = solMode
-      ? -(maybeNum(p.pnlSolPctChange) ?? 0)
-      : -(maybeNum(p.pnlPctChange) ?? 0);
+      ? maybeNum(p.pnlSolPctChange)
+      : maybeNum(p.pnlPctChange);
     const derivedPnlPct = deriveOpenPnlPct(p, solMode);
     return {
       pnl_usd:           roundNum(solMode ? p.pnlSol : p.pnlUsd, 4),
-      pnl_pct:           roundNum(reportedPnlPct ?? derivedPnlPct ?? 0, 2),
+      pnl_pct:           roundNum(derivedPnlPct ?? reportedPnlPct ?? 0, 2),
       current_value_usd: roundNum(currentValue, 4),
       unclaimed_fee_usd: roundNum(unclaimedValue, 4),
       all_time_fees_usd: roundNum(solMode ? p.allTimeFees?.total?.sol : p.allTimeFees?.total?.usd, 4),
@@ -1350,7 +1350,7 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
         const reportedPnlPct = lpData
           ? parseFloat(config.management.solMode ? (lpData.pnl?.percentNative || 0) : (lpData.pnl?.percent || 0))
           : binData
-            ? -(parseFloat(config.management.solMode ? (binData.pnlSolPctChange || 0) : (binData.pnlPctChange || 0)))
+            ? parseFloat(config.management.solMode ? (binData.pnlSolPctChange || 0) : (binData.pnlPctChange || 0))
             : null;
         const derivedPnlPct = lpData
           ? deriveLpAgentPnlPct(lpData, config.management.solMode)
@@ -1360,15 +1360,12 @@ export async function getMyPositions({ force = false, silent = false, wallet_add
         const pnlPctDiff = reportedPnlPct != null && derivedPnlPct != null
           ? Math.abs(reportedPnlPct - derivedPnlPct)
           : null;
-        const pnlSignMismatch = reportedPnlPct != null && derivedPnlPct != null
-          ? (reportedPnlPct > 0 && derivedPnlPct < 0) || (reportedPnlPct < 0 && derivedPnlPct > 0)
-          : false;
-        const pnlPctSuspicious = pnlSignMismatch || (pnlPctDiff != null && pnlPctDiff > (config.management.pnlSanityMaxDiffPct ?? 5));
+        const pnlPctSuspicious = pnlPctDiff != null && pnlPctDiff > (config.management.pnlSanityMaxDiffPct ?? 5);
         if (pnlPctSuspicious) {
-          log("positions_warn", `Suspicious pnl_pct for ${positionAddress.slice(0, 8)}: reported=${reportedPnlPct.toFixed(2)} derived=${derivedPnlPct.toFixed(2)} diff=${pnlPctDiff?.toFixed(2) ?? "N/A"} sign_mismatch=${pnlSignMismatch} — using derived`);
+          log("positions_warn", `Suspicious pnl_pct for ${positionAddress.slice(0, 8)}: reported=${reportedPnlPct.toFixed(2)} derived=${derivedPnlPct.toFixed(2)} diff=${pnlPctDiff.toFixed(2)} — using derived`);
         }
-        // Use derived PnL when reported vs derived differ by more than threshold or have opposite signs
-        const finalPnlPct = pnlPctSuspicious && derivedPnlPct != null ? derivedPnlPct : reportedPnlPct;
+        // Always prefer derived PnL (calculated from raw balances/deposits) over API reported PnL
+        const finalPnlPct = derivedPnlPct != null ? derivedPnlPct : reportedPnlPct;
 
         positions.push({
           position:           positionAddress,
@@ -1527,8 +1524,8 @@ export async function getWalletPositions({ wallet_address }) {
         : 0;
       const reportedPnlPct = p
         ? solMode
-          ? -(maybeNum(p.pnlSolPctChange) ?? 0)
-          : -(maybeNum(p.pnlPctChange) ?? 0)
+          ? maybeNum(p.pnlSolPctChange)
+          : maybeNum(p.pnlPctChange)
         : null;
       const derivedPnlPct = p ? deriveOpenPnlPct(p, solMode) : null;
 
@@ -1542,7 +1539,7 @@ export async function getWalletPositions({ wallet_address }) {
         unclaimed_fees_usd: roundNum(unclaimedValue, 4),
         total_value_usd:    roundNum(currentValue, 4),
         pnl_usd:            roundNum(p ? (solMode ? p.pnlSol : p.pnlUsd) : 0, 4),
-        pnl_pct:            roundNum(reportedPnlPct ?? derivedPnlPct ?? 0, 2),
+        pnl_pct:            roundNum(derivedPnlPct ?? reportedPnlPct ?? 0, 2),
         age_minutes:        p?.createdAt ? Math.floor((Date.now() - p.createdAt * 1000) / 60000) : null,
       };
     });

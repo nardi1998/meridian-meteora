@@ -28,7 +28,7 @@ import {
   createLiveMessage,
 } from "./telegram.js";
 import { generateBriefing } from "./briefing.js";
-import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, getTrackedPositions, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop, save, loadTrackedWithSave } from "./state.js";
+import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, getTrackedPositions, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop, save, loadTrackedWithSave, registerExitSignal, confirmPeak } from "./state.js";
 import { getActiveStrategy } from "./strategy-library.js";
 import { recordPositionSnapshot, recallForPool, addPoolNote } from "./pool-memory.js";
 import { checkWhaleEscape, recordTvlSnapshot, getNetDepositData } from "./whale-escape.js";
@@ -200,6 +200,73 @@ function stopCronJobs() {
   for (const task of _cronTasks) task.stop();
   if (_cronTasks._pnlPollInterval) clearInterval(_cronTasks._pnlPollInterval);
   _cronTasks = [];
+}
+
+/**
+ * Execute the actions decided by the deterministic rules. CLOSE/CLAIM run directly
+ * via executeTool (no LLM) — preserving all post-effects (notify, auto-swap,
+ * recordPerformance, decision-log, HiveMind). Only INSTRUCTION positions, whose
+ * free-text condition JS can't parse, are handed to the MANAGER LLM. Returns a
+ * one-line-per-position result string.
+ */
+async function executeManagementActions(actionPositions, actionMap, { liveMessage = null, cur = "$" } = {}) {
+  const lines = [];
+  const instructionPositions = [];
+
+  const mechanical = actionPositions.filter(p => actionMap.get(p.position).action !== "INSTRUCTION");
+  if (mechanical.length) {
+    log("cron", `Management: executing ${mechanical.length} mechanical action(s) — no LLM`);
+  }
+
+  for (const p of actionPositions) {
+    const act = actionMap.get(p.position);
+    if (act.action === "INSTRUCTION") { instructionPositions.push(p); continue; }
+
+    if (act.action === "CLOSE") {
+      const reason = act.reason || (act.rule ? `Rule ${act.rule}` : "rule close");
+      await liveMessage?.toolStart("close_position");
+      const res = await executeTool("close_position", { position_address: p.position, reason }).catch(e => ({ error: e.message }));
+      const ok = res?.success !== false && !res?.error && !res?.blocked;
+      await liveMessage?.toolFinish("close_position", res, ok);
+      lines.push(`${p.pair}: ${ok ? `closed (${reason})` : `close FAILED — ${res?.error || res?.reason || "unknown"}`}`);
+    } else if (act.action === "CLAIM") {
+      await liveMessage?.toolStart("claim_fees");
+      const res = await executeTool("claim_fees", { position_address: p.position }).catch(e => ({ error: e.message }));
+      const ok = res?.success !== false && !res?.error && !res?.blocked;
+      await liveMessage?.toolFinish("claim_fees", res, ok);
+      lines.push(`${p.pair}: ${ok ? "fees claimed" : `claim FAILED — ${res?.error || res?.reason || "unknown"}`}`);
+    }
+  }
+
+  // INSTRUCTION positions need the LLM to evaluate the free-text condition.
+  if (instructionPositions.length > 0) {
+    log("cron", `Management: ${instructionPositions.length} instruction position(s) — invoking LLM [model: ${config.llm.managementModel}]`);
+    const actionBlocks = instructionPositions.map((p) => [
+      `POSITION: ${p.pair} (${p.position})`,
+      `  pool: ${p.pool}`,
+      `  pnl_pct: ${p.pnl_pct}% | unclaimed_fees: ${cur}${p.unclaimed_fees_usd} | value: ${cur}${p.total_value_usd} | fee_per_tvl_24h: ${p.fee_per_tvl_24h ?? "?"}%`,
+      `  bins: lower=${p.lower_bin} upper=${p.upper_bin} active=${p.active_bin} | oor_minutes: ${p.minutes_out_of_range ?? 0}`,
+      `  instruction: "${p.instruction}"`,
+    ].join("\n")).join("\n\n");
+
+    const { content } = await agentLoop(`
+INSTRUCTION EVALUATION — ${instructionPositions.length} position(s)
+
+${actionBlocks}
+
+For each position, evaluate the instruction condition against the live data:
+- If the condition is MET → call close_position (it claims fees internally; do NOT call claim_fees first).
+- If NOT met → HOLD, do nothing.
+
+After evaluating, write a brief one-line result per position.
+    `, config.llm.maxSteps, [], "MANAGER", config.llm.managementModel, 2048, {
+      onToolStart: async ({ name }) => { await liveMessage?.toolStart(name); },
+      onToolFinish: async ({ name, result, success }) => { await liveMessage?.toolFinish(name, result, success); },
+    });
+    if (content) lines.push(content);
+  }
+
+  return lines.join("\n");
 }
 
 export async function runManagementCycle({ silent = false } = {}) {
@@ -379,54 +446,15 @@ export async function runManagementCycle({ silent = false } = {}) {
     mgmtReport = reportLines.join("\n\n") +
       `\n\n💼 ${positions.length} positions • ${cur}${totalValue.toFixed(2)} • unclaimed fees: ${cur}${totalUnclaimed.toFixed(2)} • ${actionSummary}`;
 
-    // ── Call LLM only if action needed ──────────────────────────────
+    // ── Execute actions (CLOSE/CLAIM directly, INSTRUCTION via LLM) ──
     const actionPositions = positionData.filter(p => {
       const a = actionMap.get(p.position);
       return a.action !== "STAY";
     });
 
     if (actionPositions.length > 0) {
-      log("cron", `Management: ${actionPositions.length} action(s) needed — invoking LLM [model: ${config.llm.managementModel}]`);
-
-      const actionBlocks = actionPositions.map((p) => {
-        const act = actionMap.get(p.position);
-        return [
-          `POSITION: ${p.pair} (${p.position})`,
-          `  pool: ${p.pool}`,
-          `  action: ${act.action}${act.rule && act.rule !== "exit" ? ` — Rule ${act.rule}: ${act.reason}` : ""}${act.rule === "exit" ? ` — ⚡ Trailing TP: ${act.reason}` : ""}`,
-          `  pnl_pct: ${p.pnl_pct}% | unclaimed_fees: ${cur}${p.unclaimed_fees_usd} | value: ${cur}${p.total_value_usd} | fee_per_tvl_24h: ${p.fee_per_tvl_24h ?? "?"}%`,
-          `  bins: lower=${p.lower_bin} upper=${p.upper_bin} active=${p.active_bin} | oor_minutes: ${p.minutes_out_of_range ?? 0}`,
-          p.instruction ? `  instruction: "${p.instruction}"` : null,
-        ].filter(Boolean).join("\n");
-      }).join("\n\n");
-
-      const { content } = await agentLoop(`
-MANAGEMENT ACTION REQUIRED — ${actionPositions.length} position(s)
-
-${actionBlocks}
-
-RULES:
-- CLOSE: call close_position with reason from the rule above — it handles fee claiming internally, do NOT call claim_fees first
-- CLAIM: call claim_fees with position address
-- INSTRUCTION: evaluate the instruction condition. If met → close_position with reason "instruction met". If not → HOLD, do nothing.
-- ⚡ exit alerts: close immediately with the exit reason, no exceptions
-
-Execute the required actions. Do NOT re-evaluate CLOSE/CLAIM — rules already applied. Just execute.
-After executing, write a brief one-line result per position.
-      `, config.llm.maxSteps, [], "MANAGER", config.llm.managementModel, 2048, {
-        onToolStart: async ({ name }) => { await liveMessage?.toolStart(name); },
-        onToolFinish: async ({ name, result, success }) => { await liveMessage?.toolFinish(name, result, success); },
-      });
-
-      mgmtReport += `\n\n${content}`;
-
-      // Fallback: send notifications for any CLOSE actions that might have been missed
-      for (const p of actionPositions) {
-        const act = actionMap.get(p.position);
-        if (act.action === "CLOSE" && act.rule) {
-          log("cron", `Management close executed for ${p.pair}: Rule ${act.rule} - ${act.reason}`);
-        }
-      }
+      const resultText = await executeManagementActions(actionPositions, actionMap, { liveMessage, cur });
+      if (resultText) mgmtReport += `\n\n${resultText}`;
     } else {
       log("cron", "Management: all positions STAY — skipping LLM");
       await liveMessage?.note("No tool actions needed.");
@@ -929,7 +957,13 @@ Summarize the current portfolio health, total fees earned, and performance of al
     await maybeRunMissedBriefing();
   }, { timezone: 'UTC' });
 
-  // Lightweight 30s PnL poller — updates trailing TP state between management cycles, no LLM
+  // Fast PnL poller — the real-time exit path between management cycles, no LLM.
+  // Runs on public infra (RPC + Jupiter + Meteora deposits) so it can poll aggressively.
+  // Exits require `confirmTicks` consecutive confirming polls (registerExitSignal) so a
+  // single noisy tick can't close a position; confirmed exits close DIRECTLY here (no
+  // management-interval cooldown gate that used to swallow rule hits).
+  const pnlPollMs = Math.max(1, Number(config.pnl.pollIntervalSec ?? 3)) * 1000;
+  const confirmTicks = Math.max(1, Number(config.pnl.confirmTicks ?? 2));
   let _pnlPollBusy = false;
   const pnlPollInterval = setInterval(async () => {
     if (_managementBusy || _screeningBusy || _pnlPollBusy) return;
@@ -939,50 +973,37 @@ Summarize the current portfolio health, total fees earned, and performance of al
       const result = await getMyPositions({ force: true, silent: true }).catch(() => null);
       if (!result?.positions?.length) return;
       for (const p of result.positions) {
-        if (
-          !p.pnl_pct_suspicious &&
-          queuePeakConfirmation(p.position, p.pnl_pct, { immediate: !shouldUsePnlRecheck() }) &&
-          shouldUsePnlRecheck()
-        ) {
-          schedulePeakConfirmation(p.position);
-        }
+        confirmPeak(p.position, p.pnl_pct, confirmTicks);
+
+        // Detect an exit signal this tick (rule-based exits, then deterministic close rules).
         const exit = updatePnlAndCheckExits(p.position, p, config.management);
-        if (exit) {
-          if (exit.action === "TRAILING_TP" && exit.needs_confirmation && shouldUsePnlRecheck()) {
-            if (queueTrailingDropConfirmation(p.position, exit.peak_pnl_pct, exit.current_pnl_pct, config.management.trailingDropPct)) {
-              scheduleTrailingDropConfirmation(p.position);
-            }
-            continue;
-          }
-          const cooldownMs = config.schedule.managementIntervalMin * 60 * 1000;
-          const sinceLastTrigger = Date.now() - _pollTriggeredAt;
-          if (sinceLastTrigger >= cooldownMs) {
-            _pollTriggeredAt = Date.now();
-            log("state", `[PnL poll] Exit alert: ${p.pair} — ${exit.reason} — triggering management`);
-            runManagementCycle({ silent: true }).catch((e) => log("cron_error", `Poll-triggered management failed: ${e.message}`));
-          } else {
-            log("state", `[PnL poll] Exit alert: ${p.pair} — ${exit.reason} — cooldown (${Math.round((cooldownMs - sinceLastTrigger) / 1000)}s left)`);
-          }
-          break;
+        const closeRule = exit ? null : getDeterministicCloseRule(p, config.management);
+        let signal = null, reason = null, rule = "exit";
+        if (exit) { signal = exit.action; reason = exit.reason; }
+        else if (closeRule) { signal = `RULE_${closeRule.rule}`; reason = closeRule.reason; rule = closeRule.rule; }
+
+        // Require N consecutive confirming ticks before acting.
+        const { fire } = registerExitSignal(p.position, signal, confirmTicks);
+        if (!signal || !fire) continue;
+
+        log("state", `[PnL poll] ${signal} confirmed (${confirmTicks} ticks): ${p.pair} — ${reason} — closing directly`);
+        // Hold the management lock so the cron cycle can't double-act on this position.
+        _managementBusy = true;
+        try {
+          const actMap = new Map([[p.position, { action: "CLOSE", rule, reason }]]);
+          const rpt = await executeManagementActions([p], actMap, {});
+          log("state", `[PnL poll] ${p.pair}: ${rpt || "closed"}`);
+        } catch (e) {
+          log("cron_error", `Poll-triggered close failed: ${e.message}`);
+        } finally {
+          _managementBusy = false;
         }
-        const closeRule = getDeterministicCloseRule(p, config.management);
-        if (closeRule) {
-          const cooldownMs = config.schedule.managementIntervalMin * 60 * 1000;
-          const sinceLastTrigger = Date.now() - _pollTriggeredAt;
-          if (sinceLastTrigger >= cooldownMs) {
-            _pollTriggeredAt = Date.now();
-            log("state", `[PnL poll] Deterministic close rule: ${p.pair} — Rule ${closeRule.rule}: ${closeRule.reason} — triggering management`);
-            runManagementCycle({ silent: true }).catch((e) => log("cron_error", `Poll-triggered management failed: ${e.message}`));
-          } else {
-            log("state", `[PnL poll] Deterministic close rule: ${p.pair} — Rule ${closeRule.rule}: ${closeRule.reason} — cooldown (${Math.round((cooldownMs - sinceLastTrigger) / 1000)}s left)`);
-          }
-          break;
-        }
+        break; // one action per tick
       }
     } finally {
       _pnlPollBusy = false;
     }
-  }, 30_000);
+  }, pnlPollMs);
 
   _cronTasks = [mgmtTask, screenTask, healthTask, briefingTask, briefingWatchdog];
   // Store interval ref so stopCronJobs can clear it
@@ -1088,7 +1109,7 @@ function getDeterministicCloseRule(position, managementConfig) {
   }
   if (
     position.fee_per_tvl_24h != null &&
-    position.fee_per_tvl24h < managementConfig.minFeePerTvl24h &&
+    position.fee_per_tvl_24h < managementConfig.minFeePerTvl24h &&
     (position.age_minutes ?? 0) >= managementConfig.minAgeBeforeYieldCheck &&
     (position.pnl_pct ?? 0) >= 0
   ) {

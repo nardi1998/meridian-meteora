@@ -432,6 +432,11 @@ const toolMap = {
       gmgnMinRsi: ["gmgn", "indicatorRules", "minRsi"],
       gmgnMaxRsi: ["gmgn", "indicatorRules", "maxRsi"],
       gmgnRequireBbPosition: ["gmgn", "indicatorRules", "requireBbPosition"],
+      // PnL poller
+      pnlConfirmTicks: ["pnl", "confirmTicks"],
+      pnlSource: ["pnl", "source"],
+      pnlRpcUrl: ["pnl", "rpcUrl"],
+      pnlPollIntervalSec: ["pnl", "pollIntervalSec"],
       // chart indicators
       chartIndicatorsEnabled: ["indicators", "enabled", ["chartIndicators", "enabled"]],
       indicatorEntryPreset: ["indicators", "entryPreset", ["chartIndicators", "entryPreset"]],
@@ -564,7 +569,7 @@ const toolMap = {
     }
 
     // Restart cron jobs if intervals changed
-    const intervalChanged = applied.managementIntervalMin != null || applied.screeningIntervalMin != null;
+    const intervalChanged = applied.managementIntervalMin != null || applied.screeningIntervalMin != null || applied.pnlPollIntervalSec != null;
     if (intervalChanged && _cronRestarter) {
       _cronRestarter();
       log("config", `Cron restarted — management: ${config.schedule.managementIntervalMin}m, screening: ${config.schedule.screeningIntervalMin}m`);

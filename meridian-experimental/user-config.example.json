@@ -111,6 +111,7 @@
   "pnlRpcUrl": "https://pump.helius-rpc.com",
   "pnlPollIntervalSec": 3,
   "pnlDepositCacheTtlSec": 300,
+  "pnlConfirmTicks": 2,
 
   "gmgnFeeSource": "gmgn",
 

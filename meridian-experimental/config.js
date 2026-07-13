@@ -306,6 +306,7 @@ export const config = {
     source: nonEmptyString(u.pnlSource, "rpc"), // rpc | meteora (fallback-only)
     pollIntervalSec: Number(u.pnlPollIntervalSec ?? 3),
     depositCacheTtlSec: Number(u.pnlDepositCacheTtlSec ?? 300),
+    confirmTicks: Number(u.pnlConfirmTicks ?? 2),
   },
 
   jupiter: {

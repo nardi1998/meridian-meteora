@@ -1116,12 +1116,10 @@ function getDeterministicCloseRule(position, managementConfig) {
     return { action: "CLOSE", rule: 5, reason: "low yield" };
   }
 
-  // ── Rule 9: Recovery exit — if PnL dipped < -5% within 2 hours, wait for +0.5% then close ──
+  // ── Rule 9: Recovery exit — if PnL dipped < -5%, wait for +0.5% then close ──
   if (
     !pnlSuspect &&
-    position.pnl_pct != null &&
-    (position.age_minutes ?? 0) < 120 &&
-    (position.age_minutes ?? 0) >= 3
+    position.pnl_pct != null
   ) {
     if (position.pnl_pct < -5 && tracked && !tracked.recovery_exit_dipped) {
       tracked.recovery_exit_dipped = true;

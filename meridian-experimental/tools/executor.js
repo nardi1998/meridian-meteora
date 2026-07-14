@@ -328,7 +328,6 @@ const toolMap = {
       orderBlockMaxPoolAgeHours: ["screening", "orderBlockMaxPoolAgeHours"],
       orderBlockYoungPoolHours: ["screening", "orderBlockYoungPoolHours"],
       orderBlockMaxCoverPct: ["screening", "orderBlockMaxCoverPct"],
-      smcRejectNoNewATH: ["screening", "smcRejectNoNewATH"],
       minFeePerTvl24h: ["management", "minFeePerTvl24h"],
       // management
       minClaimAmount: ["management", "minClaimAmount"],
@@ -916,7 +915,7 @@ async function runSafetyChecks(name, args) {
       // Order block detection: pool-age-based timeframes
       // Pool age < 12h: 1H → 30M → 15M → 5M (SMC rejection enabled)
       // Pool age 12-36h: 2H → 1H → 30M (SMC rejection enabled)
-      // Pool age > 36h: 2H → 1H → 30M (SMC rejection disabled)
+      // Pool age > 36h: 2H → 1H → 30M (SMC rejection enabled)
       const orderBlockCoveragePct = Number(config.screening.orderBlockCoveragePct ?? 20);
       const shouldRunOB = orderBlockCoveragePct > 0 && 
                            args.pool_address && 

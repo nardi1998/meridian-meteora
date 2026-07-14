@@ -430,7 +430,7 @@ Models: managementModel, screeningModel, generalModel, temperature, maxTokens, m
 Strategy: strategy, binsBelow, minBinsBelow, maxBinsBelow, defaultBinsBelow
 Hive/API: hiveMindUrl, hiveMindApiKey, agentId, hiveMindPullMode, publicApiKey, agentMeridianApiUrl, lpAgentRelayEnabled
 Indicators: chartIndicatorsEnabled, indicatorEntryPreset, indicatorExitPreset, rsiLength, indicatorIntervals, indicatorCandles, rsiOversold, rsiOverbought, requireAllIntervals
-Order Block: orderBlockCoveragePct, orderBlockTimeframes, orderBlockMaxPoolAgeHours, orderBlockYoungPoolHours, orderBlockMaxCoverPct, smcRejectNoNewATH
+Order Block: orderBlockCoveragePct, orderBlockTimeframes, orderBlockMaxPoolAgeHours, orderBlockYoungPoolHours, orderBlockMaxCoverPct
 
 Reason is optional but helpful — logged as a lesson when provided.`,
       parameters: {

@@ -150,7 +150,7 @@ DEPLOY RULES:
   * Only fresh zones (never touched by price) are used for range extension
   * Default coverage: ${config.screening.orderBlockCoveragePct ?? 20}% below current price
   * Pool age > ${config.screening.orderBlockMaxPoolAgeHours ?? 36}h: No OB detection, no coverage fallback
-- SMC RULE (IMPORTANT): ${config.screening.smcRejectNoNewATH !== false ? 'Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH. Wait for second touch to order block. This applies to fresh zones too.' : 'SMC rejection rule disabled.'}
+- SMC RULE (HARD RULE - ALWAYS ENFORCED): Do NOT open position if price already touched OB/FVG and rejected upward but did NOT make new ATH. Wait for second touch to order block. This applies to fresh zones too. Cannot be disabled.
 - pass deploy_position.volatility = the candidate volatility value.
 - pass deploy_position.token_created_at = the candidate token created_at timestamp (for pool age calculation).
 - pass deploy_position.fee_per_tvl_24h = the candidate fee_per_tvl_24h value (if available).

@@ -135,10 +135,10 @@ export const config = {
     maxVolatility:      HARDCODED_FILTERS.maxVolatility,   // HARDCODED — reject pools above this volatility threshold. Not overridable.
     orderBlockCoveragePct: u.orderBlockCoveragePct ?? 20, // ensure LP range covers order block zone (% below current price)
     orderBlockTimeframes: u.orderBlockTimeframes ?? ["1H", "30M", "15M", "5M"], // timeframes to check for order blocks (priority order)
-    orderBlockMaxPoolAgeHours: null, // disabled: always run OB detection, use skipSMC for > 36h
+    orderBlockMaxPoolAgeHours: null, // disabled: always run OB detection + SMC rejection for all pool ages
     orderBlockYoungPoolHours: u.orderBlockYoungPoolHours ?? 12, // pools younger than this use shorter timeframes (1H→30M→15M→5M)
     orderBlockMaxCoverPct: u.orderBlockMaxCoverPct ?? 70, // max cover percentage before falling back to lower timeframe
-    smcRejectNoNewATH: u.smcRejectNoNewATH ?? true, // reject entry if OB/FVG touched and rejected without new ATH
+    smcRejectNoNewATH: true, // HARD RULE: always reject entry if OB/FVG touched and rejected without new ATH — cannot be disabled
   },
 
   gmgn: {
@@ -396,7 +396,6 @@ export function reloadScreeningThresholds() {
     if (fresh.athFilterPctSmallCap !== undefined) s.athFilterPctSmallCap = fresh.athFilterPctSmallCap;
     if (fresh.orderBlockCoveragePct != null) s.orderBlockCoveragePct = fresh.orderBlockCoveragePct;
     if (fresh.orderBlockTimeframes != null) s.orderBlockTimeframes = fresh.orderBlockTimeframes;
-    if (fresh.smcRejectNoNewATH !== undefined) s.smcRejectNoNewATH = fresh.smcRejectNoNewATH;
     const minBinsBelow = numericConfig(fresh.minBinsBelow) ?? config.strategy.minBinsBelow;
     const maxBinsBelow = numericConfig(fresh.maxBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.maxBinsBelow;
     const defaultBinsBelow = numericConfig(fresh.defaultBinsBelow) ?? numericConfig(fresh.binsBelow) ?? config.strategy.defaultBinsBelow ?? maxBinsBelow;

@@ -101,6 +101,30 @@ function getMeridianApiBase() {
   return String(config.api.url || "https://api.agentmeridian.xyz/api").replace(/\/+$/, "");
 }
 
+// ─── Retry-aware sendAndConfirmTransaction ──────────────────────
+// Solana RPCs frequently return -32603 (Internal error) on getSignatureStatuses
+// during congestion. Retry with exponential backoff to avoid crashing the bot.
+async function sendAndConfirmWithRetry(connection, transaction, signers, { maxRetries = 3, baseDelayMs = 2000 } = {}) {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await sendAndConfirmTransaction(connection, transaction, signers);
+    } catch (error) {
+      lastError = error;
+      const isRpcError = error?.code === -32603
+        || error?.message?.includes("failed to get signature status")
+        || error?.message?.includes("Internal error")
+        || error?.message?.includes("503")
+        || error?.message?.includes("429");
+      if (!isRpcError || attempt >= maxRetries) throw error;
+      const delay = baseDelayMs * Math.pow(2, attempt);
+      log("tx_retry", `sendAndConfirm attempt ${attempt + 1}/${maxRetries} failed (${error.message}); retrying in ${delay}ms...`);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+  throw lastError;
+}
+
 function getMeridianHeaders() {
   const headers = { "Content-Type": "application/json" };
   if (config.api.publicApiKey) {
@@ -904,7 +928,7 @@ export async function deployPosition({
       const createTxArray = Array.isArray(createTxs) ? createTxs : [createTxs];
       for (let i = 0; i < createTxArray.length; i++) {
         const signers = i === 0 ? [wallet, newPosition] : [wallet];
-        const txHash = await sendAndConfirmTransaction(getConnection(), createTxArray[i], signers);
+        const txHash = await sendAndConfirmWithRetry(getConnection(), createTxArray[i], signers);
         txHashes.push(txHash);
         log("deploy", `Create tx ${i + 1}/${createTxArray.length}: ${txHash}`);
       }
@@ -920,7 +944,7 @@ export async function deployPosition({
       });
       const addTxArray = Array.isArray(addTxs) ? addTxs : [addTxs];
       for (let i = 0; i < addTxArray.length; i++) {
-        const txHash = await sendAndConfirmTransaction(getConnection(), addTxArray[i], [wallet]);
+        const txHash = await sendAndConfirmWithRetry(getConnection(), addTxArray[i], [wallet]);
         txHashes.push(txHash);
         log("deploy", `Add liquidity tx ${i + 1}/${addTxArray.length}: ${txHash}`);
       }
@@ -934,7 +958,7 @@ export async function deployPosition({
         strategy: { maxBinId, minBinId, strategyType },
         slippage: 1000, // 10% in bps
       });
-      const txHash = await sendAndConfirmTransaction(getConnection(), tx, [wallet, newPosition]);
+      const txHash = await sendAndConfirmWithRetry(getConnection(), tx, [wallet, newPosition]);
       txHashes.push(txHash);
     }
 
@@ -1610,7 +1634,7 @@ export async function claimFees({ position_address }) {
 
     const txHashes = [];
     for (const tx of txs) {
-      const txHash = await sendAndConfirmTransaction(getConnection(), tx, [wallet]);
+      const txHash = await sendAndConfirmWithRetry(getConnection(), tx, [wallet]);
       txHashes.push(txHash);
     }
     log("claim", `SUCCESS txs: ${txHashes.join(", ")}`);
@@ -1892,7 +1916,7 @@ export async function closePosition({ position_address, reason }) {
         });
         if (claimTxs && claimTxs.length > 0) {
           for (const tx of claimTxs) {
-            const claimHash = await sendAndConfirmTransaction(getConnection(), tx, [wallet]);
+            const claimHash = await sendAndConfirmWithRetry(getConnection(), tx, [wallet]);
             claimTxHashes.push(claimHash);
           }
           log("close", `Step 1 OK (claim only): ${claimTxHashes.join(", ")}`);
@@ -1931,7 +1955,7 @@ export async function closePosition({ position_address, reason }) {
       });
 
       for (const tx of Array.isArray(closeTx) ? closeTx : [closeTx]) {
-        const txHash = await sendAndConfirmTransaction(getConnection(), tx, [wallet]);
+        const txHash = await sendAndConfirmWithRetry(getConnection(), tx, [wallet]);
         closeTxHashes.push(txHash);
       }
     } else {
@@ -1940,7 +1964,7 @@ export async function closePosition({ position_address, reason }) {
         owner: wallet.publicKey,
         position: { publicKey: positionPubKey },
       });
-      const txHash = await sendAndConfirmTransaction(getConnection(), closeTx, [wallet]);
+      const txHash = await sendAndConfirmWithRetry(getConnection(), closeTx, [wallet]);
       closeTxHashes.push(txHash);
     }
     const txHashes = [...claimTxHashes, ...closeTxHashes];

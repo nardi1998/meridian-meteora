@@ -22,7 +22,7 @@ import { addSmartWallet, removeSmartWallet, listSmartWallets, checkSmartWalletsO
 import { getTokenInfo, getTokenHolders, getTokenNarrative } from "./token.js";
 import { config, reloadScreeningThresholds, MIN_SAFE_BINS_BELOW } from "../config.js";
 import { getRecentDecisions } from "../decision-log.js";
-import { findOrderBlock, calculateBinsForOrderBlock, getOrderBlockSummary } from "./orderblock.js";
+import { findOrderBlock, calculateBinsForOrderBlock, getOrderBlockSummary, checkYoungTokenRejection } from "./orderblock.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -979,6 +979,30 @@ async function runSafetyChecks(name, args) {
           }
         } catch (e) {
           log("deploy", ` order block detection skipped: ${e.message}`);
+        }
+      }
+
+      // ── Young Token Rejection Rule (< 12h) ──────────────────────
+      // If price dropped >45% from ATH then rejected upward but new ATH
+      // does NOT exceed old ATH by >35% → block deploy
+      if (poolAgeHours != null && poolAgeHours < 12 && args.base_mint) {
+        try {
+          const activeBinData2 = await getActiveBin({ pool_address: args.pool_address });
+          if (activeBinData2?.price && activeBinData2.price > 0) {
+            const youngCheck = await checkYoungTokenRejection(args.base_mint, activeBinData2.price, poolAgeHours);
+            if (youngCheck.rejected && !youngCheck.canOpen) {
+              _deployLock = false;
+              return {
+                pass: false,
+                reason: `Young Token Rule: ${youngCheck.reason}`,
+              };
+            }
+            if (youngCheck.reason) {
+              log("deploy", ` Young token check: ${youngCheck.reason}`);
+            }
+          }
+        } catch (e) {
+          log("deploy", ` Young token rejection check skipped: ${e.message}`);
         }
       }
 

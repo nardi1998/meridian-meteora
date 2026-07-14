@@ -687,3 +687,84 @@ export function getOrderBlockSummary(orderBlock) {
 
   return `${orderBlock.type || "OB"} (${orderBlock.timeframe})${freshTag}: ${orderBlock.low.toFixed(8)}-${orderBlock.high.toFixed(8)} | Direction: ${orderBlock.direction} | Strength: ${(orderBlock.strength * 100).toFixed(0)}%${coverInfo}${rejectionInfo}`;
 }
+
+// ─── Young Token Rejection Rule ─────────────────────────────────
+// For tokens < 12h old:
+// - If price dropped >45% from ATH then rejected upward but new ATH
+//   does NOT exceed old ATH by >35% → block deploy
+// - CAN open if price returns to the drop zone (where it dropped to)
+const YOUNG_TOKEN_ATH_DROP_PCT = 45;    // max drop from ATH to trigger rule
+const YOUNG_TOKEN_NEW_ATH_BOOST_PCT = 35; // new ATH must exceed old by this %
+const YOUNG_TOKEN_MAX_AGE_HOURS = 12;
+
+export async function checkYoungTokenRejection(mint, currentPrice, poolAgeHours) {
+  if (poolAgeHours == null || poolAgeHours >= YOUNG_TOKEN_MAX_AGE_HOURS) {
+    return { rejected: false, canOpen: true };
+  }
+
+  try {
+    // Fetch 1H candles to calculate ATH and lowest point
+    const candles = await fetchCandles(mint, "1H", 100);
+    if (!candles || candles.length < 5) {
+      return { rejected: false, canOpen: true, reason: "Insufficient candle data" };
+    }
+
+    // Calculate ATH and lowest point from all candles
+    const ath = Math.max(...candles.map(c => c.high));
+    const lowestPoint = Math.min(...candles.map(c => c.low));
+    if (ath <= 0 || currentPrice <= 0) {
+      return { rejected: false, canOpen: true };
+    }
+
+    // Check if price dropped >45% from ATH
+    const dropPct = ((ath - currentPrice) / ath) * 100;
+    if (dropPct <= YOUNG_TOKEN_ATH_DROP_PCT) {
+      return { rejected: false, canOpen: true, reason: `Drop ${dropPct.toFixed(1)}% <= ${YOUNG_TOKEN_ATH_DROP_PCT}% threshold` };
+    }
+
+    // Price dropped >45% from ATH — check if new ATH was made (>35% above old ATH)
+    const newAthThreshold = ath * (1 + YOUNG_TOKEN_NEW_ATH_BOOST_PCT / 100);
+    const madeValidNewATH = currentPrice >= newAthThreshold;
+
+    if (madeValidNewATH) {
+      return {
+        rejected: false,
+        canOpen: true,
+        reason: `Valid new ATH: ${currentPrice.toFixed(8)} >= ${newAthThreshold.toFixed(8)} (old ATH: ${ath.toFixed(8)})`,
+        ath,
+        dropPct,
+      };
+    }
+
+    // Dropped >45% but no valid new ATH — check if price returned to drop zone
+    // Drop zone = lowest point where price dropped to
+    // If current price is near the lowest point, it's a second touch to the drop zone
+    const dropZoneHigh = lowestPoint * 1.05; // within 5% above lowest point
+    const nearDropZone = currentPrice <= dropZoneHigh && currentPrice >= lowestPoint * 0.95;
+
+    if (nearDropZone) {
+      return {
+        rejected: false,
+        canOpen: true,
+        touchCount: 2,
+        reason: `Second touch to drop zone (${lowestPoint.toFixed(8)}-${dropZoneHigh.toFixed(8)}) after ${dropPct.toFixed(1)}% drop from ATH. Valid entry.`,
+        ath,
+        dropPct,
+        lowestPoint,
+      };
+    }
+
+    // Rejected upward but no valid new ATH and not at drop zone — block
+    return {
+      rejected: true,
+      canOpen: false,
+      reason: `Young token (<${YOUNG_TOKEN_MAX_AGE_HOURS}h): dropped ${dropPct.toFixed(1)}% from ATH (${ath.toFixed(8)}) to ${lowestPoint.toFixed(8)}, rejected but no valid new ATH (needs >${YOUNG_TOKEN_NEW_ATH_BOOST_PCT}% above old = ${newAthThreshold.toFixed(8)}). Current: ${currentPrice.toFixed(8)}. Wait for price to return to drop zone (${lowestPoint.toFixed(8)}-${dropZoneHigh.toFixed(8)}).`,
+      ath,
+      dropPct,
+      lowestPoint,
+    };
+  } catch (error) {
+    log("orderblock", `Young token rejection check failed: ${error.message}`);
+    return { rejected: false, canOpen: true, reason: `Check failed: ${error.message}` };
+  }
+}

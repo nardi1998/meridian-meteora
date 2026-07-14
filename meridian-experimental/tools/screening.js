@@ -107,6 +107,13 @@ function getRawPoolScreeningRejectReason(pool, s) {
   if (pool?.base_token_has_high_single_ownership === true) return "base token has high single ownership";
   if (pool?.pool_type && pool.pool_type !== "dlmm") return `pool_type ${pool.pool_type} is not dlmm`;
 
+  // Hard block tokens with TRUMP in name/symbol
+  const baseSymbol = String(base?.symbol || "").toUpperCase();
+  const baseName = String(base?.name || "").toUpperCase();
+  if (baseSymbol.includes("TRUMP") || baseName.includes("TRUMP")) {
+    return "TRUMP token blocked";
+  }
+
   if (mcap == null || mcap < s.minMcap) return `mcap ${mcap ?? "unknown"} below minMcap ${s.minMcap}`;
   if (mcap > s.maxMcap) return `mcap ${mcap} above maxMcap ${s.maxMcap}`;
   if (holders == null || holders < s.minHolders) return `holders ${holders ?? "unknown"} below minHolders ${s.minHolders}`;
@@ -582,6 +589,14 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       if (p.dev && isDevBlocked(p.dev)) {
         log("dev_blocklist", `Filtered blocked deployer ${p.dev?.slice(0, 8)} token ${p.base?.symbol}`);
         pushFilteredReason(filteredOut, p, "blocked deployer");
+        return false;
+      }
+      // Hard block TRUMP tokens
+      const baseSymbol = String(p.base?.symbol || "").toUpperCase();
+      const baseName = String(p.base?.name || "").toUpperCase();
+      if (baseSymbol.includes("TRUMP") || baseName.includes("TRUMP")) {
+        log("screening", `Filtered TRUMP token ${p.base?.symbol}`);
+        pushFilteredReason(filteredOut, p, "TRUMP token blocked");
         return false;
       }
       return true;
